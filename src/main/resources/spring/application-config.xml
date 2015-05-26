@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+    
+    <bean id="travelAPIClient" class="com.nearsoft.flights.client.TravelFlightStatsClient">
+    	<constructor-arg index="0" ref="restTemplate"/>
+    	<constructor-arg index="1" ref="appKeys"/>
+    </bean>
+    
+    <bean id="apiClientTravelDataGetter" class="com.nearsoft.flights.data.getters.APIClientTravelDataGetter">
+    	<constructor-arg index="0" ref="travelAPIClient"/>
+    	<constructor-arg index="1">
+    		<list>
+    			<ref bean="databaseTravelDataGetter"/>
+    		</list>
+    	</constructor-arg>
+    </bean>
+    
+    <bean id="databaseTravelDataGetter" class="com.nearsoft.flights.data.getters.DatabaseTravelDataGetter">
+    	<constructor-arg index="0" ref="airportDAO" />
+    	<constructor-arg index="1" ref="flightDAO" />
+    </bean>
+    
+    <bean id="airportDAO" class="com.nearsoft.flights.dao.jdbc.AirportJDBCDAO"></bean>
+    <bean id="flightDAO" class="com.nearsoft.flights.dao.jdbc.FlightJDBCDAO"></bean>
+    <bean id="restTemplate" class="org.springframework.web.client.RestTemplate"/>
+    <util:map map-class="java.util.HashMap" id="appKeys">
+    		<entry key="appId" value="#{systemProperties['appId']}"/>
+    		<entry key="appKey" value="#{systemProperties['appKey']}"/>
+    		<entry key="extendedOptions" value="useHTTPErrors"/>
+    </util:map>
+    <!-- Uncomment and add your base-package here:
+         <context:component-scan
+            base-package="org.springframework.samples.service"/>  -->
+</beans>
