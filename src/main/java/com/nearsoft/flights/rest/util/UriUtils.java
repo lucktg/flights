@@ -1,7 +1,6 @@
 package com.nearsoft.flights.rest.util;
 
 import java.net.URI;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.ws.rs.core.UriBuilder;

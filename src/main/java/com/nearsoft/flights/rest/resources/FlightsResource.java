@@ -2,7 +2,6 @@ package com.nearsoft.flights.rest.resources;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.nearsoft.flights.service.FlightsService;
-import com.nearsoft.flights.vo.Flight;
 import com.nearsoft.flights.vo.RoundTrip;
 import com.nearsoft.flights.vo.TripInformation;
 

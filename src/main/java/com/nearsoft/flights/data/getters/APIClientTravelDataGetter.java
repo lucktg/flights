@@ -1,7 +1,6 @@
 package com.nearsoft.flights.data.getters;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;

@@ -1,6 +1,5 @@
 package com.nearsoft.flights.dao;
 
-import java.util.Date;
 import java.util.Set;
 
 import com.nearsoft.flights.vo.Flight;
