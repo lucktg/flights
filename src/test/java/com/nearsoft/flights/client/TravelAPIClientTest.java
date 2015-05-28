@@ -35,6 +35,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
 
+import com.nearsoft.flights.interfaces.TravelAPIClient;
+import com.nearsoft.flights.interfaces.flexapi.TravelFlightStatsClient;
 import com.nearsoft.flights.rest.util.UriUtils;
 import com.nearsoft.flights.vo.Airport;
 import com.nearsoft.flights.vo.Airports;

@@ -1,4 +1,4 @@
-package com.nearsoft.flights.client;
+package com.nearsoft.flights.interfaces;
 
 import com.nearsoft.flights.vo.Airports;
 import com.nearsoft.flights.vo.Flights;

@@ -25,11 +25,11 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.nearsoft.flights.client.TravelAPIClient;
 import com.nearsoft.flights.dao.AirportDAO;
 import com.nearsoft.flights.dao.FlightDAO;
 import com.nearsoft.flights.data.getters.APIClientTravelDataGetter;
 import com.nearsoft.flights.data.getters.DatabaseTravelDataGetter;
+import com.nearsoft.flights.interfaces.TravelAPIClient;
 import com.nearsoft.flights.service.AirportsService;
 import com.nearsoft.flights.service.AirportsServiceImpl;
 import com.nearsoft.flights.vo.Airport;

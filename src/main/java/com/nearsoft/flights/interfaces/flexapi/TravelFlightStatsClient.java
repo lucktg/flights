@@ -1,4 +1,4 @@
-package com.nearsoft.flights.client;
+package com.nearsoft.flights.interfaces.flexapi;
 
 import java.net.URI;
 import java.util.Calendar;
@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import com.nearsoft.flights.interfaces.TravelAPIClient;
 import com.nearsoft.flights.rest.util.UriUtils;
 import com.nearsoft.flights.vo.Airports;
 import com.nearsoft.flights.vo.FlightItemsSet;

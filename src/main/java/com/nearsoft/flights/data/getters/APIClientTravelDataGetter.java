@@ -6,7 +6,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
 
-import com.nearsoft.flights.client.TravelAPIClient;
+import com.nearsoft.flights.interfaces.TravelAPIClient;
 import com.nearsoft.flights.vo.Airport;
 import com.nearsoft.flights.vo.Airports;
 import com.nearsoft.flights.vo.Flight;
