@@ -9,8 +9,9 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nearsoft.flights.domain.model.airport.Airport;
 import com.nearsoft.flights.interfaces.flexapi.extractor.ExtractionException;
+import com.nearsoft.flights.interfaces.flexapi.extractor.Extractor;
 
-public class AirportExtractorJson extends AbstractAirportExtractorJson<Airport>{
+public class AirportExtractorJson implements Extractor<Airport>{
 
 	@Override
 	public Airport extract(InputStream in) throws ExtractionException {
@@ -19,8 +20,8 @@ public class AirportExtractorJson extends AbstractAirportExtractorJson<Airport>{
                 .withFieldVisibility(JsonAutoDetect.Visibility.ANY));
 		Airport airport = Airport.EMPTY_AIRPORT;
 		try {
-			AirportJson airportJson = mapper.readValue(in, AirportJson.class);
-			airport = airportJsonToAirport(airportJson);
+			AirportPojo airportJson = mapper.readValue(in, AirportPojo.class);
+			airport = ExtractorUtils.airportPojoToAirport(airportJson);
 		} catch (JsonParseException e) {
 			throw new ExtractionException(e);
 		} catch (JsonMappingException e) {

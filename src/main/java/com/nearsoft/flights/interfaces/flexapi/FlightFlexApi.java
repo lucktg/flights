@@ -13,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.nearsoft.flights.domain.model.flight.Flight;
 import com.nearsoft.flights.interfaces.FlightApi;
+import com.nearsoft.flights.interfaces.flexapi.extractor.FlightSetExtractorFactory;
 import com.nearsoft.flights.interfaces.flexapi.extractor.MediaTypeResponseExtractor;
 import com.nearsoft.flights.rest.util.UriUtils;
 import com.nearsoft.flights.vo.TripInformationRequest;

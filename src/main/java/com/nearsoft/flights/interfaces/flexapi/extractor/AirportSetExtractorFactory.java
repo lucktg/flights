@@ -1,12 +1,11 @@
-package com.nearsoft.flights.interfaces.flexapi.extractor.json;
+package com.nearsoft.flights.interfaces.flexapi.extractor;
 
 import java.util.Set;
 
 import org.springframework.http.MediaType;
 
 import com.nearsoft.flights.domain.model.airport.Airport;
-import com.nearsoft.flights.interfaces.flexapi.extractor.Extractor;
-import com.nearsoft.flights.interfaces.flexapi.extractor.MediaTypeExtractorFactory;
+import com.nearsoft.flights.interfaces.flexapi.extractor.json.AirportSetExtractorJson;
 
 public class AirportSetExtractorFactory implements MediaTypeExtractorFactory<Set<Airport>>{
 	

@@ -1,30 +1,10 @@
 package com.nearsoft.flights.interfaces.flexapi.extractor.json;
 
-import com.nearsoft.flights.domain.model.airport.Airport;
-import com.nearsoft.flights.domain.model.airport.Airport.AirportBuilder;
-import com.nearsoft.flights.interfaces.flexapi.extractor.Extractor;
 
-public abstract class AbstractAirportExtractorJson<T> implements Extractor<T> {
-
-		
-
-	Airport airportJsonToAirport(AirportJson airportJson){
-		AirportBuilder airportBuilder = new AirportBuilder(airportJson.fs);
-		airportBuilder.addCity(airportJson.city);
-		airportBuilder.addCityCode(airportJson.cityCode);
-		airportBuilder.addCountryCode(airportJson.countryCode);
-		airportBuilder.addCountryName(airportJson.countryName);
-		airportBuilder.addLatitude(airportJson.latitude);
-		airportBuilder.addLongitude(airportJson.longitude);
-		airportBuilder.addName(airportJson.name);
-		airportBuilder.addStateCode(airportJson.stateCode);
-		return airportBuilder.build();
-	}
-	
-	static class AirportJson {
+public class AirportPojo {
 		
 		//Required by jackson
-		public AirportJson() {
+		public AirportPojo() {
 			
 		}
 		
@@ -54,6 +34,8 @@ public abstract class AbstractAirportExtractorJson<T> implements Extractor<T> {
 		private String delayIndexUrl;
 		private String weatherUrl;
 		
+		
+		
 		@Override
 		public int hashCode() {
 			final int prime = 31;
@@ -73,7 +55,7 @@ public abstract class AbstractAirportExtractorJson<T> implements Extractor<T> {
 				return false;
 			if (getClass() != obj.getClass())
 				return false;
-			AirportJson other = (AirportJson) obj;
+			AirportPojo other = (AirportPojo) obj;
 			if (fs == null) {
 				if (other.fs != null)
 					return false;
@@ -91,5 +73,79 @@ public abstract class AbstractAirportExtractorJson<T> implements Extractor<T> {
 				return false;
 			return true;
 		}
+		protected String getFs() {
+			return fs;
+		}
+		protected String getIata() {
+			return iata;
+		}
+		protected String getIcao() {
+			return icao;
+		}
+		protected String getFaa() {
+			return faa;
+		}
+		protected String getName() {
+			return name;
+		}
+		protected String getStreet1() {
+			return street1;
+		}
+		protected String getStreet2() {
+			return street2;
+		}
+		protected String getCity() {
+			return city;
+		}
+		protected String getCityCode() {
+			return cityCode;
+		}
+		protected String getStateCode() {
+			return stateCode;
+		}
+		protected String getPostalCode() {
+			return postalCode;
+		}
+		protected String getCountryCode() {
+			return countryCode;
+		}
+		protected String getCountryName() {
+			return countryName;
+		}
+		protected String getRegionName() {
+			return regionName;
+		}
+		protected String getTimeZoneRegionName() {
+			return timeZoneRegionName;
+		}
+		protected String getWeatherZone() {
+			return weatherZone;
+		}
+		protected String getLocalTime() {
+			return localTime;
+		}
+		protected String getUtcOffsetHours() {
+			return utcOffsetHours;
+		}
+		protected String getLatitude() {
+			return latitude;
+		}
+		protected String getLongitude() {
+			return longitude;
+		}
+		protected String getElevationFeet() {
+			return elevationFeet;
+		}
+		protected String getClassification() {
+			return classification;
+		}
+		protected String getActive() {
+			return active;
+		}
+		protected String getDelayIndexUrl() {
+			return delayIndexUrl;
+		}
+		protected String getWeatherUrl() {
+			return weatherUrl;
+		}
  }
-}

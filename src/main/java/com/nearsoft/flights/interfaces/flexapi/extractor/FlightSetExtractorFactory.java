@@ -1,12 +1,10 @@
-package com.nearsoft.flights.interfaces.flexapi;
+package com.nearsoft.flights.interfaces.flexapi.extractor;
 
 import java.util.Set;
 
 import javax.ws.rs.core.MediaType;
 
 import com.nearsoft.flights.domain.model.flight.Flight;
-import com.nearsoft.flights.interfaces.flexapi.extractor.Extractor;
-import com.nearsoft.flights.interfaces.flexapi.extractor.MediaTypeExtractorFactory;
 import com.nearsoft.flights.interfaces.flexapi.extractor.json.FlightSetExtractorJson;
 
 public class FlightSetExtractorFactory implements

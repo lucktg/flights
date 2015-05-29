@@ -11,9 +11,9 @@ import org.springframework.web.client.RestTemplate;
 
 import com.nearsoft.flights.domain.model.airport.Airport;
 import com.nearsoft.flights.interfaces.AirportApi;
+import com.nearsoft.flights.interfaces.flexapi.extractor.AirportExtractorFactory;
+import com.nearsoft.flights.interfaces.flexapi.extractor.AirportSetExtractorFactory;
 import com.nearsoft.flights.interfaces.flexapi.extractor.MediaTypeResponseExtractor;
-import com.nearsoft.flights.interfaces.flexapi.extractor.json.AirportExtractorFactory;
-import com.nearsoft.flights.interfaces.flexapi.extractor.json.AirportSetExtractorFactory;
 import com.nearsoft.flights.rest.util.UriUtils;
 
 public class AirportFlexApi implements AirportApi {

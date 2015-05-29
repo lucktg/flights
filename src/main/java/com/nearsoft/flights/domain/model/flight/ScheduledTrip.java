@@ -4,21 +4,28 @@ import java.util.Date;
 
 import com.nearsoft.flights.domain.model.airport.Airport;
 
-public class Departure {
+public class ScheduledTrip {
+	
 	private Airport airport;
-	private Date departureDate;
+	private Date scheduledDate;
 	private String terminal;
+	
+	public ScheduledTrip(Airport aiport, Date scheduledDate, String terminal) {
+		this.airport = aiport;
+		this.scheduledDate = scheduledDate;
+		this.terminal = terminal;
+	}
 	
 	public Airport getAirport() {
 		return airport;
 	}
+	
 	public Date getDepartureDate() {
-		return departureDate;
+		return scheduledDate;
 	}
 	
 	public String getTerminal() {
 		return terminal;
 	}
-	
-	
+
 }
