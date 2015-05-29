@@ -1,6 +1,7 @@
 package com.nearsoft.flights.interfaces.flexapi;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
@@ -33,43 +34,18 @@ public class AirportFlexAPI implements AirportAPI {
 	
 	@Override
 	public Set<Airport> getAllActiveAirports() {
-		RestExchange<Set<Airport>> restExchange = new RestExchange<Set<Airport>>(restTemplate);
-		return restExchange.execute(new JsonExecuteConfig<Set<Airport>>(UriUtils.buildAllActiveAirportsJSONURI(apiConfig),
-				HttpMethod.GET, null,
-				new GenericResponseExtractor<Set<Airport>>(
-						new AirportExtractorFactory())));
+		return restTemplate.execute(UriUtils.buildAllActiveAirportsJSONURI(apiConfig), 
+				HttpMethod.GET, 
+				new EmptyRequestCallback(Collections.singletonList(MediaType.APPLICATION_JSON)), 
+				new GenericResponseExtractor<Set<Airport>>(new AirportSetExtractorFactory()));
 	}
-	
-	
-	public void exchangeJSON(){
-		restTemplate.execute(UriUtils.buildAllActiveAirportsJSONURI(apiConfig), HttpMethod.GET, 
-				new RequestCallback() {
 
-					@Override
-					public void doWithRequest(ClientHttpRequest request)
-							throws IOException {
-						request.getHeaders().setAccept(Lists.newArrayList(MediaType.APPLICATION_JSON));
-					}
-			
-		}, 
-				new ResponseExtractor<Airport>(){
-
-					@Override
-					public Airport extractData(ClientHttpResponse response)
-							throws IOException {
-						AirportExtractorFactory extractor = ExtractorStrategy.getExtractor(response.getHeaders().getContentType());
-						return strategy.extract(response.getBody());
-					}
-			
-		});
-		
-	}
-	
-	private HttpEntity<Airport> getJSONRequest() {
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Lists.newArrayList(MediaType.APPLICATION_JSON));
-		HttpEntity<Airport> request = new HttpEntity<Airport>(null, headers);
-		return request;
+	@Override
+	public Airport getAirportByCode(String airportCode) {
+		return restTemplate.execute(UriUtils.buildAllActiveAirportsJSONURI(apiConfig), 
+				HttpMethod.GET, 
+				new EmptyRequestCallback(Collections.singletonList(MediaType.APPLICATION_JSON)), 
+				new GenericResponseExtractor<Airport>(new AirportExtractorFactory()));
 	}
 
 }

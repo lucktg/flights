@@ -7,4 +7,5 @@ import com.nearsoft.flights.domain.model.flight.Flight;
 
 public interface AirportAPI {
 	Set<Airport> getAllActiveAirports();
+	Airport getAirportByCode(String airportCode);
 }
