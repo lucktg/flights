@@ -1,7 +1,10 @@
 package com.nearsoft.flights.interfaces;
 
-import com.nearsoft.flights.vo.Airports;
+import java.util.Set;
+
+import com.nearsoft.flights.domain.model.airport.Airport;
+import com.nearsoft.flights.domain.model.flight.Flight;
 
 public interface AirportAPI {
-	Airports getAllActiveAirports();
+	Set<Airport> getAllActiveAirports();
 }

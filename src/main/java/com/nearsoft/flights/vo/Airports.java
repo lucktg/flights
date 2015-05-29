@@ -3,6 +3,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+
 public class Airports extends FlightItemsSet<Airport>{
 	@JsonProperty("airports")
 	private Set<Airport> airports;

@@ -2,6 +2,7 @@ package com.nearsoft.flights.domain.model.airport;
 
 public class Airport {
 	
+	private String airportCode;
 	private String name;
 	private String city;
 	private String cityCode;
@@ -10,6 +11,17 @@ public class Airport {
 	private String countryName;
 	private String latitude;
 	private String longitude;
+	
+	private Airport(String airportCode, String latitude, String longitude) {
+		this.airportCode = airportCode;
+		this.latitude = latitude;
+		this.longitude = longitude;
+	}
+	
+	
+	public String getAirportCode() {
+		return airportCode;
+	}
 
 	public String getName() {
 		return name;
@@ -42,8 +54,6 @@ public class Airport {
 	public String getLongitude() {
 		return longitude;
 	}
-	
-	
 
 	@Override
 	public String toString() {
@@ -59,18 +69,20 @@ public class Airport {
 		
 		return builder.toString();
 	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
+				+ ((airportCode == null) ? 0 : airportCode.hashCode());
+		result = prime * result
 				+ ((latitude == null) ? 0 : latitude.hashCode());
 		result = prime * result
 				+ ((longitude == null) ? 0 : longitude.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
+
 
 	@Override
 	public boolean equals(Object obj) {
@@ -81,6 +93,11 @@ public class Airport {
 		if (getClass() != obj.getClass())
 			return false;
 		Airport other = (Airport) obj;
+		if (airportCode == null) {
+			if (other.airportCode != null)
+				return false;
+		} else if (!airportCode.equals(other.airportCode))
+			return false;
 		if (latitude == null) {
 			if (other.latitude != null)
 				return false;
@@ -91,11 +108,79 @@ public class Airport {
 				return false;
 		} else if (!longitude.equals(other.longitude))
 			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
 		return true;
+	}
+
+
+	
+	public static class AirportBuilder {
+		private String airportCode = "";
+		private String name = "";
+		private String city = "";
+		private String cityCode = "";
+		private String stateCode = "";
+		private String countryCode = "";
+		private String countryName = "";
+		private String latitude = "";
+		private String longitude = "";
+
+		public AirportBuilder (String airportCode, String latitud, String longitud) {
+			this.airportCode = airportCode;
+			this.latitude = latitud;
+			this.longitude = longitud;
+		}
+		
+		public AirportBuilder addName(String name){
+			this.name = name;
+			return this;
+		}
+		
+		public AirportBuilder addCity(String city){
+			this.city = city;
+			return this;
+		}
+		
+		public AirportBuilder addCityCode(String cityCode){
+			this.cityCode= cityCode;
+			return this;
+		}
+		
+		public AirportBuilder addStateCode(String stateCode) {
+			this.stateCode = stateCode;
+			return this;
+		}
+		
+		public AirportBuilder addCountryCode(String countryCode) {
+			this.countryCode = countryCode;
+			return this;
+		}
+		
+		public AirportBuilder addCountryName(String countryName) {
+			this.countryName = countryName;
+			return this;
+		}
+		
+		public AirportBuilder addLatitude(String latitude) {
+			this.latitude = latitude;
+			return this;
+		}
+		
+		public AirportBuilder addLongitude(String longitude) {
+			this.longitude = longitude;
+			return this;
+		}
+		
+		public Airport build() {
+			Airport airport = new Airport(this.airportCode,this.latitude, this.longitude);
+			airport.city = this.city;
+			airport.cityCode = this.cityCode;
+			airport.countryCode = this.countryCode;
+			airport.countryName = this.countryName;
+			airport.latitude = this.latitude;
+			airport.longitude = this.longitude;
+			airport.name = this.name;
+			airport.stateCode = this.stateCode;
+			return airport;
+		}
 	}
 }

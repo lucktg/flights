@@ -52,6 +52,7 @@ public class TravelFlightStatsClient implements TravelAPIClient {
 				tripInformation.getDepartureAirportCode(),
 				tripInformation.getArrivalAirportCode(),
 				tripInformation.getDepartureDate());
+		restTemplate.exchange(null,null,null,Flights.class).
 		return exchange(UriUtils.buildScheduledDepartingFlightsByRouteNDateJSON(appKeys, urlParams), Flights.class);
 	}
 	

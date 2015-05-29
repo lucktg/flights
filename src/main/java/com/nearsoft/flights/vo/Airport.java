@@ -1,6 +1,8 @@
 package com.nearsoft.flights.vo;
 
+import javax.annotation.security.DenyAll;
 
+@Deprecated
 public class Airport implements FlightItem {
 	
 	private String name;
