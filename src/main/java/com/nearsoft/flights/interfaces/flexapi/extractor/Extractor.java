@@ -1,4 +1,4 @@
-package com.nearsoft.flights.interfaces.flexapi;
+package com.nearsoft.flights.interfaces.flexapi.extractor;
 
 import java.io.InputStream;
 

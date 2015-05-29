@@ -29,7 +29,7 @@ import com.nearsoft.flights.vo.Airport;
 import com.nearsoft.flights.vo.Airports;
 import com.nearsoft.flights.vo.Flight;
 import com.nearsoft.flights.vo.Flights;
-import com.nearsoft.flights.vo.TripInformation;
+import com.nearsoft.flights.vo.TripInformationRequest;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:spring/application-config.xml")
@@ -100,7 +100,7 @@ public class APIClientTravelDataGetterTest {
 	
 	@Test
 	public void shouldReturnEmptyFlightsSet() {
-		TripInformation tripInformation = getTripInformation();
+		TripInformationRequest tripInformation = getTripInformation();
 		when(travelAPIClient.getDepartingFlightsByRouteAndDate(tripInformation)).thenReturn(null);
 
 		Set<Flight> flights = apiClientTravelDataGetter.getDepartingFlightsByRouteNDate(tripInformation);
@@ -113,7 +113,7 @@ public class APIClientTravelDataGetterTest {
 	
 	@Test
 	public void shouldReturnNotEmptyFlightSet() {
-		TripInformation tripInformation = getTripInformation();
+		TripInformationRequest tripInformation = getTripInformation();
 		Flights flights = getFlights();
 		when(travelAPIClient.getDepartingFlightsByRouteAndDate(tripInformation)).thenReturn(flights);
 
@@ -129,7 +129,7 @@ public class APIClientTravelDataGetterTest {
 
 	@Test
 	public void shouldReturnEmptyFlightSetWhenAirportSetIsNull() {
-		TripInformation tripInformation = getTripInformation();
+		TripInformationRequest tripInformation = getTripInformation();
 		Flights nullFlightSet = getFlightsNullFlightSet();
 		when(travelAPIClient.getDepartingFlightsByRouteAndDate(tripInformation)).thenReturn(nullFlightSet);
 		Set<Flight> flights = apiClientTravelDataGetter.getDepartingFlightsByRouteNDate(tripInformation);
@@ -161,7 +161,7 @@ public class APIClientTravelDataGetterTest {
 		return new Flights(null);
 	}
 	
-	private TripInformation getTripInformation() {
-		return new TripInformation(MEX_AIRPORT_CODE, HMO_AIRPORT_CODE, new Date());
+	private TripInformationRequest getTripInformation() {
+		return new TripInformationRequest(MEX_AIRPORT_CODE, HMO_AIRPORT_CODE, new Date());
 	}
 }

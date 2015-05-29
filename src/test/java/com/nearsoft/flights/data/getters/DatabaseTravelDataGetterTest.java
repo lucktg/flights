@@ -22,7 +22,7 @@ import com.nearsoft.flights.dao.AirportDAO;
 import com.nearsoft.flights.dao.FlightDAO;
 import com.nearsoft.flights.vo.Airport;
 import com.nearsoft.flights.vo.Flight;
-import com.nearsoft.flights.vo.TripInformation;
+import com.nearsoft.flights.vo.TripInformationRequest;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:spring/application-config.xml")
@@ -82,7 +82,7 @@ public class DatabaseTravelDataGetterTest {
 	
 	@Test
 	public void shouldReturnNullFlightSet() {
-		TripInformation tripInformation = getTripInformation();
+		TripInformationRequest tripInformation = getTripInformation();
 		when(flightDAO.findDepartingFlightsByRouteNDate(tripInformation)).thenReturn(null);
 		
 		Set<Flight> flights = databaseTravelDataGetter.getDepartingFlightsByRouteNDate(tripInformation);
@@ -93,7 +93,7 @@ public class DatabaseTravelDataGetterTest {
 	
 	@Test
 	public void shouldReturnEmptyFlightSet() {
-		TripInformation tripInformation = getTripInformation();
+		TripInformationRequest tripInformation = getTripInformation();
 		when(flightDAO.findDepartingFlightsByRouteNDate(tripInformation)).thenReturn(Collections.emptySet());
 		
 		Set<Flight> flights = databaseTravelDataGetter.getDepartingFlightsByRouteNDate(tripInformation);
@@ -105,7 +105,7 @@ public class DatabaseTravelDataGetterTest {
 	
 	@Test
 	public void shouldReturnNotEmptyFlighttSet() {
-		TripInformation tripInformation = getTripInformation();
+		TripInformationRequest tripInformation = getTripInformation();
 		when(flightDAO.findDepartingFlightsByRouteNDate(tripInformation)).thenReturn(getFlightSet());
 		
 		Set<Flight> flights = databaseTravelDataGetter.getDepartingFlightsByRouteNDate(tripInformation);
@@ -127,7 +127,7 @@ public class DatabaseTravelDataGetterTest {
 		return airports;
 	}
 	
-	private TripInformation getTripInformation() {
-		return new TripInformation(MEX_AIRPORT_CODE, HMO_AIRPORT_CODE, new Date());
+	private TripInformationRequest getTripInformation() {
+		return new TripInformationRequest(MEX_AIRPORT_CODE, HMO_AIRPORT_CODE, new Date());
 	}
 }

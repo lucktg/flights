@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 import com.nearsoft.flights.service.FlightsService;
 import com.nearsoft.flights.vo.RoundTrip;
-import com.nearsoft.flights.vo.TripInformation;
+import com.nearsoft.flights.vo.TripInformationRequest;
 
 @Component
 @Path("flights")
@@ -40,9 +40,9 @@ public class FlightsResource {
 		}
 	}
 	
-	private TripInformation getTripInformation(String airportCodeOrigin, String airportCodeDestiny, String departureDate) throws ParseException {
+	private TripInformationRequest getTripInformation(String airportCodeOrigin, String airportCodeDestiny, String departureDate) throws ParseException {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
-		return new TripInformation(airportCodeDestiny, airportCodeDestiny, format.parse(departureDate));
+		return new TripInformationRequest(airportCodeDestiny, airportCodeDestiny, format.parse(departureDate));
 	}
 
 }

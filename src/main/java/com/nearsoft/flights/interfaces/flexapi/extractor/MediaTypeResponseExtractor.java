@@ -1,15 +1,15 @@
-package com.nearsoft.flights.interfaces.flexapi;
+package com.nearsoft.flights.interfaces.flexapi.extractor;
 
 import java.io.IOException;
 
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.ResponseExtractor;
 
-public class GenericResponseExtractor<T> implements ResponseExtractor<T> {
+public class MediaTypeResponseExtractor<T> implements ResponseExtractor<T> {
 	
-	private ExtractorFactory<T> extractorFactory;
+	private MediaTypeExtractorFactory<T> extractorFactory;
 	
-	public GenericResponseExtractor(ExtractorFactory<T> extractorFactory) {
+	public MediaTypeResponseExtractor(MediaTypeExtractorFactory<T> extractorFactory) {
 		this.extractorFactory = extractorFactory;
 	}
 	

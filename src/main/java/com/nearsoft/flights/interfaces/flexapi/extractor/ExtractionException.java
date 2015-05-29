@@ -1,4 +1,4 @@
-package com.nearsoft.flights.interfaces.flexapi;
+package com.nearsoft.flights.interfaces.flexapi.extractor;
 
 public class ExtractionException extends Exception {
 

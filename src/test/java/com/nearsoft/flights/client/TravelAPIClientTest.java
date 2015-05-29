@@ -42,7 +42,7 @@ import com.nearsoft.flights.vo.Airport;
 import com.nearsoft.flights.vo.Airports;
 import com.nearsoft.flights.vo.Flight;
 import com.nearsoft.flights.vo.Flights;
-import com.nearsoft.flights.vo.TripInformation;
+import com.nearsoft.flights.vo.TripInformationRequest;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:spring/application-config.xml")
@@ -100,7 +100,7 @@ public class TravelAPIClientTest {
 	
 	@Test
 	public void shouldReturnNotEmptyDepartingFlightsSet() {
-		TripInformation tripInformation = getTripInformation();
+		TripInformationRequest tripInformation = getTripInformation();
 		when(mockTemplate.exchange(UriUtils.buildScheduledDepartingFlightsByRouteNDateJSON(
 				mockAppKeys,getFlighsByRouteNDateURLParamsMap(tripInformation.getDepartureDate())), 
 				HttpMethod.GET, 
@@ -119,7 +119,7 @@ public class TravelAPIClientTest {
 	
 	@Test
 	public void shouldReturnNullDepartingFlightsSet(){
-		TripInformation tripInformation = getTripInformation();
+		TripInformationRequest tripInformation = getTripInformation();
 		when(mockTemplate.exchange(UriUtils.buildScheduledDepartingFlightsByRouteNDateJSON(
 				mockAppKeys,getFlighsByRouteNDateURLParamsMap(tripInformation.getDepartureDate())), 
 				HttpMethod.GET,
@@ -137,7 +137,7 @@ public class TravelAPIClientTest {
 	
 	@Test
 	public void shouldFailWithException(){
-		TripInformation tripInformation = getTripInformation();
+		TripInformationRequest tripInformation = getTripInformation();
 		expectedException.expect(IllegalArgumentException.class);
 		expectedException.expectMessage(containsString("The template variable"));
 		when(mockTemplate.exchange(UriUtils.buildScheduledDepartingFlightsByRouteNDateJSON(mockAppKeys,null), 
@@ -157,7 +157,7 @@ public class TravelAPIClientTest {
 	
 	@Test
 	public void shouldReturnFlights() {
-		TripInformation tripInformation = getTripInformation();
+		TripInformationRequest tripInformation = getTripInformation();
 		TravelAPIClient newClient = getTravelAPIClientNoMocking();
 		Flights flights =newClient.getDepartingFlightsByRouteAndDate(tripInformation);
 		Assert.assertNotNull(flights);
@@ -202,7 +202,7 @@ public class TravelAPIClientTest {
 		return new TravelFlightStatsClient(restTemplate, apiKeys);
 	}
 	
-	private TripInformation getTripInformation() {
-		return new TripInformation(MEX_AIRPORT_CODE, HMO_AIRPORT_CODE, new Date());
+	private TripInformationRequest getTripInformation() {
+		return new TripInformationRequest(MEX_AIRPORT_CODE, HMO_AIRPORT_CODE, new Date());
 	}
 }

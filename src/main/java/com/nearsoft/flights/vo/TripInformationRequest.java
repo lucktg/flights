@@ -2,12 +2,12 @@ package com.nearsoft.flights.vo;
 
 import java.util.Date;
 
-public class TripInformation {
+public class TripInformationRequest {
 	private String departureAirportCode;
 	private String arrivalAirportCode;
 	private Date departureDate;
 
-	public TripInformation(String departureAirportCode,
+	public TripInformationRequest(String departureAirportCode,
 			String arrivalAirportCode, Date departureDate) {
 		this.departureAirportCode = departureAirportCode;
 		this.arrivalAirportCode = arrivalAirportCode;

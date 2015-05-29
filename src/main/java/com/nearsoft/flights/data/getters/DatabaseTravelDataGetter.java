@@ -11,7 +11,7 @@ import com.nearsoft.flights.vo.Airport;
 import com.nearsoft.flights.vo.Airports;
 import com.nearsoft.flights.vo.Flight;
 import com.nearsoft.flights.vo.Flights;
-import com.nearsoft.flights.vo.TripInformation;
+import com.nearsoft.flights.vo.TripInformationRequest;
 
 public class DatabaseTravelDataGetter implements TravelDataGetter, Observer {
 	
@@ -42,7 +42,7 @@ public class DatabaseTravelDataGetter implements TravelDataGetter, Observer {
 	}
 
 	@Override
-	public Set<Flight> getDepartingFlightsByRouteNDate(TripInformation tripInformation) {
+	public Set<Flight> getDepartingFlightsByRouteNDate(TripInformationRequest tripInformation) {
 		return flightDAO.findDepartingFlightsByRouteNDate(tripInformation);
 	}
 }

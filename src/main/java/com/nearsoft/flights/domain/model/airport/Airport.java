@@ -1,6 +1,7 @@
 package com.nearsoft.flights.domain.model.airport;
 
 public class Airport {
+	public static Airport EMPTY_AIRPORT = new Airport();
 	
 	private String airportCode;
 	private String name;
@@ -12,10 +13,12 @@ public class Airport {
 	private String latitude;
 	private String longitude;
 	
-	private Airport(String airportCode, String latitude, String longitude) {
+	private Airport() {
+		
+	}
+	
+	private Airport(String airportCode) {
 		this.airportCode = airportCode;
-		this.latitude = latitude;
-		this.longitude = longitude;
 	}
 	
 	
@@ -124,10 +127,8 @@ public class Airport {
 		private String latitude = "";
 		private String longitude = "";
 
-		public AirportBuilder (String airportCode, String latitud, String longitud) {
+		public AirportBuilder (String airportCode) {
 			this.airportCode = airportCode;
-			this.latitude = latitud;
-			this.longitude = longitud;
 		}
 		
 		public AirportBuilder addName(String name){
@@ -171,7 +172,9 @@ public class Airport {
 		}
 		
 		public Airport build() {
-			Airport airport = new Airport(this.airportCode,this.latitude, this.longitude);
+			Airport airport = new Airport(this.airportCode);
+			airport.latitude = this.latitude;
+			airport.longitude = this.longitude;
 			airport.city = this.city;
 			airport.cityCode = this.cityCode;
 			airport.countryCode = this.countryCode;

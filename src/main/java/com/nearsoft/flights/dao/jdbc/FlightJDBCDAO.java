@@ -4,7 +4,7 @@ import java.util.Set;
 
 import com.nearsoft.flights.dao.FlightDAO;
 import com.nearsoft.flights.vo.Flight;
-import com.nearsoft.flights.vo.TripInformation;
+import com.nearsoft.flights.vo.TripInformationRequest;
 
 public class FlightJDBCDAO implements FlightDAO {
 
@@ -15,7 +15,7 @@ public class FlightJDBCDAO implements FlightDAO {
 	}
 
 	@Override
-	public Set<Flight> findDepartingFlightsByRouteNDate(TripInformation tripInformation) {
+	public Set<Flight> findDepartingFlightsByRouteNDate(TripInformationRequest tripInformation) {
 		// TODO Auto-generated method stub
 		return null;
 	}
