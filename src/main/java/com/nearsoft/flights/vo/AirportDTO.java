@@ -3,7 +3,7 @@ package com.nearsoft.flights.vo;
 import javax.annotation.security.DenyAll;
 
 @Deprecated
-public class Airport implements FlightItem {
+public class AirportDTO implements FlightItem {
 	
 	private String name;
 	private String city;
@@ -14,7 +14,7 @@ public class Airport implements FlightItem {
 	private String latitude;
 	private String longitude;
 	
-	public Airport() {
+	public AirportDTO() {
 		
 	}
 
@@ -87,7 +87,7 @@ public class Airport implements FlightItem {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Airport other = (Airport) obj;
+		AirportDTO other = (AirportDTO) obj;
 		if (latitude == null) {
 			if (other.latitude != null)
 				return false;

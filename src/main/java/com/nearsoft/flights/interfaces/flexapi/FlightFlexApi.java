@@ -9,6 +9,7 @@ import java.util.Set;
 
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.RestTemplate;
 
 import com.nearsoft.flights.domain.model.flight.Flight;
@@ -29,12 +30,14 @@ public class FlightFlexApi implements FlightApi {
 	
 	private RestTemplate restTemplate;
 	private Map<String, String> apiConfig;
+	private RequestCallback requestCallback;
 
 
 	public FlightFlexApi(RestTemplate restTemplate,
-			Map<String, String> apiConfig) {
+			Map<String, String> apiConfig, RequestCallback requestCallback) {
 		this.restTemplate = restTemplate;
 		this.apiConfig = apiConfig;
+		this.requestCallback = requestCallback;
 	}
 
 	@Override
@@ -44,7 +47,7 @@ public class FlightFlexApi implements FlightApi {
 				infoRequest.getDepartureDate());
 		return restTemplate.execute(UriUtils.buildScheduledDepartingFlightsByRouteNDateJSON(apiConfig, urlParams), 
 				HttpMethod.GET, 
-				new EmptyRequestCallback(Collections.singletonList(MediaType.APPLICATION_JSON)), 
+				requestCallback, 
 				new MediaTypeResponseExtractor<Set<Flight>>(new FlightSetExtractorFactory()));
 	}
 	

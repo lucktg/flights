@@ -2,9 +2,9 @@ package com.nearsoft.flights.service;
 
 import java.util.Set;
 
-import com.nearsoft.flights.vo.Airport;
+import com.nearsoft.flights.vo.AirportDTO;
 
 public interface AirportsService {
-	Set<Airport> getActiveAirports();
-	Airport getAirportByCode(String airportCode);
+	Set<AirportDTO> getActiveAirports();
+	AirportDTO getAirportByCode(String airportCode);
 }

@@ -3,7 +3,7 @@ package com.nearsoft.flights.service;
 import java.util.Set;
 
 import com.nearsoft.flights.data.getters.TravelDataGetter;
-import com.nearsoft.flights.vo.Airport;
+import com.nearsoft.flights.vo.AirportDTO;
 public class AirportsServiceImpl implements AirportsService {
 
 	private TravelDataGetter databaseTravelDataGetter;
@@ -16,8 +16,8 @@ public class AirportsServiceImpl implements AirportsService {
 	}
 
 	@Override
-	public Set<Airport> getActiveAirports() {
-		Set<Airport> airports = databaseTravelDataGetter.getAllActiveAirports();
+	public Set<AirportDTO> getActiveAirports() {
+		Set<AirportDTO> airports = databaseTravelDataGetter.getAllActiveAirports();
 		if (airports == null || airports.isEmpty()) {
 			airports =apiClientTravelDataGetter.getAllActiveAirports();
 		}
@@ -25,7 +25,7 @@ public class AirportsServiceImpl implements AirportsService {
 	}
 
 	@Override
-	public Airport getAirportByCode(String airportCode) {
+	public AirportDTO getAirportByCode(String airportCode) {
 		// TODO Auto-generated method stub
 		return null;
 	}

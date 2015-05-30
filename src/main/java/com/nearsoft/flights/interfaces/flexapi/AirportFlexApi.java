@@ -1,12 +1,11 @@
 package com.nearsoft.flights.interfaces.flexapi;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
+import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.RestTemplate;
 
 import com.nearsoft.flights.domain.model.airport.Airport;
@@ -21,19 +20,21 @@ public class AirportFlexApi implements AirportApi {
 		code
 	}
 	private RestTemplate restTemplate;
+	private RequestCallback requestCallback;
 	
 	private Map<String, String> apiConfig;
 	
-	public AirportFlexApi(RestTemplate restTemplate, Map<String, String> apiConfig) {
+	public AirportFlexApi(RestTemplate restTemplate, Map<String, String> apiConfig, RequestCallback requestCallback) {
 		this.restTemplate = restTemplate;
 		this.apiConfig = apiConfig;
+		this.requestCallback = requestCallback;
 	}
 	
 	@Override
 	public Set<Airport> getAllActiveAirports() {
 		return restTemplate.execute(UriUtils.buildAllActiveAirportsJSONURI(apiConfig), 
 				HttpMethod.GET, 
-				new EmptyRequestCallback(Collections.singletonList(MediaType.APPLICATION_JSON)), 
+				requestCallback, 
 				new MediaTypeResponseExtractor<Set<Airport>>(new AirportSetExtractorFactory()));
 	}
 
@@ -43,7 +44,7 @@ public class AirportFlexApi implements AirportApi {
 		urlParams.put(URLParams.code.name(), airportCode);
 		return restTemplate.execute(UriUtils.buildAirportsJSONURI(apiConfig, urlParams), 
 				HttpMethod.GET, 
-				new EmptyRequestCallback(Collections.singletonList(MediaType.APPLICATION_JSON)), 
+				requestCallback, 
 				new MediaTypeResponseExtractor<Airport>(new AirportExtractorFactory()));
 	}
 

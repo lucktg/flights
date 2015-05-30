@@ -22,10 +22,10 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.nearsoft.flights.dao.AirportDAO;
-import com.nearsoft.flights.dao.FlightDAO;
 import com.nearsoft.flights.interfaces.TravelAPIClient;
-import com.nearsoft.flights.vo.Airport;
+import com.nearsoft.flights.persistence.dao.AirportDAO;
+import com.nearsoft.flights.persistence.dao.FlightDAO;
+import com.nearsoft.flights.vo.AirportDTO;
 import com.nearsoft.flights.vo.Airports;
 import com.nearsoft.flights.vo.Flight;
 import com.nearsoft.flights.vo.Flights;
@@ -66,7 +66,7 @@ public class APIClientTravelDataGetterTest {
 	public void shouldReturnEmptyAirportSet() {
 		when(travelAPIClient.getAllActiveAirports()).thenReturn(null);
 
-		Set<Airport> airports = apiClientTravelDataGetter.getAllActiveAirports();
+		Set<AirportDTO> airports = apiClientTravelDataGetter.getAllActiveAirports();
 		Assert.assertNotNull(airports);
 		Assert.assertThat(airports, is(empty()));
 		verify(dbGetter).update(apiClientTravelDataGetter, null);
@@ -78,7 +78,7 @@ public class APIClientTravelDataGetterTest {
 		Airports airports = getAirports();
 		when(travelAPIClient.getAllActiveAirports()).thenReturn(airports);
 
-		Set<Airport> airportSet = apiClientTravelDataGetter.getAllActiveAirports();
+		Set<AirportDTO> airportSet = apiClientTravelDataGetter.getAllActiveAirports();
 		Assert.assertNotNull(airports);
 		Assert.assertThat(airportSet, is(not(empty())));
 		
@@ -90,7 +90,7 @@ public class APIClientTravelDataGetterTest {
 	public void shouldReturnEmptyAirportSetWhenAirportSetIsNull() {
 		Airports nullAirportSet = getAirportsNullAirportsSet();
 		when(travelAPIClient.getAllActiveAirports()).thenReturn(nullAirportSet);
-		Set<Airport> airports = apiClientTravelDataGetter.getAllActiveAirports();
+		Set<AirportDTO> airports = apiClientTravelDataGetter.getAllActiveAirports();
 		Assert.assertNotNull(airports);
 		Assert.assertThat(airports, is(empty()));
 		
@@ -142,7 +142,7 @@ public class APIClientTravelDataGetterTest {
 	
 
 	private Airports getAirports() {
-		Set<Airport> airportsSet = Collections.singleton(new Airport());
+		Set<AirportDTO> airportsSet = Collections.singleton(new AirportDTO());
 		Airports airports = new Airports(airportsSet);
 		return airports;
 	}

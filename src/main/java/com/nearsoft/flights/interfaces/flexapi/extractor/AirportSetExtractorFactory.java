@@ -15,7 +15,7 @@ public class AirportSetExtractorFactory implements MediaTypeExtractorFactory<Set
 				return new AirportSetExtractorJson();
 			}
 			default : {
-				return null;
+				throw new RuntimeException("No extractor for media type ["+mediaType+"]");
 			}
 		}
 	}

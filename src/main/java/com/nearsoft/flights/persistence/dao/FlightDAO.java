@@ -1,4 +1,4 @@
-package com.nearsoft.flights.dao;
+package com.nearsoft.flights.persistence.dao;
 
 import java.util.Set;
 

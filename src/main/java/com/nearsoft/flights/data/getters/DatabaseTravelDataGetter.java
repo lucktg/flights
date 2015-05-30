@@ -5,9 +5,9 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
 
-import com.nearsoft.flights.dao.AirportDAO;
-import com.nearsoft.flights.dao.FlightDAO;
-import com.nearsoft.flights.vo.Airport;
+import com.nearsoft.flights.persistence.dao.AirportDAO;
+import com.nearsoft.flights.persistence.dao.FlightDAO;
+import com.nearsoft.flights.vo.AirportDTO;
 import com.nearsoft.flights.vo.Airports;
 import com.nearsoft.flights.vo.Flight;
 import com.nearsoft.flights.vo.Flights;
@@ -24,7 +24,7 @@ public class DatabaseTravelDataGetter implements TravelDataGetter, Observer {
 	}
 	
 	@Override
-	public Set<Airport> getAllActiveAirports() {
+	public Set<AirportDTO> getAllActiveAirports() {
 		return airportDAO.findActiveAirports();
 	}
 

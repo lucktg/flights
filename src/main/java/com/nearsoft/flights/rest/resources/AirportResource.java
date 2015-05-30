@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.nearsoft.flights.service.AirportsService;
-import com.nearsoft.flights.vo.Airport;
+import com.nearsoft.flights.vo.AirportDTO;
 
 @Component
 @Path("/airports")
@@ -23,7 +23,7 @@ public class AirportResource {
 	@GET
 	@Path("active")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Set<Airport> getAllActiveAirports(){
+	public Set<AirportDTO> getAllActiveAirports(){
 		return airportService.getActiveAirports();
 	}
 	

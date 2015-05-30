@@ -1,8 +1,8 @@
-package com.nearsoft.flights.dao.jdbc;
+package com.nearsoft.flights.persistence.dao.jdbc;
 
 import java.util.Set;
 
-import com.nearsoft.flights.dao.FlightDAO;
+import com.nearsoft.flights.persistence.dao.FlightDAO;
 import com.nearsoft.flights.vo.Flight;
 import com.nearsoft.flights.vo.TripInformationRequest;
 

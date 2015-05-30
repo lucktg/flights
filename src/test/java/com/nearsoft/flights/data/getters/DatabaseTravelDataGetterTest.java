@@ -18,9 +18,9 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.nearsoft.flights.dao.AirportDAO;
-import com.nearsoft.flights.dao.FlightDAO;
-import com.nearsoft.flights.vo.Airport;
+import com.nearsoft.flights.persistence.dao.AirportDAO;
+import com.nearsoft.flights.persistence.dao.FlightDAO;
+import com.nearsoft.flights.vo.AirportDTO;
 import com.nearsoft.flights.vo.Flight;
 import com.nearsoft.flights.vo.TripInformationRequest;
 
@@ -50,7 +50,7 @@ public class DatabaseTravelDataGetterTest {
 	public void shouldReturnNullAirportSet() {
 		when(airportDAO.findActiveAirports()).thenReturn(null);
 		
-		Set<Airport> airports = databaseTravelDataGetter.getAllActiveAirports();
+		Set<AirportDTO> airports = databaseTravelDataGetter.getAllActiveAirports();
 		Assert.assertNull(airports);
 		
 		verify(airportDAO).findActiveAirports();
@@ -60,7 +60,7 @@ public class DatabaseTravelDataGetterTest {
 	public void shouldReturnEmptyAirportSet() {
 		when(airportDAO.findActiveAirports()).thenReturn(Collections.emptySet());
 		
-		Set<Airport> airports = databaseTravelDataGetter.getAllActiveAirports();
+		Set<AirportDTO> airports = databaseTravelDataGetter.getAllActiveAirports();
 		Assert.assertNotNull(airports);
 		Assert.assertThat(airports, is(empty()));
 		
@@ -71,7 +71,7 @@ public class DatabaseTravelDataGetterTest {
 	public void shouldReturnNotEmptyAirportSet() {
 		when(airportDAO.findActiveAirports()).thenReturn(getAirportSet());
 		
-		Set<Airport> airports = databaseTravelDataGetter.getAllActiveAirports();
+		Set<AirportDTO> airports = databaseTravelDataGetter.getAllActiveAirports();
 		Assert.assertNotNull(airports);
 		Assert.assertThat(airports, is(not(empty())));
 		
@@ -121,9 +121,9 @@ public class DatabaseTravelDataGetterTest {
 		return flights;
 	}
 
-	private Set<Airport> getAirportSet() {
-		Set<Airport> airports = new HashSet<Airport>();
-		airports.add(new Airport());
+	private Set<AirportDTO> getAirportSet() {
+		Set<AirportDTO> airports = new HashSet<AirportDTO>();
+		airports.add(new AirportDTO());
 		return airports;
 	}
 	

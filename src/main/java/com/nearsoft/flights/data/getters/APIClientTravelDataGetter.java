@@ -7,7 +7,7 @@ import java.util.Observer;
 import java.util.Set;
 
 import com.nearsoft.flights.interfaces.TravelAPIClient;
-import com.nearsoft.flights.vo.Airport;
+import com.nearsoft.flights.vo.AirportDTO;
 import com.nearsoft.flights.vo.Airports;
 import com.nearsoft.flights.vo.Flight;
 import com.nearsoft.flights.vo.FlightItem;
@@ -25,7 +25,7 @@ public class APIClientTravelDataGetter extends Observable implements TravelDataG
 	}
 	
 	@Override
-	public Set<Airport> getAllActiveAirports() {
+	public Set<AirportDTO> getAllActiveAirports() {
 		Airports airports = travelAPIClient.getAllActiveAirports();
 		return notify(airports);
 	}
