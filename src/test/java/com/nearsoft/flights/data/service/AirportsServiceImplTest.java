@@ -28,8 +28,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.nearsoft.flights.data.getters.APIClientTravelDataGetter;
 import com.nearsoft.flights.data.getters.DatabaseTravelDataGetter;
 import com.nearsoft.flights.interfaces.TravelAPIClient;
-import com.nearsoft.flights.persistence.dao.AirportDAO;
-import com.nearsoft.flights.persistence.dao.FlightDAO;
+import com.nearsoft.flights.persistence.dao.AirportDao;
+import com.nearsoft.flights.persistence.dao.FlightDao;
 import com.nearsoft.flights.service.AirportsService;
 import com.nearsoft.flights.service.AirportsServiceImpl;
 import com.nearsoft.flights.vo.AirportDTO;
@@ -42,10 +42,10 @@ public class AirportsServiceImplTest {
 	private AirportsService airportService;
 		
 	@Mock
-	private AirportDAO airportDAO;
+	private AirportDao airportDAO;
 	
 	@Mock
-	private FlightDAO flightDAO;
+	private FlightDao flightDAO;
 	
 	@Mock
 	private TravelAPIClient apiClient;
@@ -64,7 +64,7 @@ public class AirportsServiceImplTest {
 		when(airportDAO.findActiveAirports()).thenReturn(null);
 		when(apiClient.getAllActiveAirports()).thenReturn(null);
 		
-		Set<AirportDTO> airports = airportService.getActiveAirports();
+		Set<AirportDto> airports = airportService.getActiveAirports();
 		Assert.assertNotNull(airports);
 		Assert.assertThat(airports, is(empty()));
 		
@@ -81,7 +81,7 @@ public class AirportsServiceImplTest {
 		when(airportDAO.findActiveAirports()).thenReturn(null);
 		when(apiClient.getAllActiveAirports()).thenReturn(getAirportsWithEmptyAirportSet());
 		
-		Set<AirportDTO> airports = airportService.getActiveAirports();
+		Set<AirportDto> airports = airportService.getActiveAirports();
 		Assert.assertNotNull(airports);
 		Assert.assertThat(airports, is(empty()));
 		
@@ -98,7 +98,7 @@ public class AirportsServiceImplTest {
 		when(airportDAO.findActiveAirports()).thenReturn(getAirportSet());
 		when(apiClient.getAllActiveAirports()).thenReturn(null);
 		
-		Set<AirportDTO> airports = airportService.getActiveAirports();
+		Set<AirportDto> airports = airportService.getActiveAirports();
 		Assert.assertNotNull(airports);
 		Assert.assertThat(airports, is(not(empty())));
 		
@@ -114,7 +114,7 @@ public class AirportsServiceImplTest {
 		when(airportDAO.findActiveAirports()).thenReturn(null);
 		when(apiClient.getAllActiveAirports()).thenReturn(getAirports());
 		
-		Set<AirportDTO> airports = airportService.getActiveAirports();
+		Set<AirportDto> airports = airportService.getActiveAirports();
 		Assert.assertNotNull(airports);
 		Assert.assertThat(airports, is(not(empty())));
 		
@@ -130,11 +130,11 @@ public class AirportsServiceImplTest {
 	}
 	
 	private Airports getAirports() {
-		return new Airports(Collections.singleton(new AirportDTO()));
+		return new Airports(Collections.singleton(new AirportDto()));
 	}
 	
-	private Set<AirportDTO> getAirportSet() {
-		Set<AirportDTO> airports = Collections.singleton(new AirportDTO());
+	private Set<AirportDto> getAirportSet() {
+		Set<AirportDto> airports = Collections.singleton(new AirportDto());
 		return airports;
 	}
 }

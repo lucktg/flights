@@ -23,13 +23,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.nearsoft.flights.interfaces.TravelAPIClient;
-import com.nearsoft.flights.persistence.dao.AirportDAO;
-import com.nearsoft.flights.persistence.dao.FlightDAO;
+import com.nearsoft.flights.persistence.dao.AirportDao;
+import com.nearsoft.flights.persistence.dao.FlightDao;
+import com.nearsoft.flights.persistence.dto.TripInformationRequestDto;
 import com.nearsoft.flights.vo.AirportDTO;
 import com.nearsoft.flights.vo.Airports;
-import com.nearsoft.flights.vo.Flight;
+import com.nearsoft.flights.vo.FlightDto;
 import com.nearsoft.flights.vo.Flights;
-import com.nearsoft.flights.vo.TripInformationRequest;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:spring/application-config.xml")
@@ -45,10 +45,10 @@ public class APIClientTravelDataGetterTest {
 	private TravelAPIClient travelAPIClient;
 	
 	@Mock
-	private AirportDAO airportDAO;
+	private AirportDao airportDAO;
 	
 	@Mock
-	private FlightDAO flightDAO;
+	private FlightDao flightDAO;
 	
 	@Mock
 	DatabaseTravelDataGetter dbGetter;
@@ -66,7 +66,7 @@ public class APIClientTravelDataGetterTest {
 	public void shouldReturnEmptyAirportSet() {
 		when(travelAPIClient.getAllActiveAirports()).thenReturn(null);
 
-		Set<AirportDTO> airports = apiClientTravelDataGetter.getAllActiveAirports();
+		Set<AirportDto> airports = apiClientTravelDataGetter.getAllActiveAirports();
 		Assert.assertNotNull(airports);
 		Assert.assertThat(airports, is(empty()));
 		verify(dbGetter).update(apiClientTravelDataGetter, null);
@@ -78,7 +78,7 @@ public class APIClientTravelDataGetterTest {
 		Airports airports = getAirports();
 		when(travelAPIClient.getAllActiveAirports()).thenReturn(airports);
 
-		Set<AirportDTO> airportSet = apiClientTravelDataGetter.getAllActiveAirports();
+		Set<AirportDto> airportSet = apiClientTravelDataGetter.getAllActiveAirports();
 		Assert.assertNotNull(airports);
 		Assert.assertThat(airportSet, is(not(empty())));
 		
@@ -90,7 +90,7 @@ public class APIClientTravelDataGetterTest {
 	public void shouldReturnEmptyAirportSetWhenAirportSetIsNull() {
 		Airports nullAirportSet = getAirportsNullAirportsSet();
 		when(travelAPIClient.getAllActiveAirports()).thenReturn(nullAirportSet);
-		Set<AirportDTO> airports = apiClientTravelDataGetter.getAllActiveAirports();
+		Set<AirportDto> airports = apiClientTravelDataGetter.getAllActiveAirports();
 		Assert.assertNotNull(airports);
 		Assert.assertThat(airports, is(empty()));
 		
@@ -100,10 +100,10 @@ public class APIClientTravelDataGetterTest {
 	
 	@Test
 	public void shouldReturnEmptyFlightsSet() {
-		TripInformationRequest tripInformation = getTripInformation();
+		TripInformationRequestDto tripInformation = getTripInformation();
 		when(travelAPIClient.getDepartingFlightsByRouteAndDate(tripInformation)).thenReturn(null);
 
-		Set<Flight> flights = apiClientTravelDataGetter.getDepartingFlightsByRouteNDate(tripInformation);
+		Set<FlightDto> flights = apiClientTravelDataGetter.getDepartingFlightsByRouteNDate(tripInformation);
 		Assert.assertNotNull(flights);
 		Assert.assertThat(flights, is(empty()));
 		
@@ -113,11 +113,11 @@ public class APIClientTravelDataGetterTest {
 	
 	@Test
 	public void shouldReturnNotEmptyFlightSet() {
-		TripInformationRequest tripInformation = getTripInformation();
+		TripInformationRequestDto tripInformation = getTripInformation();
 		Flights flights = getFlights();
 		when(travelAPIClient.getDepartingFlightsByRouteAndDate(tripInformation)).thenReturn(flights);
 
-		Set<Flight> flightsSet = apiClientTravelDataGetter.getDepartingFlightsByRouteNDate(tripInformation);
+		Set<FlightDto> flightsSet = apiClientTravelDataGetter.getDepartingFlightsByRouteNDate(tripInformation);
 		Assert.assertNotNull(flightsSet);
 		Assert.assertThat(flightsSet, is(not(empty())));
 		
@@ -129,10 +129,10 @@ public class APIClientTravelDataGetterTest {
 
 	@Test
 	public void shouldReturnEmptyFlightSetWhenAirportSetIsNull() {
-		TripInformationRequest tripInformation = getTripInformation();
+		TripInformationRequestDto tripInformation = getTripInformation();
 		Flights nullFlightSet = getFlightsNullFlightSet();
 		when(travelAPIClient.getDepartingFlightsByRouteAndDate(tripInformation)).thenReturn(nullFlightSet);
-		Set<Flight> flights = apiClientTravelDataGetter.getDepartingFlightsByRouteNDate(tripInformation);
+		Set<FlightDto> flights = apiClientTravelDataGetter.getDepartingFlightsByRouteNDate(tripInformation);
 		Assert.assertNotNull(flights);
 		Assert.assertThat(flights, is(empty()));
 		
@@ -142,7 +142,7 @@ public class APIClientTravelDataGetterTest {
 	
 
 	private Airports getAirports() {
-		Set<AirportDTO> airportsSet = Collections.singleton(new AirportDTO());
+		Set<AirportDto> airportsSet = Collections.singleton(new AirportDto());
 		Airports airports = new Airports(airportsSet);
 		return airports;
 	}
@@ -152,7 +152,7 @@ public class APIClientTravelDataGetterTest {
 	}
 	
 	private Flights getFlights() {
-		Set<Flight> flightSet = Collections.singleton(new Flight());
+		Set<FlightDto> flightSet = Collections.singleton(new FlightDto());
 		Flights flights = new Flights(flightSet);
 		return flights;
 	}
@@ -161,7 +161,7 @@ public class APIClientTravelDataGetterTest {
 		return new Flights(null);
 	}
 	
-	private TripInformationRequest getTripInformation() {
-		return new TripInformationRequest(MEX_AIRPORT_CODE, HMO_AIRPORT_CODE, new Date());
+	private TripInformationRequestDto getTripInformation() {
+		return new TripInformationRequestDto(MEX_AIRPORT_CODE, HMO_AIRPORT_CODE, new Date());
 	}
 }

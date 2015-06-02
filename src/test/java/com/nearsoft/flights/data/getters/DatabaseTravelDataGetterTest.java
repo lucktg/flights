@@ -18,11 +18,11 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.nearsoft.flights.persistence.dao.AirportDAO;
-import com.nearsoft.flights.persistence.dao.FlightDAO;
+import com.nearsoft.flights.persistence.dao.AirportDao;
+import com.nearsoft.flights.persistence.dao.FlightDao;
+import com.nearsoft.flights.persistence.dto.TripInformationRequestDto;
 import com.nearsoft.flights.vo.AirportDTO;
-import com.nearsoft.flights.vo.Flight;
-import com.nearsoft.flights.vo.TripInformationRequest;
+import com.nearsoft.flights.vo.FlightDto;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:spring/application-config.xml")
@@ -35,10 +35,10 @@ public class DatabaseTravelDataGetterTest {
 	DatabaseTravelDataGetter databaseTravelDataGetter;
 	
 	@Mock
-	private AirportDAO airportDAO;
+	private AirportDao airportDAO;
 	
 	@Mock
-	private FlightDAO flightDAO;
+	private FlightDao flightDAO;
 	
 	@Before
 	public void setup() {
@@ -50,7 +50,7 @@ public class DatabaseTravelDataGetterTest {
 	public void shouldReturnNullAirportSet() {
 		when(airportDAO.findActiveAirports()).thenReturn(null);
 		
-		Set<AirportDTO> airports = databaseTravelDataGetter.getAllActiveAirports();
+		Set<AirportDto> airports = databaseTravelDataGetter.getAllActiveAirports();
 		Assert.assertNull(airports);
 		
 		verify(airportDAO).findActiveAirports();
@@ -60,7 +60,7 @@ public class DatabaseTravelDataGetterTest {
 	public void shouldReturnEmptyAirportSet() {
 		when(airportDAO.findActiveAirports()).thenReturn(Collections.emptySet());
 		
-		Set<AirportDTO> airports = databaseTravelDataGetter.getAllActiveAirports();
+		Set<AirportDto> airports = databaseTravelDataGetter.getAllActiveAirports();
 		Assert.assertNotNull(airports);
 		Assert.assertThat(airports, is(empty()));
 		
@@ -71,7 +71,7 @@ public class DatabaseTravelDataGetterTest {
 	public void shouldReturnNotEmptyAirportSet() {
 		when(airportDAO.findActiveAirports()).thenReturn(getAirportSet());
 		
-		Set<AirportDTO> airports = databaseTravelDataGetter.getAllActiveAirports();
+		Set<AirportDto> airports = databaseTravelDataGetter.getAllActiveAirports();
 		Assert.assertNotNull(airports);
 		Assert.assertThat(airports, is(not(empty())));
 		
@@ -82,10 +82,10 @@ public class DatabaseTravelDataGetterTest {
 	
 	@Test
 	public void shouldReturnNullFlightSet() {
-		TripInformationRequest tripInformation = getTripInformation();
+		TripInformationRequestDto tripInformation = getTripInformation();
 		when(flightDAO.findDepartingFlightsByRouteNDate(tripInformation)).thenReturn(null);
 		
-		Set<Flight> flights = databaseTravelDataGetter.getDepartingFlightsByRouteNDate(tripInformation);
+		Set<FlightDto> flights = databaseTravelDataGetter.getDepartingFlightsByRouteNDate(tripInformation);
 		Assert.assertNull(flights);
 		
 		verify(flightDAO).findDepartingFlightsByRouteNDate(tripInformation);
@@ -93,10 +93,10 @@ public class DatabaseTravelDataGetterTest {
 	
 	@Test
 	public void shouldReturnEmptyFlightSet() {
-		TripInformationRequest tripInformation = getTripInformation();
+		TripInformationRequestDto tripInformation = getTripInformation();
 		when(flightDAO.findDepartingFlightsByRouteNDate(tripInformation)).thenReturn(Collections.emptySet());
 		
-		Set<Flight> flights = databaseTravelDataGetter.getDepartingFlightsByRouteNDate(tripInformation);
+		Set<FlightDto> flights = databaseTravelDataGetter.getDepartingFlightsByRouteNDate(tripInformation);
 		Assert.assertNotNull(flights);
 		Assert.assertThat(flights, is(empty()));
 		
@@ -105,29 +105,29 @@ public class DatabaseTravelDataGetterTest {
 	
 	@Test
 	public void shouldReturnNotEmptyFlighttSet() {
-		TripInformationRequest tripInformation = getTripInformation();
+		TripInformationRequestDto tripInformation = getTripInformation();
 		when(flightDAO.findDepartingFlightsByRouteNDate(tripInformation)).thenReturn(getFlightSet());
 		
-		Set<Flight> flights = databaseTravelDataGetter.getDepartingFlightsByRouteNDate(tripInformation);
+		Set<FlightDto> flights = databaseTravelDataGetter.getDepartingFlightsByRouteNDate(tripInformation);
 		Assert.assertNotNull(flights);
 		Assert.assertThat(flights, is(not(empty())));
 		
 		verify(flightDAO).findDepartingFlightsByRouteNDate(tripInformation);
 	}
 	
-	private Set<Flight> getFlightSet() {
-		Set<Flight> flights = new HashSet<Flight>();
-		flights.add(new Flight());
+	private Set<FlightDto> getFlightSet() {
+		Set<FlightDto> flights = new HashSet<FlightDto>();
+		flights.add(new FlightDto());
 		return flights;
 	}
 
-	private Set<AirportDTO> getAirportSet() {
-		Set<AirportDTO> airports = new HashSet<AirportDTO>();
-		airports.add(new AirportDTO());
+	private Set<AirportDto> getAirportSet() {
+		Set<AirportDto> airports = new HashSet<AirportDto>();
+		airports.add(new AirportDto());
 		return airports;
 	}
 	
-	private TripInformationRequest getTripInformation() {
-		return new TripInformationRequest(MEX_AIRPORT_CODE, HMO_AIRPORT_CODE, new Date());
+	private TripInformationRequestDto getTripInformation() {
+		return new TripInformationRequestDto(MEX_AIRPORT_CODE, HMO_AIRPORT_CODE, new Date());
 	}
 }

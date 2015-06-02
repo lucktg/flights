@@ -4,20 +4,20 @@ import java.util.Set;
 
 public class RoundTrip {
 	
-	private Set<Flight> originFlights;
+	private Set<FlightDto> originFlights;
 	
-	private Set<Flight> destinyFlights;
+	private Set<FlightDto> destinyFlights;
 	
-	public RoundTrip(Set<Flight> originFlights, Set<Flight> destinyFlights) {
+	public RoundTrip(Set<FlightDto> originFlights, Set<FlightDto> destinyFlights) {
 		this.originFlights = originFlights;
 		this.destinyFlights = destinyFlights;
 	}
 
-	public Set<Flight> getOriginFlights() {
+	public Set<FlightDto> getOriginFlights() {
 		return originFlights;
 	}
 	
-	public Set<Flight> getDestinyFlights() {
+	public Set<FlightDto> getDestinyFlights() {
 		return destinyFlights;
 	}
 }

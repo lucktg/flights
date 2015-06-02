@@ -7,13 +7,13 @@ import java.util.Observer;
 import java.util.Set;
 
 import com.nearsoft.flights.interfaces.TravelAPIClient;
+import com.nearsoft.flights.persistence.dto.TripInformationRequestDto;
 import com.nearsoft.flights.vo.AirportDTO;
 import com.nearsoft.flights.vo.Airports;
-import com.nearsoft.flights.vo.Flight;
+import com.nearsoft.flights.vo.FlightDto;
 import com.nearsoft.flights.vo.FlightItem;
 import com.nearsoft.flights.vo.FlightItemsSet;
 import com.nearsoft.flights.vo.Flights;
-import com.nearsoft.flights.vo.TripInformationRequest;
 
 public class APIClientTravelDataGetter extends Observable implements TravelDataGetter {
 	
@@ -31,7 +31,7 @@ public class APIClientTravelDataGetter extends Observable implements TravelDataG
 	}
 
 	@Override
-	public Set<Flight> getDepartingFlightsByRouteNDate(TripInformationRequest tripInformation) {
+	public Set<FlightDto> getDepartingFlightsByRouteNDate(TripInformationRequestDto tripInformation) {
 		Flights flights = travelAPIClient.getDepartingFlightsByRouteAndDate(tripInformation);
 		return notify(flights);
 	}

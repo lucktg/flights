@@ -16,8 +16,8 @@ import com.nearsoft.flights.domain.model.flight.Flight;
 import com.nearsoft.flights.interfaces.FlightApi;
 import com.nearsoft.flights.interfaces.flexapi.extractor.FlightSetExtractorFactory;
 import com.nearsoft.flights.interfaces.flexapi.extractor.MediaTypeResponseExtractor;
+import com.nearsoft.flights.persistence.dto.TripInformationRequestDto;
 import com.nearsoft.flights.rest.util.UriUtils;
-import com.nearsoft.flights.vo.TripInformationRequest;
 
 public class FlightFlexApi implements FlightApi {
 	enum URLParams {
@@ -41,7 +41,7 @@ public class FlightFlexApi implements FlightApi {
 	}
 
 	@Override
-	public Set<Flight> getDepartingFlightsByTripInformation(TripInformationRequest infoRequest) {
+	public Set<Flight> getDepartingFlightsByTripInformation(TripInformationRequestDto infoRequest) {
 		Map<String,String> urlParams = urlParamsFromTripInformation(infoRequest.getDepartureAirportCode(), 
 				infoRequest.getArrivalAirportCode(), 
 				infoRequest.getDepartureDate());

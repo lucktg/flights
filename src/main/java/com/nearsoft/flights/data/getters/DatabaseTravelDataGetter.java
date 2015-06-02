@@ -5,26 +5,26 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
 
-import com.nearsoft.flights.persistence.dao.AirportDAO;
-import com.nearsoft.flights.persistence.dao.FlightDAO;
+import com.nearsoft.flights.persistence.dao.AirportDao;
+import com.nearsoft.flights.persistence.dao.FlightDao;
+import com.nearsoft.flights.persistence.dto.TripInformationRequestDto;
 import com.nearsoft.flights.vo.AirportDTO;
 import com.nearsoft.flights.vo.Airports;
-import com.nearsoft.flights.vo.Flight;
+import com.nearsoft.flights.vo.FlightDto;
 import com.nearsoft.flights.vo.Flights;
-import com.nearsoft.flights.vo.TripInformationRequest;
 
 public class DatabaseTravelDataGetter implements TravelDataGetter, Observer {
 	
-	private AirportDAO airportDAO;
-	private FlightDAO flightDAO;
+	private AirportDao airportDAO;
+	private FlightDao flightDAO;
 
-	public DatabaseTravelDataGetter(AirportDAO airportDAO, FlightDAO flightDAO) {
+	public DatabaseTravelDataGetter(AirportDao airportDAO, FlightDao flightDAO) {
 		this.airportDAO = airportDAO;
 		this.flightDAO = flightDAO;
 	}
 	
 	@Override
-	public Set<AirportDTO> getAllActiveAirports() {
+	public Set<AirportDto> getAllActiveAirports() {
 		return airportDAO.findActiveAirports();
 	}
 
@@ -42,7 +42,7 @@ public class DatabaseTravelDataGetter implements TravelDataGetter, Observer {
 	}
 
 	@Override
-	public Set<Flight> getDepartingFlightsByRouteNDate(TripInformationRequest tripInformation) {
+	public Set<FlightDto> getDepartingFlightsByRouteNDate(TripInformationRequestDto tripInformation) {
 		return flightDAO.findDepartingFlightsByRouteNDate(tripInformation);
 	}
 }
