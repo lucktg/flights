@@ -22,7 +22,7 @@ import com.nearsoft.flights.persistence.dao.AirportDao;
 import com.nearsoft.flights.persistence.dao.FlightDao;
 import com.nearsoft.flights.persistence.dto.TripInformationRequestDto;
 import com.nearsoft.flights.vo.AirportDTO;
-import com.nearsoft.flights.vo.FlightDto;
+import com.nearsoft.flights.vo.Flight;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:spring/application-config.xml")
@@ -85,7 +85,7 @@ public class DatabaseTravelDataGetterTest {
 		TripInformationRequestDto tripInformation = getTripInformation();
 		when(flightDAO.findDepartingFlightsByRouteNDate(tripInformation)).thenReturn(null);
 		
-		Set<FlightDto> flights = databaseTravelDataGetter.getDepartingFlightsByRouteNDate(tripInformation);
+		Set<Flight> flights = databaseTravelDataGetter.getDepartingFlightsByRouteNDate(tripInformation);
 		Assert.assertNull(flights);
 		
 		verify(flightDAO).findDepartingFlightsByRouteNDate(tripInformation);
@@ -96,7 +96,7 @@ public class DatabaseTravelDataGetterTest {
 		TripInformationRequestDto tripInformation = getTripInformation();
 		when(flightDAO.findDepartingFlightsByRouteNDate(tripInformation)).thenReturn(Collections.emptySet());
 		
-		Set<FlightDto> flights = databaseTravelDataGetter.getDepartingFlightsByRouteNDate(tripInformation);
+		Set<Flight> flights = databaseTravelDataGetter.getDepartingFlightsByRouteNDate(tripInformation);
 		Assert.assertNotNull(flights);
 		Assert.assertThat(flights, is(empty()));
 		
@@ -108,16 +108,16 @@ public class DatabaseTravelDataGetterTest {
 		TripInformationRequestDto tripInformation = getTripInformation();
 		when(flightDAO.findDepartingFlightsByRouteNDate(tripInformation)).thenReturn(getFlightSet());
 		
-		Set<FlightDto> flights = databaseTravelDataGetter.getDepartingFlightsByRouteNDate(tripInformation);
+		Set<Flight> flights = databaseTravelDataGetter.getDepartingFlightsByRouteNDate(tripInformation);
 		Assert.assertNotNull(flights);
 		Assert.assertThat(flights, is(not(empty())));
 		
 		verify(flightDAO).findDepartingFlightsByRouteNDate(tripInformation);
 	}
 	
-	private Set<FlightDto> getFlightSet() {
-		Set<FlightDto> flights = new HashSet<FlightDto>();
-		flights.add(new FlightDto());
+	private Set<Flight> getFlightSet() {
+		Set<Flight> flights = new HashSet<Flight>();
+		flights.add(new Flight());
 		return flights;
 	}
 

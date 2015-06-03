@@ -59,6 +59,7 @@ public class FlightFlexApi implements FlightApi {
 		urlParams.put(URLParams.arrivalAirportCode.toString(), arrivalAirportCode);
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(departureDate);
+		System.out.println(calendar);
 		urlParams.put(URLParams.year.toString(), Integer.toString(calendar.get(Calendar.YEAR)));
 		urlParams.put(URLParams.month.toString(), Integer.toString(calendar.get(Calendar.MONTH)+1));
 		urlParams.put(URLParams.day.toString(), Integer.toString(calendar.get(Calendar.DAY_OF_MONTH)));

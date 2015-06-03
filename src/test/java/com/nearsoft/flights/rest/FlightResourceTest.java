@@ -1,29 +1,23 @@
 package com.nearsoft.flights.rest;
 
-
-
-import java.util.Set;
-
 import javax.ws.rs.core.Application;
+import javax.ws.rs.core.Response;
 
 import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.grizzly.GrizzlyTestContainerFactory;
 import org.glassfish.jersey.test.spi.TestContainerFactory;
 import org.junit.Test;
 
-import com.nearsoft.flights.rest.resources.AirportResource;
+import com.nearsoft.flights.rest.resources.FlightsResource;
 
-public class AirportResourceTest extends JerseyTest {
-	Logger logger = Logger.getLogger(AirportResourceTest.class);
-	
+public class FlightResourceTest extends JerseyTest {
 	@Override
 	protected Application configure() {
 		BasicConfigurator.configure();
 		ResourceConfig rc  = new ResourceConfig();
-		rc.register(AirportResource.class).property("contextConfigLocation", "classpath:spring/application-config.xml");
+		rc.register(FlightsResource.class).property("contextConfigLocation", "classpath:spring/application-config.xml");
 		
 		return rc;
 	}
@@ -34,8 +28,11 @@ public class AirportResourceTest extends JerseyTest {
 	
 	@Test
 	public void shouldReturnEmptyAirportsList() {
-		Set response = target("/airports/active").request().get(Set.class);
-		System.out.println(response.size());
+		Response response = target("/flights/roundtrip")
+				.queryParam("fromAirport", "MEX")
+				.queryParam("departing","2015-06-03")
+				.queryParam("returningAirport","GDL")
+				.queryParam("returning","2015-06-05").request().get();
+		System.out.println(response);
 	}
-	
 }

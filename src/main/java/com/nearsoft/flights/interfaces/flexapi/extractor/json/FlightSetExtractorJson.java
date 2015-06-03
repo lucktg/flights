@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -31,10 +32,13 @@ public class FlightSetExtractorJson implements Extractor<Set<Flight>> {
 			throw new ExtractionException(e);
 		}
 	}
+@JsonIgnoreProperties(ignoreUnknown = true)
  static class FlightsJson {
 	 
-	 @JsonProperty("airports")
+	 @JsonProperty("scheduledFlights")
 	 Set<FlightScheduledPojo> flights;
+	 @JsonProperty("appendix")
+	 AppendixPojo appendix;
 	 
 	 public FlightsJson(){
 		 

@@ -32,37 +32,4 @@
             </list>
         </constructor-arg>
     </bean>
-    
-    
-    <!--  
-    <bean id="travelAPIClient" class="com.nearsoft.flights.interfaces.flexapi.TravelFlightStatsClient">
-    	<constructor-arg index="0" ref="restTemplate"/>
-    	<constructor-arg index="1" ref="appKeys"/>
-    </bean>
-    
-    <bean id="apiClientTravelDataGetter" class="com.nearsoft.flights.data.getters.APIClientTravelDataGetter">
-    	<constructor-arg index="0" ref="travelAPIClient"/>
-    	<constructor-arg index="1">
-    		<list>
-    			<ref bean="databaseTravelDataGetter"/>
-    		</list>
-    	</constructor-arg>
-    </bean>
-    
-    <bean id="databaseTravelDataGetter" class="com.nearsoft.flights.data.getters.DatabaseTravelDataGetter">
-    	<constructor-arg index="0" ref="airportDAO" />
-    	<constructor-arg index="1" ref="flightDAO" />
-    </bean>
-    
-    <bean id="airportDAO" class="com.nearsoft.flights.dao.jdbc.AirportJDBCDAO"></bean>
-    <bean id="flightDAO" class="com.nearsoft.flights.dao.jdbc.FlightJDBCDAO"></bean>
-    <bean id="restTemplate" class="org.springframework.web.client.RestTemplate"/>
-    <util:map map-class="java.util.HashMap" id="appKeys">
-    		<entry key="appId" value="#{systemProperties['appId']}"/>
-    		<entry key="appKey" value="#{systemProperties['appKey']}"/>
-    		<entry key="extendedOptions" value="useHTTPErrors"/>
-    </util:map>-->
-    <!-- Uncomment and add your base-package here:
-         <context:component-scan
-            base-package="org.springframework.samples.service"/>  -->
 </beans>

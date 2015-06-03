@@ -4,20 +4,20 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Flights extends FlightItemsSet<FlightDto> {
+public class Flights extends FlightItemsSet<Flight> {
 	
 	@JsonProperty("scheduledFlights")
-	private Set<FlightDto> flights;
+	private Set<Flight> flights;
 	
 	public Flights() {
 		
 	}
 
-	public Flights(Set<FlightDto> flights) {
+	public Flights(Set<Flight> flights) {
 		this.flights = flights;
 	}
 
-	public Set<FlightDto> getItems(){
+	public Set<Flight> getItems(){
 		return flights;
 	}
 	

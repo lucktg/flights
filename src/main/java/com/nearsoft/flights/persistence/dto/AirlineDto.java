@@ -12,6 +12,8 @@ public class AirlineDto implements Serializable {
 	private String airlineCode;
 	private String airlineName;
 	private String phoneNumber;
+	private String active;
+	
 	public String getAirlineCode() {
 		return airlineCode;
 	}
@@ -30,6 +32,13 @@ public class AirlineDto implements Serializable {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
+	public String getActive() {
+		return active;
+	}
+	public void setActive(String active) {
+		this.active = active;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -60,6 +69,7 @@ public class AirlineDto implements Serializable {
 		return "AirlineDto [airlineCode=" + airlineCode + ", airlineName="
 				+ airlineName + ", phoneNumber=" + phoneNumber + "]";
 	}
+	
 	
 	
 

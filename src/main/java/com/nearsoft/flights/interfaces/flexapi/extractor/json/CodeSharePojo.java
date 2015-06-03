@@ -3,7 +3,7 @@ package com.nearsoft.flights.interfaces.flexapi.extractor.json;
 import java.util.List;
 
 public class CodeSharePojo {
-	private String carrierFSCode;
+	private String carrierFsCode;
 	private String flightNumber;
 	private String serviceType;
 	private List<String> serviceClasses;
@@ -14,8 +14,8 @@ public class CodeSharePojo {
 		
 	}
 
-	protected String getCarrierFSCode() {
-		return carrierFSCode;
+	protected String getCarrierFsCode() {
+		return carrierFsCode;
 	}
 
 	protected String getFlightNumber() {
@@ -43,7 +43,7 @@ public class CodeSharePojo {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((carrierFSCode == null) ? 0 : carrierFSCode.hashCode());
+				+ ((carrierFsCode == null) ? 0 : carrierFsCode.hashCode());
 		result = prime * result
 				+ ((flightNumber == null) ? 0 : flightNumber.hashCode());
 		return result;
@@ -58,10 +58,10 @@ public class CodeSharePojo {
 		if (getClass() != obj.getClass())
 			return false;
 		CodeSharePojo other = (CodeSharePojo) obj;
-		if (carrierFSCode == null) {
-			if (other.carrierFSCode != null)
+		if (carrierFsCode == null) {
+			if (other.carrierFsCode != null)
 				return false;
-		} else if (!carrierFSCode.equals(other.carrierFSCode))
+		} else if (!carrierFsCode.equals(other.carrierFsCode))
 			return false;
 		if (flightNumber == null) {
 			if (other.flightNumber != null)

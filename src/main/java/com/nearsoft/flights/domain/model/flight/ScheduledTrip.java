@@ -20,7 +20,7 @@ public class ScheduledTrip {
 		return airport;
 	}
 	
-	public Date getDepartureDate() {
+	public Date getScheduledDate() {
 		return scheduledDate;
 	}
 	

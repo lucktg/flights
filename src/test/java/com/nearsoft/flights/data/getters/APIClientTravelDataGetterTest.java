@@ -28,7 +28,7 @@ import com.nearsoft.flights.persistence.dao.FlightDao;
 import com.nearsoft.flights.persistence.dto.TripInformationRequestDto;
 import com.nearsoft.flights.vo.AirportDTO;
 import com.nearsoft.flights.vo.Airports;
-import com.nearsoft.flights.vo.FlightDto;
+import com.nearsoft.flights.vo.Flight;
 import com.nearsoft.flights.vo.Flights;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -103,7 +103,7 @@ public class APIClientTravelDataGetterTest {
 		TripInformationRequestDto tripInformation = getTripInformation();
 		when(travelAPIClient.getDepartingFlightsByRouteAndDate(tripInformation)).thenReturn(null);
 
-		Set<FlightDto> flights = apiClientTravelDataGetter.getDepartingFlightsByRouteNDate(tripInformation);
+		Set<Flight> flights = apiClientTravelDataGetter.getDepartingFlightsByRouteNDate(tripInformation);
 		Assert.assertNotNull(flights);
 		Assert.assertThat(flights, is(empty()));
 		
@@ -117,7 +117,7 @@ public class APIClientTravelDataGetterTest {
 		Flights flights = getFlights();
 		when(travelAPIClient.getDepartingFlightsByRouteAndDate(tripInformation)).thenReturn(flights);
 
-		Set<FlightDto> flightsSet = apiClientTravelDataGetter.getDepartingFlightsByRouteNDate(tripInformation);
+		Set<Flight> flightsSet = apiClientTravelDataGetter.getDepartingFlightsByRouteNDate(tripInformation);
 		Assert.assertNotNull(flightsSet);
 		Assert.assertThat(flightsSet, is(not(empty())));
 		
@@ -132,7 +132,7 @@ public class APIClientTravelDataGetterTest {
 		TripInformationRequestDto tripInformation = getTripInformation();
 		Flights nullFlightSet = getFlightsNullFlightSet();
 		when(travelAPIClient.getDepartingFlightsByRouteAndDate(tripInformation)).thenReturn(nullFlightSet);
-		Set<FlightDto> flights = apiClientTravelDataGetter.getDepartingFlightsByRouteNDate(tripInformation);
+		Set<Flight> flights = apiClientTravelDataGetter.getDepartingFlightsByRouteNDate(tripInformation);
 		Assert.assertNotNull(flights);
 		Assert.assertThat(flights, is(empty()));
 		
@@ -152,7 +152,7 @@ public class APIClientTravelDataGetterTest {
 	}
 	
 	private Flights getFlights() {
-		Set<FlightDto> flightSet = Collections.singleton(new FlightDto());
+		Set<Flight> flightSet = Collections.singleton(new Flight());
 		Flights flights = new Flights(flightSet);
 		return flights;
 	}

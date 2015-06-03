@@ -17,6 +17,8 @@ public class AirportDto implements Serializable {
 	private String countryName;
 	private String latitude;
 	private String longitude;
+	private String stateCode;
+	
 	public String getAirportCode() {
 		return airportCode;
 	}
@@ -65,6 +67,12 @@ public class AirportDto implements Serializable {
 	public void setLongitude(String longitude) {
 		this.longitude = longitude;
 	}
+	public String getStateCode() {
+		return stateCode;
+	}
+	public void setStateCode(String stateCode) {
+		this.stateCode = stateCode;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -111,9 +119,4 @@ public class AirportDto implements Serializable {
 				+ countryName + ", latitude=" + latitude + ", longitude="
 				+ longitude + "]";
 	}
-	
-	
-	
-	
-
 }

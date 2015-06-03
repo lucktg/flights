@@ -2,7 +2,7 @@ package com.nearsoft.flights.vo;
 
 import java.util.Date;
 
-public class FlightDto implements FlightItem {
+public class Flight implements FlightItem {
 	
 	private String carrierFSCode;
 	private String flightNumber;
@@ -13,7 +13,7 @@ public class FlightDto implements FlightItem {
 	private Date  departureTime;
 	private Date arrivalTime;
 	
-	public FlightDto () {
+	public Flight () {
 		
 	}
 	

@@ -38,10 +38,10 @@ public class ExtractorUtils {
 		Map<String, AirlinePojo> airlinesMap = flightPojo.getAppendix().getAirlines().stream().collect(Collectors.toMap(AirlinePojo::getFs, p -> p));
 		Map<String, AirportPojo> airportsMap = flightPojo.getAppendix().getAirports().stream().collect(Collectors.toMap(AirportPojo::getFs, p -> p));
 		FlightBuilder builder = new FlightBuilder(flightPojo.getFlightNumber(), 
-				airlinePojoToAirline(airlinesMap.get(flightPojo.getCarrierFSCode())));
-		builder.addArrival(getScheduledTrip(airportPojoToAirport(airportsMap.get(flightPojo.getArrivalAirportFSCode())),
+				airlinePojoToAirline(airlinesMap.get(flightPojo.getCarrierFsCode())));
+		builder.addArrival(getScheduledTrip(airportPojoToAirport(airportsMap.get(flightPojo.getArrivalAirportFsCode())),
 				flightPojo.getArrivalTime(), flightPojo.getArrivalTerminal()));
-		builder.addDeparture(getScheduledTrip(airportPojoToAirport(airportsMap.get(flightPojo.getDepartureAirportFSCode())),
+		builder.addDeparture(getScheduledTrip(airportPojoToAirport(airportsMap.get(flightPojo.getDepartureAirportFsCode())),
 				flightPojo.getDepartureTime(), flightPojo.getDepartureTerminal()));
 		builder.addServiceClasses(flightPojo.getServiceClasses());
 		builder.addServiceType(flightPojo.getServiceType());

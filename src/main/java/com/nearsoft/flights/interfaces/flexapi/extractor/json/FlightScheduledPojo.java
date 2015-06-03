@@ -1,14 +1,14 @@
-	package com.nearsoft.flights.interfaces.flexapi.extractor.json;
+package com.nearsoft.flights.interfaces.flexapi.extractor.json;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
 public class FlightScheduledPojo {
-	private String carrierFSCode;
+	private String carrierFsCode;
 	private String flightNumber;
-	private String departureAirportFSCode;
-	private String arrivalAirportFSCode;
+	private String departureAirportFsCode;
+	private String arrivalAirportFsCode;
 	private String stops;
 	private String arrivalTerminal;
 	private String departureTerminal;
@@ -21,27 +21,29 @@ public class FlightScheduledPojo {
 	private Set<String> serviceClasses;
 	private List<String> trafficRestrictions;
 	private List<CodeSharePojo> codeshares;
+	private OperatorPojo operator;
+	private String wetleaseOperatorFsCode;
 	private String referenceCode;
-	private AppendixPojo appendix;
+	
 	
 	public FlightScheduledPojo() {
 		
 	}
 
-	protected String getCarrierFSCode() {
-		return carrierFSCode;
+	protected String getCarrierFsCode() {
+		return carrierFsCode;
 	}
 
 	protected String getFlightNumber() {
 		return flightNumber;
 	}
 
-	protected String getDepartureAirportFSCode() {
-		return departureAirportFSCode;
+	protected String getDepartureAirportFsCode() {
+		return departureAirportFsCode;
 	}
 
-	protected String getArrivalAirportFSCode() {
-		return arrivalAirportFSCode;
+	protected String getArrivalAirportFsCode() {
+		return arrivalAirportFsCode;
 	}
 
 	protected String getStops() {
@@ -87,6 +89,10 @@ public class FlightScheduledPojo {
 	protected List<String> getTrafficRestrictions() {
 		return trafficRestrictions;
 	}
+	
+	public OperatorPojo getOperator() {
+		return operator;
+	}
 
 	protected List<CodeSharePojo> getCodeshares() {
 		return codeshares;
@@ -94,10 +100,6 @@ public class FlightScheduledPojo {
 
 	protected String getReferenceCode() {
 		return referenceCode;
-	}
-
-	protected AppendixPojo getAppendix() {
-		return appendix;
 	}
 
 	@Override
@@ -109,6 +111,10 @@ public class FlightScheduledPojo {
 		result = prime * result
 				+ ((referenceCode == null) ? 0 : referenceCode.hashCode());
 		return result;
+	}
+	
+	public String getWetleaseOperatorFsCode() {
+		return wetleaseOperatorFsCode;
 	}
 
 	@Override
