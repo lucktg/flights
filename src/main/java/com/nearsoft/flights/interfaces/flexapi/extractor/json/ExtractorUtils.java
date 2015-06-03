@@ -1,6 +1,8 @@
 package com.nearsoft.flights.interfaces.flexapi.extractor.json;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -34,9 +36,7 @@ public class ExtractorUtils {
 		return new Airline(airlinePojo.getFs(), airlinePojo.getPhoneNumber(), airlinePojo.getName(), airlinePojo.getActive());
 	}
 	
-	protected static Flight flightPojoToFlight(FlightScheduledPojo flightPojo) {
-		Map<String, AirlinePojo> airlinesMap = flightPojo.getAppendix().getAirlines().stream().collect(Collectors.toMap(AirlinePojo::getFs, p -> p));
-		Map<String, AirportPojo> airportsMap = flightPojo.getAppendix().getAirports().stream().collect(Collectors.toMap(AirportPojo::getFs, p -> p));
+	protected static Flight flightPojoToFlight(FlightScheduledPojo flightPojo, Map<String, AirlinePojo> airlinesMap, Map<String, AirportPojo> airportsMap) {
 		FlightBuilder builder = new FlightBuilder(flightPojo.getFlightNumber(), 
 				airlinePojoToAirline(airlinesMap.get(flightPojo.getCarrierFsCode())));
 		builder.addArrival(getScheduledTrip(airportPojoToAirport(airportsMap.get(flightPojo.getArrivalAirportFsCode())),
@@ -53,7 +53,18 @@ public class ExtractorUtils {
 	}
 	
 	protected static Set<Flight> flightJsonSetToFlightSet(FlightsJson flightsJson){
-		return flightsJson.getFlights().stream().map(airport -> flightPojoToFlight(airport)).collect(Collectors.toSet());
+		Set<FlightScheduledPojo> flightSetPojos = flightsJson.getFlights();
+		Map<String, AirlinePojo> airlinesMap = flightsJson.getAppendix().getAirlines().stream().collect(Collectors.toMap(AirlinePojo::getFs, p -> p));
+		Map<String, AirportPojo> airportsMap = flightsJson.getAppendix().getAirports().stream().collect(Collectors.toMap(AirportPojo::getFs, p -> p));
+		Iterator<FlightScheduledPojo> it = flightSetPojos != null ? flightSetPojos
+				.iterator() : null;
+		FlightScheduledPojo pojo = null;
+		Set<Flight> flights = new HashSet<>();
+		while (it != null && it.hasNext()) {
+			pojo = it.next();
+			flights.add(flightPojoToFlight(pojo,airlinesMap, airportsMap));
+		}
+		return flights;
 	}
 	
 	private static ScheduledTrip getScheduledTrip(Airport airport, Date scheduledDate, String terminal) {

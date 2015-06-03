@@ -47,5 +47,9 @@ public class FlightSetExtractorJson implements Extractor<Set<Flight>> {
 	 public Set<FlightScheduledPojo> getFlights() {
 		return flights;
 	}
+	 
+	 public AppendixPojo getAppendix() {
+		return appendix;
+	}
  }
 }

@@ -90,7 +90,7 @@ public class FlightRepositoryImpl implements FlightRepository {
 		dto.setAirportName(airport.getName());
 		dto.setCity(airport.getCity());
 		dto.setCityCode(airport.getCityCode());
-		dto.setCountryCode(airport.getCityCode());
+		dto.setCountryCode(airport.getCountryCode());
 		dto.setCountryName(airport.getCountryName());
 		dto.setLatitude(airport.getLatitude());
 		dto.setLongitude(airport.getLongitude());

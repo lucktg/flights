@@ -24,6 +24,7 @@
             <entry key="appId" value="#{systemProperties['flex.appId']}"/>
             <entry key="appKey" value="#{systemProperties['flex.appKey']}"/>
             <entry key="extendedOptions" value="useHTTPErrors"/>
+            <entry key="languageCode" value="es"/>
     </util:map>
     <bean id="jsonEmptyRequestCallback" class="com.nearsoft.flights.interfaces.flexapi.EmptyRequestCallback">
         <constructor-arg index="0">
