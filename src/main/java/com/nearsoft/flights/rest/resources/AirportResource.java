@@ -10,7 +10,6 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,8 +21,6 @@ import com.nearsoft.flights.domain.services.exception.ServiceException;
 @Path("/airports")
 public class AirportResource {
 	
-	private static final Logger logger = Logger.getLogger(AirportResource.class);
-
 	@Autowired
 	private AirportsService airportService;
 	
@@ -33,8 +30,7 @@ public class AirportResource {
 	public Set<Airport> getAllActiveAirports(){
 		try {
 			return airportService.getActiveAirports();
-		} catch (Exception e) {
-			logger.error("Ocurrio un error",e);
+		} catch (ServiceException e) {
 			throw new WebApplicationException("Unavailable service",e,Response.Status.INTERNAL_SERVER_ERROR);
 		}
 	}

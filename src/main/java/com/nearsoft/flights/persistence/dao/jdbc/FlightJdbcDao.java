@@ -102,7 +102,6 @@ public class FlightJdbcDao implements FlightDao {
 			rs  = st.executeQuery();
 			Set<FlightDto> flights = new HashSet<>();
 			FlightDto dto = null;
-			int index = 7;
 			while(rs != null && rs.next()) {
 				dto = new FlightDto();
 				dto.setFlightNumber(rs.getString(1));
@@ -111,9 +110,9 @@ public class FlightJdbcDao implements FlightDao {
 				dto.setArrivalDate(rs.getTimestamp(4));
 				dto.setArrivalTerminal(rs.getString(5));
 				dto.setServiceType(rs.getString(6));
-				dto.setAirline(getAirlineDto(rs, index));
-				dto.setDepartureAirport(getAirport(rs, index));
-				dto.setArrivalAirport(getAirport(rs, index));
+				dto.setAirline(getAirlineDto(rs, 7));
+				dto.setDepartureAirport(getAirport(rs, 10));
+				dto.setArrivalAirport(getAirport(rs, 18));
 				flights.add(dto);
 			}
 			return flights;
@@ -180,8 +179,7 @@ public class FlightJdbcDao implements FlightDao {
 		try {
 			List<String> params = Collections.nCopies(airports.size(), "?");
 			String str = params.stream().collect(Collectors.joining(","));
-			SELECT_AIRPORT.replace("?", str);
-			st = conn.prepareStatement(SELECT_AIRPORT);
+			st = conn.prepareStatement(SELECT_AIRPORT.replace("?", str));
 			int index=1;
 			for(AirportDto dto:airports) {
 				st.setString(index++, dto.getAirportCode());
@@ -215,7 +213,7 @@ public class FlightJdbcDao implements FlightDao {
 			}
 			
 		} catch (SQLException ex) {
-			throw new PersistenceException("Error ocurred while inserting ariports data", ex);
+			throw new PersistenceException("Error ocurred while inserting flights data", ex);
 		} finally {
 			try {
 				if(inSt != null) inSt.close();

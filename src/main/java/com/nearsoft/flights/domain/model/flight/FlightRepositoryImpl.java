@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.googlecode.ehcache.annotations.Cacheable;
 import com.nearsoft.flights.domain.model.airport.Airport;
 import com.nearsoft.flights.domain.model.airport.Airport.AirportBuilder;
 import com.nearsoft.flights.domain.model.exception.RepositoryException;
@@ -27,8 +28,7 @@ public class FlightRepositoryImpl implements FlightRepository {
 		this.flightDao = flightDao;
 	}
 
-
-
+	@Cacheable(cacheName="flights")
 	@Override
 	public Set<Flight> findFlightsByDeparture(TripInformationRequest request) throws RepositoryException {
 		try {
@@ -90,7 +90,7 @@ public class FlightRepositoryImpl implements FlightRepository {
 		dto.setAirportName(airport.getName());
 		dto.setCity(airport.getCity());
 		dto.setCityCode(airport.getCityCode());
-		dto.setCountryCode(airport.getCityCode());
+		dto.setCountryCode(airport.getCountryCode());
 		dto.setCountryName(airport.getCountryName());
 		dto.setLatitude(airport.getLatitude());
 		dto.setLongitude(airport.getLongitude());

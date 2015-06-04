@@ -8,6 +8,7 @@
     <import resource="classpath:spring/domain-config.xml"/>
     <import resource="classpath:spring/jdbc-config.xml"/>
     <import resource="classpath:spring/flexapi-config.xml"/>
+    <import resource="classpath:spring/cache-config.xml"/>
     <context:component-scan base-package="com.nearsoft.flights.rest.*" />
 
 </beans>

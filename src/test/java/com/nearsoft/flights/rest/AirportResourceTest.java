@@ -13,6 +13,7 @@ import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.grizzly.GrizzlyTestContainerFactory;
 import org.glassfish.jersey.test.spi.TestContainerFactory;
 import org.junit.Test;
+import org.springframework.util.Assert;
 
 import com.nearsoft.flights.rest.resources.AirportResource;
 
@@ -33,9 +34,9 @@ public class AirportResourceTest extends JerseyTest {
     }
 	
 	@Test
-	public void shouldReturnEmptyAirportsList() {
+	public void shouldNotEmptyAirportsList() {
 		Set response = target("/airports/active").request().get(Set.class);
-		System.out.println(response.size());
+		Assert.notNull(response);
 	}
 	
 }

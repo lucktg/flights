@@ -18,7 +18,6 @@ public class FlightResourceTest extends JerseyTest {
 		BasicConfigurator.configure();
 		ResourceConfig rc  = new ResourceConfig();
 		rc.register(FlightsResource.class).property("contextConfigLocation", "classpath:spring/application-config.xml");
-		
 		return rc;
 	}
 	@Override
@@ -28,11 +27,11 @@ public class FlightResourceTest extends JerseyTest {
 	
 	@Test
 	public void shouldReturnEmptyAirportsList() {
-		Response response = target("/flights/roundtrip")
+		String response = target("/flights/roundtrip")
 				.queryParam("fromAirport", "MEX")
-				.queryParam("departing","2015-06-03")
+				.queryParam("departing","201-06-03")
 				.queryParam("returningAirport","GDL")
-				.queryParam("returning","2015-06-05").request().get();
+				.queryParam("returning","2015-06-05").request().get(String.class);
 		System.out.println(response);
 	}
 }

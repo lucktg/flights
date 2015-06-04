@@ -3,6 +3,9 @@ package com.nearsoft.flights.domain.model.airport;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Service;
+
+import com.googlecode.ehcache.annotations.Cacheable;
 import com.nearsoft.flights.domain.model.airport.Airport.AirportBuilder;
 import com.nearsoft.flights.domain.model.exception.RepositoryException;
 import com.nearsoft.flights.interfaces.AirportApi;
@@ -10,6 +13,7 @@ import com.nearsoft.flights.persistence.dao.AirportDao;
 import com.nearsoft.flights.persistence.dao.jdbc.PersistenceException;
 import com.nearsoft.flights.persistence.dto.AirportDto;
 
+@Service
 public class AirportRepositoryImpl implements AirportRepository {
 	
 	private AirportApi airportApi;
@@ -21,8 +25,10 @@ public class AirportRepositoryImpl implements AirportRepository {
 		this.airportDao = airportDao;
 	}
 
+	@Cacheable(cacheName="airports")
 	@Override
 	public Set<Airport> findAllActiveAirports() throws RepositoryException {
+		System.out.println("Getting data from repository");
 		try {
 			Set<AirportDto> airportsDto = airportDao.findAll();
 			if(airportsDto == null || airportsDto.isEmpty()) {

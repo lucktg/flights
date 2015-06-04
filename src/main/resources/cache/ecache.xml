@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd">
+    <defaultCache eternal="false" maxElementsInMemory="100" overflowToDisk="true" />
+    <cache name="airports"  eternal="false" overflowToDisk="false" timeToLiveSeconds="36000"/>
+    <cache name="flights"  eternal="false" overflowToDisk="false" timeToLiveSeconds="60"/>
+</ehcache>
