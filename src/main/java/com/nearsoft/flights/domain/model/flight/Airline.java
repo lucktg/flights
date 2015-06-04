@@ -2,6 +2,8 @@ package com.nearsoft.flights.domain.model.flight;
 
 public class Airline {
 	
+	private static final Airline EMPTY_AIRLINE = new Airline();
+	
 	private String airlineCode;
 	private String phoneNumber;
 	private String name;
@@ -17,6 +19,10 @@ public class Airline {
 		this.active = active;
 	}
 	
+	private Airline() {
+		
+	}
+	
 	public String getAirlineCode() {
 		return airlineCode;
 	}
@@ -29,7 +35,10 @@ public class Airline {
 	public String getActive() {
 		return active;
 	}
-
+	
+	public static Airline emptyAirline() {
+		return EMPTY_AIRLINE;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;

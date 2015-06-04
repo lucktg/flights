@@ -1,5 +1,6 @@
 package com.nearsoft.flights.interfaces.flexapi.extractor.json;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -20,6 +21,8 @@ public class ExtractorUtils {
 	
 
 	protected static Airport airportPojoToAirport(AirportPojo airportPojo){
+		if (airportPojo == null) return Airport.emptyAirport();
+		
 		AirportBuilder airportBuilder = new AirportBuilder(airportPojo.getFs());
 		airportBuilder.addCity(airportPojo.getCity());
 		airportBuilder.addCityCode(airportPojo.getCityCode());
@@ -33,10 +36,17 @@ public class ExtractorUtils {
 	}
 	
 	protected static Airline airlinePojoToAirline(AirlinePojo airlinePojo) {
-		return new Airline(airlinePojo.getFs(), airlinePojo.getPhoneNumber(), airlinePojo.getName(), airlinePojo.getActive());
+		
+		return airlinePojo != null ? 
+				new Airline(airlinePojo.getFs(), airlinePojo.getPhoneNumber(), airlinePojo.getName(), airlinePojo.getActive()) : 
+						Airline.emptyAirline();
 	}
 	
 	protected static Flight flightPojoToFlight(FlightScheduledPojo flightPojo, Map<String, AirlinePojo> airlinesMap, Map<String, AirportPojo> airportsMap) {
+		if (flightPojo == null) return Flight.emptyFlight();
+		airlinesMap = airlinesMap != null ? airlinesMap : Collections.emptyMap();
+		airportsMap = airportsMap != null ? airportsMap : Collections.emptyMap();
+		
 		FlightBuilder builder = new FlightBuilder(flightPojo.getFlightNumber(), 
 				airlinePojoToAirline(airlinesMap.get(flightPojo.getCarrierFsCode())));
 		builder.addArrival(getScheduledTrip(airportPojoToAirport(airportsMap.get(flightPojo.getArrivalAirportFsCode())),
@@ -49,15 +59,21 @@ public class ExtractorUtils {
 	}
 	
 	protected static Set<Airport> airportJsonSetToAirportSet(AirportsJson airports){
-		return airports.getAirports().stream().map(airport -> airportPojoToAirport(airport)).collect(Collectors.toSet());
+		return airports != null && airports.getAirports() != null ? 
+				airports.getAirports().stream().map(airport -> airportPojoToAirport(airport)).collect(Collectors.toSet()) :
+					Collections.emptySet();
 	}
 	
 	protected static Set<Flight> flightJsonSetToFlightSet(FlightsJson flightsJson){
-		Set<FlightScheduledPojo> flightSetPojos = flightsJson.getFlights();
-		Map<String, AirlinePojo> airlinesMap = flightsJson.getAppendix().getAirlines().stream().collect(Collectors.toMap(AirlinePojo::getFs, p -> p));
-		Map<String, AirportPojo> airportsMap = flightsJson.getAppendix().getAirports().stream().collect(Collectors.toMap(AirportPojo::getFs, p -> p));
-		Iterator<FlightScheduledPojo> it = flightSetPojos != null ? flightSetPojos
-				.iterator() : null;
+		if (flightsJson == null || flightsJson.getFlights() == null) return Collections.emptySet();
+		AppendixPojo appendix = flightsJson.getAppendix() != null ? flightsJson.getAppendix() : new AppendixPojo();
+		Map<String, AirlinePojo> airlinesMap = appendix.getAirlines() != null ? 
+				appendix.getAirlines().stream().collect(Collectors.toMap(AirlinePojo::getFs, p -> p)) :
+					Collections.emptyMap();
+		Map<String, AirportPojo> airportsMap = appendix.getAirports() != null ? 
+				appendix.getAirports().stream().collect(Collectors.toMap(AirportPojo::getFs, p -> p)) :
+					Collections.emptyMap();
+		Iterator<FlightScheduledPojo> it = flightsJson.getFlights().iterator();
 		FlightScheduledPojo pojo = null;
 		Set<Flight> flights = new HashSet<>();
 		while (it != null && it.hasNext()) {

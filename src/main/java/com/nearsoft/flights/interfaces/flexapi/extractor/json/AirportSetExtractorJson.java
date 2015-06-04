@@ -24,7 +24,7 @@ public class AirportSetExtractorJson implements Extractor<Set<Airport>> {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setVisibilityChecker(mapper.getSerializationConfig().getDefaultVisibilityChecker()
                 .withFieldVisibility(JsonAutoDetect.Visibility.ANY));
-		Set<Airport> airports = Collections.emptySet();
+		Set<Airport> airports = null;
 		try {
 			AirportsJson airport = mapper.readValue(in, AirportsJson.class);
 			airports = ExtractorUtils.airportJsonSetToAirportSet(airport);

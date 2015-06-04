@@ -27,7 +27,7 @@ public class AirlineJdbcDao implements AirlineDao {
 	}
 
 	@Override
-	public Set<AirlineDto> findAll() throws PersistenceException {
+	public Set<AirlineDto> findAll() throws SQLException {
 		Connection conn = null;
 		PreparedStatement st = null;
 		ResultSet rs = null;
@@ -42,19 +42,13 @@ public class AirlineJdbcDao implements AirlineDao {
 				airlines.add(dto);
 			}
 			return airlines;
-		} catch (SQLException ex) {
-			throw new PersistenceException("Error occured while fetchin airline data", ex);
 		} finally {
-			try {
 				if (rs != null)
 					rs.close();
 				if (st != null)
 					st.close();
 				if (conn != null)
 					conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 		}
 	}
 

@@ -1,7 +1,7 @@
 package com.nearsoft.flights.domain.model.airport;
 
 public class Airport {
-	public static Airport EMPTY_AIRPORT = new Airport();
+	private static Airport EMPTY_AIRPORT = new Airport();
 	
 	private String airportCode;
 	private String name;
@@ -15,6 +15,10 @@ public class Airport {
 	
 	private Airport() {
 		
+	}
+	
+	public static Airport emptyAirport() {
+		return EMPTY_AIRPORT;
 	}
 	
 	private Airport(String airportCode) {

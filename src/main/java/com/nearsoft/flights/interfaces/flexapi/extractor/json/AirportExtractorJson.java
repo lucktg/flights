@@ -18,7 +18,7 @@ public class AirportExtractorJson implements Extractor<Airport>{
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setVisibilityChecker(mapper.getSerializationConfig().getDefaultVisibilityChecker()
                 .withFieldVisibility(JsonAutoDetect.Visibility.ANY));
-		Airport airport = Airport.EMPTY_AIRPORT;
+		Airport airport = null;
 		try {
 			AirportPojo airportJson = mapper.readValue(in, AirportPojo.class);
 			airport = ExtractorUtils.airportPojoToAirport(airportJson);

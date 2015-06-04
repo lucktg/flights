@@ -5,13 +5,20 @@ import java.util.Set;
 
 public class Flight {
 	
+	private static final Flight EMPTY_FLIGHT = new Flight();
+	
 	private String flightNumber;
+	//TODO replace with a Set and initialize with an empty Set
 	private LinkedHashSet<Flight> connectionFlights;
 	private Airline airline;
 	private ScheduledTrip departure;
 	private ScheduledTrip arrival;
 	private Set<String> serviceClasses;
 	private String serviceType;
+	
+	private Flight() {
+		
+	}
 	
 	private Flight(String flightNumber, Airline airline) {
 		this.flightNumber = flightNumber;
@@ -60,7 +67,11 @@ public class Flight {
 				+ ((flightNumber == null) ? 0 : flightNumber.hashCode());
 		return result;
 	}
-
+	
+	public static Flight emptyFlight() {
+		return EMPTY_FLIGHT;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

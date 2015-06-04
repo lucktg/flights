@@ -54,6 +54,7 @@ public class FlightRepositoryImpl implements FlightRepository {
 	}
 
 	private TripInformationRequestDto tripInformationRequestToDto(TripInformationRequest request) {
+		if (request == null) return new TripInformationRequestDto();
 		TripInformationRequestDto dto = new TripInformationRequestDto();
 		dto.setDepartureAirportCode(request.getDepartureAirportCode());
 		dto.setDepartureDate(new Timestamp(request.getDepartureDate().getTime()));
@@ -62,14 +63,17 @@ public class FlightRepositoryImpl implements FlightRepository {
 	}
 	
 	private FlightDto flightToFlightDto(Flight flight){
+		if (flight == null) return new FlightDto();
 		FlightDto dto = new FlightDto();
 		dto.setAirline(airlineToAirlineDto(flight.getAirline()));
-		dto.setArrivalAirport(airportToAirportDto(flight.getArrival().getAirport()));
-		dto.setArrivalDate(new Timestamp(flight.getArrival().getScheduledDate().getTime()));
-		dto.setArrivalTerminal(flight.getArrival().getTerminal());
-		dto.setDepartureAirport(airportToAirportDto(flight.getDeparture().getAirport()));
-		dto.setDepartureDate(new Timestamp(flight.getDeparture().getScheduledDate().getTime()));
-		dto.setDepartureTerminal(flight.getDeparture().getTerminal());
+		ScheduledTrip arrival = flight.getArrival();
+		ScheduledTrip departure = flight.getDeparture();
+		dto.setArrivalAirport(airportToAirportDto(arrival != null ? arrival.getAirport() : null));
+		dto.setArrivalDate(arrival != null && arrival.getScheduledDate() != null ? new Timestamp( arrival.getScheduledDate().getTime()) : null);
+		dto.setArrivalTerminal(arrival != null ? arrival.getTerminal() : null);
+		dto.setDepartureAirport(airportToAirportDto(departure != null ? departure.getAirport() : null));
+		dto.setDepartureDate(departure != null && departure.getScheduledDate() != null ? new Timestamp(departure.getScheduledDate().getTime()) : null);
+		dto.setDepartureTerminal(departure != null ? departure.getTerminal() : null);
 		dto.setFlightNumber(flight.getFlightNumber());
 		dto.setServiceType(flight.getServiceType());
 		return dto;
@@ -77,6 +81,7 @@ public class FlightRepositoryImpl implements FlightRepository {
 
 
 	private AirlineDto airlineToAirlineDto(Airline airline) {
+		if(airline == null) return new AirlineDto();
 		AirlineDto dto = new AirlineDto();
 		dto.setAirlineCode(airline.getAirlineCode());
 		dto.setAirlineName(airline.getName());
@@ -85,6 +90,7 @@ public class FlightRepositoryImpl implements FlightRepository {
 	}
 	
 	private AirportDto airportToAirportDto(Airport airport) {
+		if(airport == null) return new AirportDto();
 		AirportDto dto = new AirportDto();
 		dto.setAirportCode(airport.getAirportCode());
 		dto.setAirportName(airport.getName());
@@ -98,6 +104,7 @@ public class FlightRepositoryImpl implements FlightRepository {
 	}
 	
 	private Flight flightDtoToFlight(FlightDto flightDto) {
+		if(flightDto == null) return Flight.emptyFlight();
 		FlightBuilder builder = new FlightBuilder(flightDto.getFlightNumber(),airlineDtoToAirline(flightDto.getAirline()));
 		builder.addArrival(new ScheduledTrip(airportDtoToAirport(flightDto.getArrivalAirport()), flightDto.getArrivalDate(), flightDto.getArrivalTerminal()));
 		builder.addDeparture(new ScheduledTrip(airportDtoToAirport(flightDto.getDepartureAirport()), flightDto.getDepartureDate(), flightDto.getDepartureTerminal()));
@@ -106,10 +113,11 @@ public class FlightRepositoryImpl implements FlightRepository {
 	}
 	
 	private Airline airlineDtoToAirline(AirlineDto airline) {
-		return new Airline(airline.getAirlineCode(), airline.getPhoneNumber(), airline.getAirlineName(), airline.getActive());
+		return airline != null ? new Airline(airline.getAirlineCode(), airline.getPhoneNumber(), airline.getAirlineName(), airline.getActive()) : Airline.emptyAirline();
 	}
 	
 	private Airport airportDtoToAirport(AirportDto dto) {
+		if(dto == null) return Airport.emptyAirport();
 		AirportBuilder builder = new AirportBuilder(dto.getAirportCode());
 		builder.addCity(dto.getCity());
 		builder.addCityCode(dto.getCityCode());
