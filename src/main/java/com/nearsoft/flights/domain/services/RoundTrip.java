@@ -1,6 +1,8 @@
-package com.nearsoft.flights.domain.model.flight;
+package com.nearsoft.flights.domain.services;
 
 import java.util.Set;
+
+import com.nearsoft.flights.domain.model.flight.Flight;
 
 public class RoundTrip {
 	

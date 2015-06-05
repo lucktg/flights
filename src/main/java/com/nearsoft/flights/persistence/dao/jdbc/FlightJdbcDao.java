@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -13,12 +14,13 @@ import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
+import com.nearsoft.flights.domain.model.flight.TripInformationRequest;
 import com.nearsoft.flights.persistence.dao.FlightDao;
 import com.nearsoft.flights.persistence.dto.AirlineDto;
-import com.nearsoft.flights.persistence.dto.AirportDto;
+import com.nearsoft.flights.persistence.dto.Airport;
 import com.nearsoft.flights.persistence.dto.FlightDto;
-import com.nearsoft.flights.persistence.dto.TripInformationRequestDto;
 
+@Deprecated
 public class FlightJdbcDao implements FlightDao {
 	
 	private static final String INSERT_AIRLINE = "INSERT INTO AIRLINE (AIRLINE_CODE, AIRLINE_NAME,PHONE_NUMBER) VALUES(?,?,?)";
@@ -49,7 +51,7 @@ public class FlightJdbcDao implements FlightDao {
 			FlightDto flight = null;
 			while(it != null && it.hasNext()) {
 				flight = it.next();
-				Set<AirportDto> airports = new HashSet<>();
+				Set<Airport> airports = new HashSet<>();
 				airports.add(flight.getArrivalAirport());
 				airports.add(flight.getDepartureAirport());
 				insertAirports(conn, airports);
@@ -88,17 +90,17 @@ public class FlightJdbcDao implements FlightDao {
 
 	@Override
 	public Set<FlightDto> findDepartingFlightsByTripInformationRequest(
-			TripInformationRequestDto tripInformationRequestDto) throws PersistenceException {
+			TripInformationRequest tripInformationRequest) throws PersistenceException {
 		Connection conn = null;
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
 			conn = datasource.getConnection();
 			st = conn.prepareStatement(SELECT_BY_TRIP_INFORMATION);
-			st.setString(1, tripInformationRequestDto.getDepartureAirportCode());
-			st.setString(2, tripInformationRequestDto.getArrivalAirportCode());
-			st.setTimestamp(3, tripInformationRequestDto.getDepartureDate());
-			st.setTimestamp(4, tripInformationRequestDto.getDepartureDateEndDay());
+			st.setString(1, tripInformationRequest.getDepartureAirportCode());
+			st.setString(2, tripInformationRequest.getArrivalAirportCode());
+			st.setTimestamp(3, new Timestamp(tripInformationRequest.getDepartureDate().getTime()));
+			st.setTimestamp(4, new Timestamp(tripInformationRequest.getDepartureDateEndDay().getTime()));
 			rs  = st.executeQuery();
 			Set<FlightDto> flights = new HashSet<>();
 			FlightDto dto = null;
@@ -129,8 +131,8 @@ public class FlightJdbcDao implements FlightDao {
 		}
 	}
 	
-	private AirportDto getAirport(ResultSet rs, int index) throws SQLException {
-		AirportDto dto = new AirportDto();
+	private Airport getAirport(ResultSet rs, int index) throws SQLException {
+		Airport dto = new Airport();
 		dto.setAirportCode(rs.getString(index++));
 		dto.setAirportName(rs.getString(index++));
 		dto.setCity(rs.getString(index++));
@@ -172,7 +174,7 @@ public class FlightJdbcDao implements FlightDao {
 		}
 	}
 	
-	private void insertAirports(Connection conn, Set<AirportDto> airports) throws PersistenceException {
+	private void insertAirports(Connection conn, Set<Airport> airports) throws PersistenceException {
 		PreparedStatement st = null;
 		PreparedStatement inSt = null;
 		ResultSet rs = null;
@@ -181,12 +183,12 @@ public class FlightJdbcDao implements FlightDao {
 			String str = params.stream().collect(Collectors.joining(","));
 			st = conn.prepareStatement(SELECT_AIRPORT.replace("?", str));
 			int index=1;
-			for(AirportDto dto:airports) {
+			for(Airport dto:airports) {
 				st.setString(index++, dto.getAirportCode());
 			}
 			rs = st.executeQuery();
 			while(rs != null && rs.next()) {
-				AirportDto dto = new AirportDto();
+				Airport dto = new Airport();
 				dto.setAirportCode(rs.getString(1));
 				dto.setLatitude(rs.getString(2));
 				dto.setLongitude(rs.getString(3));
@@ -194,9 +196,9 @@ public class FlightJdbcDao implements FlightDao {
 			}
 			if(airports != null && airports.size() >0 ) {
 				inSt = conn.prepareStatement(INSERT_AIRPORT);
-				Iterator<AirportDto> it = airports != null ? airports.iterator()
+				Iterator<Airport> it = airports != null ? airports.iterator()
 						: null;
-				AirportDto airportDto = null;
+				Airport airportDto = null;
 				while (it != null && it.hasNext()) {
 					airportDto = it.next();
 					inSt.setString(1, airportDto.getAirportCode());

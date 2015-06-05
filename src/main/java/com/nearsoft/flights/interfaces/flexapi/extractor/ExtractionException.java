@@ -1,6 +1,6 @@
 package com.nearsoft.flights.interfaces.flexapi.extractor;
 
-public class ExtractionException extends Exception {
+public class ExtractionException extends RuntimeException {
 
 	/**
 	 * 

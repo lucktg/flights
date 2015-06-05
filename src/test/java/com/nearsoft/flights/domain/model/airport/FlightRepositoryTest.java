@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.nearsoft.flights.domain.model.flight.FlightRepository;
+import com.nearsoft.flights.domain.model.flight.FlightService;
 import com.nearsoft.flights.domain.model.flight.TripInformationRequest;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -24,7 +24,7 @@ import com.nearsoft.flights.domain.model.flight.TripInformationRequest;
 public class FlightRepositoryTest {
 
 	@Autowired
-	private FlightRepository flightRepository;
+	private FlightService flightRepository;
 	
 	@Autowired
     private CacheManager cacheManager;

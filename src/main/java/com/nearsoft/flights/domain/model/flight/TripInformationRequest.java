@@ -1,8 +1,12 @@
 package com.nearsoft.flights.domain.model.flight;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Date;
 
 public class TripInformationRequest {
+	private static Calendar calendar = Calendar.getInstance();
+	
 	private String departureAirportCode;
 	private Date departureDate;
 	private String arrivalAirportCode;
@@ -21,17 +25,18 @@ public class TripInformationRequest {
 	public Date getDepartureDate() {
 		return departureDate;
 	}
+	
 	public String getArrivalAirportCode() {
 		return arrivalAirportCode;
 	}
-	
-	
 
 	@Override
 	public String toString() {
-		return "TripInformationRequest [departureAirportCode="
-				+ departureAirportCode + ", departureDate=" + departureDate
-				+ ", arrivalAirportCode=" + arrivalAirportCode + "]";
+		StringBuilder builder = new StringBuilder("TripInformationRequest [departureAirportCode=");
+		builder.append(departureAirportCode)
+		.append(", departureDate=").append(departureDate)
+		.append(", arrivalAirportCode=").append(arrivalAirportCode).append("]");
+		return builder.toString();
 	}
 
 	@Override
@@ -78,6 +83,12 @@ public class TripInformationRequest {
 		return true;
 	}
 	
-	
+	public Timestamp getDepartureDateEndDay() {
+		calendar.setTimeInMillis(departureDate.getTime());
+		calendar.set(Calendar.HOUR_OF_DAY, 23);
+		calendar.set(Calendar.MINUTE, 59);
+		calendar.set(Calendar.SECOND, 59);
+		return new Timestamp(calendar.getTimeInMillis());
+	}
 	
 }

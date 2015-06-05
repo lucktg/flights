@@ -2,34 +2,40 @@ package com.nearsoft.flights.domain.services;
 
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.googlecode.ehcache.annotations.Cacheable;
 import com.nearsoft.flights.domain.model.airport.Airport;
 import com.nearsoft.flights.domain.model.airport.AirportRepository;
-import com.nearsoft.flights.domain.model.exception.RepositoryException;
-import com.nearsoft.flights.domain.services.exception.ServiceException;
+import com.nearsoft.flights.interfaces.flexapi.AirportFlexApiService;
+
+@Service
 public class AirportsServiceImpl implements AirportsService {
 	
+	@Autowired
 	private AirportRepository airportRepository;
-	
-	public AirportsServiceImpl(AirportRepository airportRepository) {
-		this.airportRepository = airportRepository;
+	@Autowired
+	private AirportFlexApiService airportFlexApiService;
+
+	@Cacheable( cacheName="airports")
+	@Override
+	public Set<Airport> getActiveAirports() {
+		Set<Airport> airports = null;
+		if((airports =airportFlexApiService.getAllActiveAirports())== null || airports.isEmpty()) {
+			airportRepository.add(airports = airportFlexApiService.getAllActiveAirports());
+		}
+		return airports;
 	}
 
+	@Cacheable( cacheName="airports")
 	@Override
-	public Set<Airport> getActiveAirports() throws ServiceException {
-		try {
-			return airportRepository.findAllActiveAirports();
-		} catch (RepositoryException e) {
-			throw new ServiceException("Error occurred while gathering airports information", e);
+	public Airport getAirportByCode(String airportCode) {
+		Airport airport = null;
+		if((airport =airportFlexApiService.getAirportByCode(airportCode))== null) {
+			airportRepository.add(airport = airportFlexApiService.getAirportByCode(airportCode));
 		}
-	}
-
-	@Override
-	public Airport getAirportByCode(String airportCode) throws ServiceException {
-		try {
-			return airportRepository.findByAirportCode(airportCode);
-		} catch (RepositoryException e) {
-			throw new ServiceException("Error occurred while gathering airport information", e);
-		}
+		return airport;
 	}
 
 }

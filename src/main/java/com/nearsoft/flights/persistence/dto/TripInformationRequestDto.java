@@ -3,7 +3,7 @@ package com.nearsoft.flights.persistence.dto;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Calendar;
-
+@Deprecated
 public class TripInformationRequestDto implements Serializable {
 	private static final Calendar calendar = Calendar.getInstance();
 	/**

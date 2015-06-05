@@ -9,8 +9,6 @@ public class Airline {
 	private String name;
 	private String active;
 	
-	
-	
 	public Airline(String airlineCode, String phoneNumber, String name,
 			String active) {
 		this.airlineCode = airlineCode;

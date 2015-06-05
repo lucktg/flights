@@ -11,7 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.nearsoft.flights.persistence.dao.jdbc.PersistenceException;
-import com.nearsoft.flights.persistence.dto.AirportDto;
+import com.nearsoft.flights.persistence.dto.Airport;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:spring/jdbc-config.xml")
@@ -22,7 +22,7 @@ public class AirportDaoTest {
 	
 	@Test
 	public void testInsert() throws PersistenceException {
-		AirportDto dto = new AirportDto();
+		Airport dto = new Airport();
 		dto.setAirportCode("MX");
 		dto.setAirportName("Aeropuerto internacional de la ciudad de Mexico");
 		dto.setCity("Mexico");
@@ -37,7 +37,7 @@ public class AirportDaoTest {
 	@Test
 	public void findAll() throws PersistenceException {
 		this.insertRows();
-		Set<AirportDto> airports =airportDao.findAll();
+		Set<Airport> airports =airportDao.findAll();
 		airports.forEach(p-> System.out.println(p));
 	}
 	
@@ -45,7 +45,7 @@ public class AirportDaoTest {
 	@Test
 	public void findByAirportCode() throws PersistenceException {
 		this.insertRows();
-		AirportDto airport =airportDao.findByAirportCode("MX800");
+		Airport airport =airportDao.findByAirportCode("MX800");
 		System.out.println(airport);
 	}
 	
@@ -57,9 +57,9 @@ public class AirportDaoTest {
 	
 	@Test
 	public void insertRows() throws PersistenceException {
-		Set<AirportDto> airports = new HashSet<>();
+		Set<Airport> airports = new HashSet<>();
 		for(int i = 0; i < 1000 ; i++) {
-			AirportDto dto = new AirportDto();
+			Airport dto = new Airport();
 			dto.setAirportCode("MX"+i);
 			dto.setAirportName("Aeropuerto internacional de la ciudad de Mexico");
 			dto.setCity("Mexico");

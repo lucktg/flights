@@ -6,6 +6,7 @@ import java.util.Set;
 import com.nearsoft.flights.persistence.dao.jdbc.PersistenceException;
 import com.nearsoft.flights.persistence.dto.AirlineDto;
 
+@Deprecated
 public interface AirlineDao {
 	Set<AirlineDto> findAll() throws SQLException;
 	AirlineDto findByAirlineCode(String airlineCode) throws PersistenceException;

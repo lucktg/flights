@@ -16,10 +16,9 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.nearsoft.flights.domain.model.flight.RoundTrip;
 import com.nearsoft.flights.domain.model.flight.TripInformationRequest;
 import com.nearsoft.flights.domain.services.FlightsService;
-import com.nearsoft.flights.domain.services.exception.ServiceException;
+import com.nearsoft.flights.domain.services.RoundTrip;
 
 @Component
 @Path("/flights")
@@ -43,11 +42,7 @@ public class FlightsResource {
 				throw new WebApplicationException("Departure date must be lower than returning date", Response.Status.BAD_REQUEST);
 			return flightsService.getRoundTripFlights(getTripInformation(fromAirport, returningAirport, departureDate), 
 					getTripInformation(returningAirport, fromAirport, returningDate));
-		} catch (ServiceException e) {
-			e.printStackTrace();
-			throw new WebApplicationException("Service unavailable", e, Response.Status.INTERNAL_SERVER_ERROR);
 		} catch (ParseException e) {
-			e.printStackTrace();
 			throw new WebApplicationException("Wrong date format, must be yyyy-mm-dd", e, Response.Status.BAD_REQUEST);
 		}
 	}

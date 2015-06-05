@@ -5,7 +5,7 @@ import java.util.Set;
 import com.nearsoft.flights.domain.model.airport.Airport;
 import com.nearsoft.flights.domain.model.flight.Flight;
 
-public interface AirportApi {
+public interface AirportApiService {
 	Set<Airport> getAllActiveAirports();
 	Airport getAirportByCode(String airportCode);
 }

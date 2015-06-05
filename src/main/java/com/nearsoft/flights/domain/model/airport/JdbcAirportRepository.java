@@ -1,4 +1,4 @@
-package com.nearsoft.flights.persistence.dao.jdbc;
+package com.nearsoft.flights.domain.model.airport;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,56 +10,53 @@ import java.util.Set;
 
 import javax.sql.DataSource;
 
-import com.nearsoft.flights.persistence.dao.AirportDao;
-import com.nearsoft.flights.persistence.dto.Airport;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-public class AirportJdbcDao implements AirportDao {
+import com.nearsoft.flights.domain.model.airport.Airport.AirportBuilder;
+import com.nearsoft.flights.persistence.dao.jdbc.PersistenceException;
 
-	private DataSource datasource;
-	
+@Repository
+public class JdbcAirportRepository implements AirportRepository {
 	private static final String INSERT = "INSERT INTO AIRPORT (AIRPORT_CODE,AIRPORT_NAME,CITY,CITY_CODE,COUNTRY_CODE,COUNTRY_NAME,LATITUDE,LONGITUDE) VALUES (?,?,?,?,?,?,?,?)";
 	private static final String SELECT = "SELECT AIRPORT_CODE,AIRPORT_NAME,CITY,CITY_CODE,COUNTRY_CODE,COUNTRY_NAME,LATITUDE,LONGITUDE FROM AIRPORT";
 	private static final String FIND_BY_AIRPORT_CODE = "SELECT AIRPORT_CODE,AIRPORT_NAME,CITY,CITY_CODE,COUNTRY_CODE,COUNTRY_NAME,LATITUDE,LONGITUDE FROM AIRPORT WHERE AIRPORT_CODE=?";
 	private static final String DELETE = "DELETE FROM AIRPORT";
 	
-	public AirportJdbcDao(DataSource datasource) {
-		this.datasource = datasource;
-	}
+	@Autowired
+	private DataSource datasource;
 	
 	@Override
-	public void insert(Airport airportDto) throws PersistenceException {
+	public void add(Airport airport) {
 		Connection conn = null;
 		PreparedStatement st = null;
 		try {
 			conn = datasource.getConnection();
 			st = conn.prepareStatement(INSERT);
-			setAirportDto(st, airportDto);
+			fillPreparedStatement(st, airport);
 			st.executeUpdate();
 		} catch (SQLException ex) {
-			throw new PersistenceException("Error occured while insert airport data ["+airportDto+"]", ex);
+			throw new PersistenceException("Error occured while insert airport data ["+airport+"].", ex);
 		} finally {
 			try {
 			if(st != null) st.close();
 			if(conn != null) conn.close();
 			} catch (SQLException e) {
-				e.printStackTrace();
+				throw new PersistenceException("Error occured while closing database resources.", e);
 			}
 		}		
 	}
 	
 	
 	@Override
-	public void insert(Set<Airport> airports) throws PersistenceException {
+	public void add(Set<Airport> airports) {
 		Connection conn = null;
 		PreparedStatement st = null;
 		try {
 			conn = datasource.getConnection();
 			st = conn.prepareStatement(INSERT);
-			Iterator<Airport> it = airports!= null ? airports.iterator() : null;
-			Airport airportDto = null;
-			while(it != null && it.hasNext()) {
-				airportDto = it.next();
-				setAirportDto(st, airportDto);
+			for(Iterator<Airport> it = airports != null ? airports.iterator() : null; it != null && it.hasNext();){
+				fillPreparedStatement(st, it.next());
 				st.addBatch();
 			}
 			st.executeBatch();
@@ -67,16 +64,16 @@ public class AirportJdbcDao implements AirportDao {
 			throw new PersistenceException("Error occured while insert airport data set", ex);
 		} finally {
 			try {
-			if(st != null) st.close();
-			if(conn != null) conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+				if(st != null) st.close();
+				if(conn != null) conn.close();
+				} catch (SQLException e) {
+					throw new PersistenceException("Error occured while closing database resources", e);
+				}
 		}		
 	}
 
 	@Override
-	public void deleteAll() throws PersistenceException {
+	public void removeAll() {
 		Connection conn = null;
 		PreparedStatement st = null;
 		ResultSet rs = null;
@@ -85,14 +82,14 @@ public class AirportJdbcDao implements AirportDao {
 			st = conn.prepareStatement(DELETE);
 			st.executeUpdate();
 		} catch(SQLException ex) {
-			throw new PersistenceException("Error occured while fetching airport data",ex);
+			throw new PersistenceException("Error occured while fetching airport data.", ex);
 		} finally {
 			try {
 				if(rs != null) rs.close();
 				if(st != null) st.close();
 				if(conn != null) conn.close();
 			} catch(SQLException e) {
-				e.printStackTrace();
+				throw new PersistenceException("Error occured while closing database resources.", e);
 			}
 		}
 	}
@@ -100,7 +97,7 @@ public class AirportJdbcDao implements AirportDao {
 	
 
 	@Override
-	public Set<Airport> findAll() throws PersistenceException {
+	public Set<Airport> findAllActiveAirports() {
 		Connection conn = null;
 		PreparedStatement st = null;
 		ResultSet rs = null;
@@ -109,19 +106,20 @@ public class AirportJdbcDao implements AirportDao {
 			st = conn.prepareStatement(SELECT);
 			rs  = st.executeQuery();
 			Set<Airport> airports = new HashSet<Airport>();
+			
 			while(rs != null && rs.next()){
-				airports.add(extractDto(rs));
+				airports.add(extractAirport(rs));
 			}
 			return airports;
 		} catch(SQLException ex) {
-			throw new PersistenceException("Error occured while fetching airport data",ex);
+			throw new PersistenceException("Error occured while fetching airport data", ex);
 		} finally {
 			try {
 				if(rs != null) rs.close();
 				if(st != null) st.close();
 				if(conn != null) conn.close();
 			} catch(SQLException e) {
-				e.printStackTrace();
+				throw new PersistenceException("Error occured while closing database resources.", e);
 			}
 		}
 	}
@@ -136,47 +134,45 @@ public class AirportJdbcDao implements AirportDao {
 			st = conn.prepareStatement(FIND_BY_AIRPORT_CODE);
 			st.setString(1, airportCode);
 			rs  = st.executeQuery();
-			Airport airportDto = null;
+			Airport airport = null;
 			while(rs != null && rs.next()){
-				airportDto = extractDto(rs);
+				airport = extractAirport(rs);
 			}
-			return airportDto;
+			return airport;
 		} catch(SQLException ex) {
-			throw new PersistenceException("Error occured while fetching airport data",ex);
+			throw new PersistenceException("Error occured while fetching airport data", ex);
 		} finally {
 			try {
 				if(rs != null) rs.close();
 				if(st != null) st.close();
 				if(conn != null) conn.close();
 			} catch(SQLException e) {
-				e.printStackTrace();
+				throw new PersistenceException("Error occured while closing database resoruces", e);
 			}
 		}
 	}
 	
-	private Airport extractDto(ResultSet rs) throws SQLException {
-		Airport airport = new Airport();
-		airport.setAirportCode(rs.getString(1));
-		airport.setAirportName(rs.getString(2));
-		airport.setCity(rs.getString(3));
-		airport.setCityCode(rs.getString(4));
-		airport.setCountryCode(rs.getString(5));
-		airport.setCountryName(rs.getString(6));
-		airport.setLatitude(rs.getString(7));
-		airport.setLongitude(rs.getString(8));
-		return airport;
+	private Airport extractAirport(ResultSet rs) throws SQLException {
+		AirportBuilder builder = new AirportBuilder(rs.getString(1));
+		builder.addName(rs.getString(2));
+		builder.addCity(rs.getString(3));
+		builder.addCityCode(rs.getString(4));
+		builder.addCountryCode(rs.getString(5));
+		builder.addCountryName(rs.getString(6));
+		builder.addLatitude(rs.getString(7));
+		builder.addLongitude(rs.getString(8));
+		return builder.build();
 	}
 	
-	private void setAirportDto(PreparedStatement st, Airport airportDto)
+	private void fillPreparedStatement(PreparedStatement st, Airport airport)
 			throws SQLException {
-		st.setString(1, airportDto.getAirportCode());
-		st.setString(2, airportDto.getAirportName());
-		st.setString(3, airportDto.getCity());
-		st.setString(4, airportDto.getCityCode());
-		st.setString(5, airportDto.getCountryCode());
-		st.setString(6, airportDto.getCountryName());
-		st.setString(7, airportDto.getLatitude());
-		st.setString(8, airportDto.getLongitude());
+		st.setString(1, airport.getAirportCode());
+		st.setString(2, airport.getName());
+		st.setString(3, airport.getCity());
+		st.setString(4, airport.getCityCode());
+		st.setString(5, airport.getCountryCode());
+		st.setString(6, airport.getCountryName());
+		st.setString(7, airport.getLatitude());
+		st.setString(8, airport.getLongitude());
 	}
-
 }

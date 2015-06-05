@@ -13,7 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.nearsoft.flights.domain.model.airport.Airport;
-import com.nearsoft.flights.interfaces.AirportApi;
+import com.nearsoft.flights.interfaces.AirportApiService;
 import static org.hamcrest.Matchers.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -21,7 +21,7 @@ import static org.hamcrest.Matchers.*;
 public class AirportFlexApiTest {
 		
 	@Autowired
-	private AirportApi airportApi;
+	private AirportApiService airportApi;
 	
 	@Before
 	public void setUp() {

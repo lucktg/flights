@@ -3,13 +3,14 @@ package com.nearsoft.flights.persistence.dao;
 import java.util.Set;
 
 import com.nearsoft.flights.persistence.dao.jdbc.PersistenceException;
-import com.nearsoft.flights.persistence.dto.AirportDto;
+import com.nearsoft.flights.persistence.dto.Airport;
 
+@Deprecated
 public interface AirportDao {
 	
-	void insert(AirportDto airport) throws PersistenceException;
-	void insert(Set<AirportDto> airports) throws PersistenceException;
-	Set<AirportDto> findAll() throws PersistenceException;	
-	AirportDto findByAirportCode(String airportCode) throws PersistenceException;
+	void insert(Airport airport) throws PersistenceException;
+	void insert(Set<Airport> airports) throws PersistenceException;
+	Set<Airport> findAll() throws PersistenceException;	
+	Airport findByAirportCode(String airportCode) throws PersistenceException;
 	void deleteAll() throws PersistenceException;
 }

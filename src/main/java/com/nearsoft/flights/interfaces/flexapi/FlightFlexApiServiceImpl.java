@@ -1,25 +1,26 @@
 package com.nearsoft.flights.interfaces.flexapi;
 
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.RestTemplate;
 
 import com.nearsoft.flights.domain.model.flight.Flight;
-import com.nearsoft.flights.interfaces.FlightApi;
+import com.nearsoft.flights.domain.model.flight.TripInformationRequest;
+import com.nearsoft.flights.interfaces.FlightFlexApiService;
 import com.nearsoft.flights.interfaces.flexapi.extractor.FlightSetExtractorFactory;
 import com.nearsoft.flights.interfaces.flexapi.extractor.MediaTypeResponseExtractor;
-import com.nearsoft.flights.persistence.dto.TripInformationRequestDto;
 import com.nearsoft.flights.rest.util.UriUtils;
 
-public class FlightFlexApi implements FlightApi {
+@Service
+public class FlightFlexApiServiceImpl implements FlightFlexApiService {
 	enum URLParams {
 		departureAirportCode,
 		arrivalAirportCode,
@@ -27,21 +28,15 @@ public class FlightFlexApi implements FlightApi {
 		month,
 		day
 	}
-	
+	@Autowired
 	private RestTemplate restTemplate;
+	@Autowired
 	private Map<String, String> apiConfig;
+	@Autowired
 	private RequestCallback requestCallback;
 
-
-	public FlightFlexApi(RestTemplate restTemplate,
-			Map<String, String> apiConfig, RequestCallback requestCallback) {
-		this.restTemplate = restTemplate;
-		this.apiConfig = apiConfig;
-		this.requestCallback = requestCallback;
-	}
-
 	@Override
-	public Set<Flight> getDepartingFlightsByTripInformation(TripInformationRequestDto infoRequest) {
+	public Set<Flight> getDepartingFlightsByTripInformation(TripInformationRequest infoRequest) {
 		Map<String,String> urlParams = urlParamsFromTripInformation(infoRequest.getDepartureAirportCode(), 
 				infoRequest.getArrivalAirportCode(), 
 				infoRequest.getDepartureDate());

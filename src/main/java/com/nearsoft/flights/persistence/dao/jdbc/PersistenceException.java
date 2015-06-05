@@ -2,7 +2,7 @@ package com.nearsoft.flights.persistence.dao.jdbc;
 
 import java.sql.SQLException;
 
-public class PersistenceException extends Exception {
+public class PersistenceException extends RuntimeException {
 
 	public PersistenceException(String string, SQLException ex) {
 		super(string, ex);

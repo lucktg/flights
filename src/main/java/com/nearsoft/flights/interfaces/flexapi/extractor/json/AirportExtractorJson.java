@@ -14,7 +14,7 @@ import com.nearsoft.flights.interfaces.flexapi.extractor.Extractor;
 public class AirportExtractorJson implements Extractor<Airport>{
 
 	@Override
-	public Airport extract(InputStream in) throws ExtractionException {
+	public Airport extract(InputStream in) {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setVisibilityChecker(mapper.getSerializationConfig().getDefaultVisibilityChecker()
                 .withFieldVisibility(JsonAutoDetect.Visibility.ANY));

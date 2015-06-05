@@ -64,7 +64,7 @@ public class AirportsServiceImplTest {
 		when(airportDAO.findActiveAirports()).thenReturn(null);
 		when(apiClient.getAllActiveAirports()).thenReturn(null);
 		
-		Set<AirportDto> airports = airportService.getActiveAirports();
+		Set<Airport> airports = airportService.getActiveAirports();
 		Assert.assertNotNull(airports);
 		Assert.assertThat(airports, is(empty()));
 		
@@ -81,7 +81,7 @@ public class AirportsServiceImplTest {
 		when(airportDAO.findActiveAirports()).thenReturn(null);
 		when(apiClient.getAllActiveAirports()).thenReturn(getAirportsWithEmptyAirportSet());
 		
-		Set<AirportDto> airports = airportService.getActiveAirports();
+		Set<Airport> airports = airportService.getActiveAirports();
 		Assert.assertNotNull(airports);
 		Assert.assertThat(airports, is(empty()));
 		
@@ -98,7 +98,7 @@ public class AirportsServiceImplTest {
 		when(airportDAO.findActiveAirports()).thenReturn(getAirportSet());
 		when(apiClient.getAllActiveAirports()).thenReturn(null);
 		
-		Set<AirportDto> airports = airportService.getActiveAirports();
+		Set<Airport> airports = airportService.getActiveAirports();
 		Assert.assertNotNull(airports);
 		Assert.assertThat(airports, is(not(empty())));
 		
@@ -114,7 +114,7 @@ public class AirportsServiceImplTest {
 		when(airportDAO.findActiveAirports()).thenReturn(null);
 		when(apiClient.getAllActiveAirports()).thenReturn(getAirports());
 		
-		Set<AirportDto> airports = airportService.getActiveAirports();
+		Set<Airport> airports = airportService.getActiveAirports();
 		Assert.assertNotNull(airports);
 		Assert.assertThat(airports, is(not(empty())));
 		
@@ -130,11 +130,11 @@ public class AirportsServiceImplTest {
 	}
 	
 	private Airports getAirports() {
-		return new Airports(Collections.singleton(new AirportDto()));
+		return new Airports(Collections.singleton(new Airport()));
 	}
 	
-	private Set<AirportDto> getAirportSet() {
-		Set<AirportDto> airports = Collections.singleton(new AirportDto());
+	private Set<Airport> getAirportSet() {
+		Set<Airport> airports = Collections.singleton(new Airport());
 		return airports;
 	}
 }

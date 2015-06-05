@@ -14,11 +14,11 @@
         <constructor-arg ref="flightRepository"/>
     </bean>
     
-    <bean id="airportRepository" class="com.nearsoft.flights.domain.model.airport.AirportRepositoryImpl">
+    <bean id="airportRepository" class="com.nearsoft.flights.domain.model.airport.JdbcAirportRepository">
         <constructor-arg index="0" ref="airportApi"/>
         <constructor-arg index="1" ref="airportDao"/>
     </bean>
-    <bean id="flightRepository" class="com.nearsoft.flights.domain.model.flight.FlightRepositoryImpl">
+    <bean id="flightRepository" class="com.nearsoft.flights.domain.model.flight.FlightServiceImpl">
         <constructor-arg index="0" ref="flightApi"/>
         <constructor-arg index="1" ref="flightDao"/>
     </bean>

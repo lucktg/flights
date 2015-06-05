@@ -4,31 +4,32 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.RestTemplate;
 
 import com.nearsoft.flights.domain.model.airport.Airport;
-import com.nearsoft.flights.interfaces.AirportApi;
+import com.nearsoft.flights.interfaces.AirportApiService;
 import com.nearsoft.flights.interfaces.flexapi.extractor.AirportExtractorFactory;
 import com.nearsoft.flights.interfaces.flexapi.extractor.AirportSetExtractorFactory;
 import com.nearsoft.flights.interfaces.flexapi.extractor.MediaTypeResponseExtractor;
 import com.nearsoft.flights.rest.util.UriUtils;
 
-public class AirportFlexApi implements AirportApi {
+@Service
+public class AirportFlexApiService implements AirportApiService {
 	enum URLParams{
 		code
 	}
-	private RestTemplate restTemplate;
-	private RequestCallback requestCallback;
 	
+	@Autowired
+	private RestTemplate restTemplate;
+	@Autowired
+	private RequestCallback requestCallback;
+	@Autowired
 	private Map<String, String> apiConfig;
 	
-	public AirportFlexApi(RestTemplate restTemplate, Map<String, String> apiConfig, RequestCallback requestCallback) {
-		this.restTemplate = restTemplate;
-		this.apiConfig = apiConfig;
-		this.requestCallback = requestCallback;
-	}
 	
 	@Override
 	public Set<Airport> getAllActiveAirports() {

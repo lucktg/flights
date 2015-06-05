@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.nearsoft.flights.persistence.dao.jdbc.PersistenceException;
 import com.nearsoft.flights.persistence.dto.AirlineDto;
-import com.nearsoft.flights.persistence.dto.AirportDto;
+import com.nearsoft.flights.persistence.dto.Airport;
 import com.nearsoft.flights.persistence.dto.FlightDto;
 import com.nearsoft.flights.persistence.dto.TripInformationRequestDto;
 
@@ -79,8 +79,8 @@ public class FlightDaoTest {
 		return airlineDto;
 	}
 	
-	private AirportDto getAirport() {
-		AirportDto airportDto = new AirportDto();
+	private Airport getAirport() {
+		Airport airportDto = new Airport();
 		airportDto.setAirportCode("MX");
 		airportDto.setAirportName("Aeropuerto internacional de la ciudad de Mexico");
 		airportDto.setCity("Mexico");

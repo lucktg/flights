@@ -1,132 +1,264 @@
 package com.nearsoft.flights.domain.model.flight;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.googlecode.ehcache.annotations.Cacheable;
 import com.nearsoft.flights.domain.model.airport.Airport;
 import com.nearsoft.flights.domain.model.airport.Airport.AirportBuilder;
-import com.nearsoft.flights.domain.model.exception.RepositoryException;
 import com.nearsoft.flights.domain.model.flight.Flight.FlightBuilder;
-import com.nearsoft.flights.interfaces.FlightApi;
 import com.nearsoft.flights.persistence.dao.FlightDao;
 import com.nearsoft.flights.persistence.dao.jdbc.PersistenceException;
 import com.nearsoft.flights.persistence.dto.AirlineDto;
-import com.nearsoft.flights.persistence.dto.AirportDto;
 import com.nearsoft.flights.persistence.dto.FlightDto;
-import com.nearsoft.flights.persistence.dto.TripInformationRequestDto;
 
-public class FlightRepositoryImpl implements FlightRepository {
+@Repository
+public class JdbcFlightRepository implements FlightRepository {
 
-	private FlightApi flightApi;	
-	private FlightDao flightDao;
+	private static final String INSERT_AIRLINE = "INSERT INTO AIRLINE (AIRLINE_CODE, AIRLINE_NAME,PHONE_NUMBER) VALUES(?,?,?)";
+	private static final String SELECT_AIRLINE = "SELECT AIRLINE_CODE FROM AIRLINE WHERE AIRLINE_CODE = ?";
+	private static final String INSERT_AIRPORT = "INSERT INTO AIRPORT (AIRPORT_CODE, AIRPORT_NAME,dbc CITY, CITY_CODE, COUNTRY_CODE, COUNTRY_NAME, LATITUDE, LONGITUDE) VALUES (?,?,?,?,?,?,?,?)";
+	private static final String SELECT_AIRPORT = "SELECT AIRPORT_CODE, LATITUDE, LONGITUDE FROM AIRPORT WHERE AIRPORT_CODE IN (?)";
+	private static final String INSERT = "INSERT INTO FLIGHT (FLIGHT_NUMBER, AIRLINE_CODE, DEPARTURE_DATE, DEPARTURE_TERMINAL, DEPARTURE_AIRPORT_CODE, ARRIVAL_DATE, ARRIVAL_TERMINAL, ARRIVAL_AIRPORT_CODE, SERVICE_TYPE) VALUES(?,?,?,?,?,?,?,?,?)";
+	private static final String SELECT_BY_TRIP_INFORMATION = "SELECT A.FLIGHT_NUMBER, A.DEPARTURE_DATE, A.DEPARTURE_TERMINAL, A.ARRIVAL_DATE, A.ARRIVAL_TERMINAL, A.SERVICE_TYPE, B.AIRLINE_CODE, B.AIRLINE_NAME, B.PHONE_NUMBER, C.AIRPORT_CODE,C.AIRPORT_NAME,C.CITY,C.CITY_CODE,C.COUNTRY_CODE,C.COUNTRY_NAME,C.LATITUDE,C.LONGITUDE, D.AIRPORT_CODE,D.AIRPORT_NAME,D.CITY,D.CITY_CODE,D.COUNTRY_CODE,D.COUNTRY_NAME,D.LATITUDE,D.LONGITUDE "
+			+ "FROM FLIGHT A, AIRLINE B, AIRPORT C, AIRPORT D "
+			+ "WHERE A.AIRLINE_CODE =B.AIRLINE_CODE AND A.DEPARTURE_AIRPORT_CODE = C.AIRPORT_CODE AND A.ARRIVAL_AIRPORT_CODE = D.AIRPORT_CODE AND A.DEPARTURE_AIRPORT_CODE = ? AND A.ARRIVAL_AIRPORT_CODE = ? AND A.DEPARTURE_DATE between  ? and ?";
+	private static final String DELETE = "DELETE FROM FLIGHT";
 	
-	public FlightRepositoryImpl(FlightApi flightApi, FlightDao flightDao) {
-		super();
-		this.flightApi = flightApi;
-		this.flightDao = flightDao;
+	@Autowired
+	private DataSource datasource;
+
+	@Override
+	public void add(Set<Flight> flights) {
+		Connection conn = null;
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			conn = datasource.getConnection();
+			conn.setAutoCommit(false);
+			st = conn.prepareStatement(INSERT);
+			Iterator<Flight> it = flights !=null ? flights.iterator() : null;
+			Flight flight = null;
+			while(it != null && it.hasNext()) {
+				flight = it.next();
+				Set<Airport> airports = new HashSet<>();
+				airports.add(flight.getArrival().getAirport());
+				airports.add(flight.getDeparture().getAirport());
+				insertAirports(conn, airports);
+				insertAirline(conn, flight.getAirline());
+				st.setString(1, flight.getFlightNumber());
+				st.setString(2,  flight.getAirline().getAirlineCode());
+				st.setTimestamp(3, new Timestamp(flight.getDeparture().getScheduledDate().getTime()));
+				st.setString(4, flight.getDeparture().getTerminal());
+				st.setString(5, flight.getDeparture().getAirport().getAirportCode());
+				st.setTimestamp(6, new Timestamp(flight.getArrival().getScheduledDate().getTime()));
+				st.setString(7, flight.getArrival().getTerminal());
+				st.setString(8, flight.getArrival().getAirport().getAirportCode());
+				st.setString(9, flight.getServiceType());
+				st.addBatch();
+			}
+			st.executeBatch();
+			conn.commit();
+		} catch(SQLException ex) {
+			if(conn != null)
+				try {
+					conn.rollback();
+				} catch (SQLException e) {
+					throw new PersistenceException("Error occured while rolling back flight data", ex);
+				}
+			throw new PersistenceException("Error occured while inserting flight data", ex);
+		} finally {
+			try {
+				if(rs != null) rs.close();
+				if(st != null) st.close();
+				if(conn != null) conn.close();
+			} catch(SQLException e) {
+				throw new PersistenceException("Error occured while closing database resources", e);
+			}
+		}
 	}
 
-	@Cacheable(cacheName="flights")
 	@Override
-	public Set<Flight> findFlightsByDeparture(TripInformationRequest request) throws RepositoryException {
+	public Set<Flight> findDepartingFlightsByTripInformationRequest(
+			TripInformationRequest tripInformationRequest) {
+		Connection conn = null;
+		PreparedStatement st = null;
+		ResultSet rs = null;
 		try {
-			Set<FlightDto> flights = flightDao.findDepartingFlightsByTripInformationRequest(tripInformationRequestToDto(request));
-			if(flights == null || flights.isEmpty()) {
-				Set<Flight> flightsApi = flightApi.getDepartingFlightsByTripInformation(tripInformationRequestToDto(request));
-				flightDao.insertFlights(flightstoFlightsDto(flightsApi));
-				return flightsApi;
-			} else {
-				return flightsDtoToFlights(flights);
+			conn = datasource.getConnection();
+			st = conn.prepareStatement(SELECT_BY_TRIP_INFORMATION);
+			st.setString(1, tripInformationRequest.getDepartureAirportCode());
+			st.setString(2, tripInformationRequest.getArrivalAirportCode());
+			st.setTimestamp(3, new Timestamp(tripInformationRequest.getDepartureDate().getTime()));
+			st.setTimestamp(4, new Timestamp(tripInformationRequest.getDepartureDateEndDay().getTime()));
+			rs  = st.executeQuery();
+			Set<FlightDto> flights = new HashSet<>();
+			FlightDto dto = null;
+			while(rs != null && rs.next()) {
+				dto = new FlightDto();
+				dto.setFlightNumber(rs.getString(1));
+				dto.setDepartureDate(rs.getTimestamp(2));
+				dto.setDepartureTerminal(rs.getString(3));
+				dto.setArrivalDate(rs.getTimestamp(4));
+				dto.setArrivalTerminal(rs.getString(5));
+				dto.setServiceType(rs.getString(6));
+				dto.setAirline(getAirlineDto(rs, 7));
+				dto.setDepartureAirport(getAirport(rs, 10));
+				dto.setArrivalAirport(getAirport(rs, 18));
+				flights.add(dto);
 			}
-		} catch (PersistenceException e) {
-			throw new RepositoryException("Error ocurred while performing operations in database for finding flights by departure ["+request+"]", e);
+			return flights;
+		} catch(SQLException ex) {
+			throw new PersistenceException("Error occured while fetching flight data",ex);
+		} finally {
+			try {
+				if(rs != null) rs.close();
+				if(st != null) st.close();
+				if(conn != null) conn.close();
+			} catch(SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
-	private Set<FlightDto> flightstoFlightsDto(Set<Flight> flights) {
-		return flights.stream().map(flight -> flightToFlightDto(flight)).collect(Collectors.toSet());
-	}
-	
-	private Set<Flight> flightsDtoToFlights(Set<FlightDto> flightsDto) {
-		return flightsDto.stream().map(flightDto -> flightDtoToFlight(flightDto)).collect(Collectors.toSet());
-	}
-
-	private TripInformationRequestDto tripInformationRequestToDto(TripInformationRequest request) {
-		if (request == null) return new TripInformationRequestDto();
-		TripInformationRequestDto dto = new TripInformationRequestDto();
-		dto.setDepartureAirportCode(request.getDepartureAirportCode());
-		dto.setDepartureDate(new Timestamp(request.getDepartureDate().getTime()));
-		dto.setArrivalAirportCode(request.getArrivalAirportCode());
-		return dto;
-	}
-	
-	private FlightDto flightToFlightDto(Flight flight){
-		if (flight == null) return new FlightDto();
-		FlightDto dto = new FlightDto();
-		dto.setAirline(airlineToAirlineDto(flight.getAirline()));
-		ScheduledTrip arrival = flight.getArrival();
-		ScheduledTrip departure = flight.getDeparture();
-		dto.setArrivalAirport(airportToAirportDto(arrival != null ? arrival.getAirport() : null));
-		dto.setArrivalDate(arrival != null && arrival.getScheduledDate() != null ? new Timestamp( arrival.getScheduledDate().getTime()) : null);
-		dto.setArrivalTerminal(arrival != null ? arrival.getTerminal() : null);
-		dto.setDepartureAirport(airportToAirportDto(departure != null ? departure.getAirport() : null));
-		dto.setDepartureDate(departure != null && departure.getScheduledDate() != null ? new Timestamp(departure.getScheduledDate().getTime()) : null);
-		dto.setDepartureTerminal(departure != null ? departure.getTerminal() : null);
-		dto.setFlightNumber(flight.getFlightNumber());
-		dto.setServiceType(flight.getServiceType());
+	private Airport getAirport(ResultSet rs, int index) throws SQLException {
+		Airport dto = new Airport();
+		dto.setAirportCode(rs.getString(index++));
+		dto.setAirportName(rs.getString(index++));
+		dto.setCity(rs.getString(index++));
+		dto.setCityCode(rs.getString(index++));
+		dto.setCountryCode(rs.getString(index++));
+		dto.setCountryName(rs.getString(index++));
+		dto.setLatitude(rs.getString(index++));
+		dto.setLongitude(rs.getString(index++));
 		return dto;
 	}
 
-
-	private AirlineDto airlineToAirlineDto(Airline airline) {
-		if(airline == null) return new AirlineDto();
+	private AirlineDto getAirlineDto(ResultSet rs, int index) throws SQLException {
 		AirlineDto dto = new AirlineDto();
-		dto.setAirlineCode(airline.getAirlineCode());
-		dto.setAirlineName(airline.getName());
-		dto.setPhoneNumber(airline.getPhoneNumber());
+		dto.setAirlineCode(rs.getString(index++));
+		dto.setAirlineName(rs.getString(index++));
+		dto.setPhoneNumber(rs.getString(index++));
 		return dto;
 	}
-	
-	private AirportDto airportToAirportDto(Airport airport) {
-		if(airport == null) return new AirportDto();
-		AirportDto dto = new AirportDto();
-		dto.setAirportCode(airport.getAirportCode());
-		dto.setAirportName(airport.getName());
-		dto.setCity(airport.getCity());
-		dto.setCityCode(airport.getCityCode());
-		dto.setCountryCode(airport.getCountryCode());
-		dto.setCountryName(airport.getCountryName());
-		dto.setLatitude(airport.getLatitude());
-		dto.setLongitude(airport.getLongitude());
-		return dto;
+
+	@Override
+	public void deleteAll() throws PersistenceException {
+		Connection conn = null;
+		PreparedStatement st = null;
+		try {
+			conn = datasource.getConnection();
+			st = conn.prepareStatement(DELETE);
+			st.executeUpdate();
+		} catch (SQLException ex) {
+			throw new PersistenceException("Error ocurred while deleting flights data",ex);
+		} finally {
+			try {
+				if (st != null)
+					st.close();
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
-	private Flight flightDtoToFlight(FlightDto flightDto) {
-		if(flightDto == null) return Flight.emptyFlight();
-		FlightBuilder builder = new FlightBuilder(flightDto.getFlightNumber(),airlineDtoToAirline(flightDto.getAirline()));
-		builder.addArrival(new ScheduledTrip(airportDtoToAirport(flightDto.getArrivalAirport()), flightDto.getArrivalDate(), flightDto.getArrivalTerminal()));
-		builder.addDeparture(new ScheduledTrip(airportDtoToAirport(flightDto.getDepartureAirport()), flightDto.getDepartureDate(), flightDto.getDepartureTerminal()));
-		builder.addServiceType(flightDto.getServiceType());
-		return builder.build();
+	private void insertAirports(Connection conn, Set<Airport> airports) throws PersistenceException {
+		PreparedStatement st = null;
+		PreparedStatement inSt = null;
+		ResultSet rs = null;
+		try {
+			List<String> params = Collections.nCopies(airports.size(), "?");
+			String str = params.stream().collect(Collectors.joining(","));
+			st = conn.prepareStatement(SELECT_AIRPORT.replace("?", str));
+			int index=1;
+			for(Airport dto:airports) {
+				st.setString(index++, dto.getAirportCode());
+			}
+			rs = st.executeQuery();
+			while(rs != null && rs.next()) {
+				Airport dto = new Airport();
+				dto.setAirportCode(rs.getString(1));
+				dto.setLatitude(rs.getString(2));
+				dto.setLongitude(rs.getString(3));
+				airports.remove(dto);
+			}
+			if(airports != null && airports.size() >0 ) {
+				inSt = conn.prepareStatement(INSERT_AIRPORT);
+				Iterator<Airport> it = airports != null ? airports.iterator()
+						: null;
+				Airport airportDto = null;
+				while (it != null && it.hasNext()) {
+					airportDto = it.next();
+					inSt.setString(1, airportDto.getAirportCode());
+					inSt.setString(2, airportDto.getAirportName());
+					inSt.setString(3, airportDto.getCity());
+					inSt.setString(4, airportDto.getCityCode());
+					inSt.setString(5, airportDto.getCountryCode());
+					inSt.setString(6, airportDto.getCountryName());
+					inSt.setString(7, airportDto.getLatitude());
+					inSt.setString(8, airportDto.getLongitude());
+					inSt.addBatch();
+				}
+				inSt.executeBatch();
+			}
+			
+		} catch (SQLException ex) {
+			throw new PersistenceException("Error ocurred while inserting flights data", ex);
+		} finally {
+			try {
+				if(inSt != null) inSt.close();
+				if (rs != null) rs.close();
+				if(st != null) st.close();
+			} catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
-	private Airline airlineDtoToAirline(AirlineDto airline) {
-		return airline != null ? new Airline(airline.getAirlineCode(), airline.getPhoneNumber(), airline.getAirlineName(), airline.getActive()) : Airline.emptyAirline();
-	}
-	
-	private Airport airportDtoToAirport(AirportDto dto) {
-		if(dto == null) return Airport.emptyAirport();
-		AirportBuilder builder = new AirportBuilder(dto.getAirportCode());
-		builder.addCity(dto.getCity());
-		builder.addCityCode(dto.getCityCode());
-		builder.addCountryCode(dto.getCountryCode());
-		builder.addCountryName(dto.getCountryName());
-		builder.addLatitude(dto.getLatitude());
-		builder.addLongitude(dto.getLongitude());
-		builder.addName(dto.getAirportName());
-		builder.addStateCode(dto.getStateCode());
-		return builder.build();
+	private void insertAirline(Connection conn, AirlineDto airline) throws PersistenceException {
+		PreparedStatement st = null;
+		PreparedStatement inSt = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement(SELECT_AIRLINE);
+			st.setString(1, airline.getAirlineCode());
+			rs = st.executeQuery();
+			String airlineCode = null;
+			while(rs != null && rs.next()) {
+				airlineCode = rs.getString(1);
+			}
+			if(airlineCode == null || "".equals(airlineCode.trim())) {
+				inSt = conn.prepareStatement(INSERT_AIRLINE);				
+				inSt.setString(1, airline.getAirlineCode());
+				inSt.setString(2, airline.getAirlineName());
+				inSt.setString(3, airline.getPhoneNumber());
+				inSt.executeUpdate();
+			}
+		} catch (SQLException ex) {
+			throw new PersistenceException("Error ocurred while inserting ariports data", ex);
+		} finally {
+			try {
+				if (rs != null) rs.close();
+				if(st != null) st.close();
+			} catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

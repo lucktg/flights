@@ -3,6 +3,7 @@ package com.nearsoft.flights.persistence.dto;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+@Deprecated
 public class FlightDto implements Serializable {
 
 	/**
@@ -14,10 +15,10 @@ public class FlightDto implements Serializable {
 	private AirlineDto airline;
 	private Timestamp departureDate;
 	private String departureTerminal;
-	private AirportDto departureAirport;
+	private Airport departureAirport;
 	private Timestamp arrivalDate;
 	private String arrivalTerminal;
-	private AirportDto arrivalAirport;
+	private Airport arrivalAirport;
 	private String serviceType;
 	
 	public String getFlightNumber() {
@@ -64,16 +65,16 @@ public class FlightDto implements Serializable {
 	public void setAirline(AirlineDto airline) {
 		this.airline = airline;
 	}
-	public AirportDto getDepartureAirport() {
+	public Airport getDepartureAirport() {
 		return departureAirport;
 	}
-	public void setDepartureAirport(AirportDto departureAirport) {
+	public void setDepartureAirport(Airport departureAirport) {
 		this.departureAirport = departureAirport;
 	}
-	public AirportDto getArrivalAirport() {
+	public Airport getArrivalAirport() {
 		return arrivalAirport;
 	}
-	public void setArrivalAirport(AirportDto arrivalAirport) {
+	public void setArrivalAirport(Airport arrivalAirport) {
 		this.arrivalAirport = arrivalAirport;
 	}
 	@Override

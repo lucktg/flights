@@ -20,11 +20,7 @@ public class MediaTypeResponseExtractor<T> implements ResponseExtractor<T> {
 			throws IOException {
 		MediaType mediaType = new MediaType(response.getHeaders().getContentType().getType(), response.getHeaders().getContentType().getSubtype());
 		Extractor<T> extractor = extractorFactory.createExtractor(mediaType.toString());
-		try {
-			return extractor.extract(response.getBody());
-		} catch (ExtractionException e) {
-			throw new RuntimeException(e);
-		}
+		return extractor.extract(response.getBody());
 	}
 
 }
