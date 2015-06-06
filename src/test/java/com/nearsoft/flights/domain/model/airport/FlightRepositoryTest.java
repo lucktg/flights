@@ -41,25 +41,25 @@ public class FlightRepositoryTest {
     }
 	@Test
 	public void shouldGetAirportsFromCache() throws Exception {
-		flightRepository.findFlightsByDeparture(getTripInformationRequestHMO());
+		flightRepository.findDepartingFlightsByTripInformationRequest(getTripInformationRequestHMO());
 		Assert.assertEquals(1, flightCache.getStatistics().getMemoryStoreObjectCount());
 		Assert.assertEquals(0, flightCache.getStatistics().getCacheHits());
 		Assert.assertEquals(1, flightCache.getStatistics().getCacheMisses());
-		flightRepository.findFlightsByDeparture(getTripInformationRequestHMO());
+		flightRepository.findDepartingFlightsByTripInformationRequest(getTripInformationRequestHMO());
 		Assert.assertEquals(1, flightCache.getStatistics().getMemoryStoreObjectCount());
 		Assert.assertEquals(1, flightCache.getStatistics().getCacheHits());
 		Assert.assertEquals(1, flightCache.getStatistics().getCacheMisses());
-		flightRepository.findFlightsByDeparture(getTripInformationRequestHMO());
+		flightRepository.findDepartingFlightsByTripInformationRequest(getTripInformationRequestHMO());
 		Assert.assertEquals(1, flightCache.getStatistics().getMemoryStoreObjectCount());
 		Assert.assertEquals(2, flightCache.getStatistics().getCacheHits());
 		Assert.assertEquals(1, flightCache.getStatistics().getCacheMisses());
 		
 		//Al cambiar la informacion de busqueda, se agrega un nuevo elemento en el cache
-		flightRepository.findFlightsByDeparture(getTripInformationRequestGDL());
+		flightRepository.findDepartingFlightsByTripInformationRequest(getTripInformationRequestGDL());
 		Assert.assertEquals(2, flightCache.getStatistics().getMemoryStoreObjectCount());
 		Assert.assertEquals(2, flightCache.getStatistics().getCacheHits());
 		Assert.assertEquals(2, flightCache.getStatistics().getCacheMisses());
-		flightRepository.findFlightsByDeparture(getTripInformationRequestGDL());
+		flightRepository.findDepartingFlightsByTripInformationRequest(getTripInformationRequestGDL());
 		Assert.assertEquals(2, flightCache.getStatistics().getMemoryStoreObjectCount());
 		Assert.assertEquals(3, flightCache.getStatistics().getCacheHits());
 		Assert.assertEquals(2, flightCache.getStatistics().getCacheMisses());

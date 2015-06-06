@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RequestCallback;
@@ -14,13 +15,13 @@ import org.springframework.web.client.RestTemplate;
 
 import com.nearsoft.flights.domain.model.flight.Flight;
 import com.nearsoft.flights.domain.model.flight.TripInformationRequest;
-import com.nearsoft.flights.interfaces.FlightFlexApiService;
+import com.nearsoft.flights.interfaces.FlightApiService;
 import com.nearsoft.flights.interfaces.flexapi.extractor.FlightSetExtractorFactory;
 import com.nearsoft.flights.interfaces.flexapi.extractor.MediaTypeResponseExtractor;
 import com.nearsoft.flights.rest.util.UriUtils;
 
 @Service
-public class FlightFlexApiServiceImpl implements FlightFlexApiService {
+public class FlightFlexApiServiceImpl implements FlightApiService {
 	enum URLParams {
 		departureAirportCode,
 		arrivalAirportCode,
@@ -28,9 +29,9 @@ public class FlightFlexApiServiceImpl implements FlightFlexApiService {
 		month,
 		day
 	}
-	@Autowired
-	private RestTemplate restTemplate;
-	@Autowired
+	
+	private RestTemplate restTemplate = new RestTemplate();
+	@Value("#{apiConfig}")
 	private Map<String, String> apiConfig;
 	@Autowired
 	private RequestCallback requestCallback;

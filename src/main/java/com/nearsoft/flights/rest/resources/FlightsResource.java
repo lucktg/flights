@@ -12,6 +12,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.log4j.Logger;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,6 +25,8 @@ import com.nearsoft.flights.domain.services.RoundTrip;
 @Path("/flights")
 public class FlightsResource {
 	
+	private static final Logger logger = Logger.getLogger(FlightsResource.class);
+	
 	@Autowired
 	private FlightsService flightsService;
 	
@@ -34,6 +37,7 @@ public class FlightsResource {
 			@NotEmpty @QueryParam("departing") String departing,
 			@NotEmpty @QueryParam ("returningAirport") String returningAirport,
 			@NotEmpty @QueryParam("returning") String returning) {
+		logger.debug("Searching rondTrips with parameters:  fromAirport["+fromAirport+"], departing["+departing+"], returningAirport["+returningAirport+"], returning["+returning+"]");
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		try {
 			Date departureDate = format.parse(departing);

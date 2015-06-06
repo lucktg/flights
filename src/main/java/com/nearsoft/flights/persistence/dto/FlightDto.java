@@ -12,7 +12,7 @@ public class FlightDto implements Serializable {
 	private static final long serialVersionUID = -7090692690829040890L;
 	
 	private String flightNumber;
-	private AirlineDto airline;
+	private Airline airline;
 	private Timestamp departureDate;
 	private String departureTerminal;
 	private Airport departureAirport;
@@ -59,10 +59,10 @@ public class FlightDto implements Serializable {
 	public void setServiceType(String serviceType) {
 		this.serviceType = serviceType;
 	}
-	public AirlineDto getAirline() {
+	public Airline getAirline() {
 		return airline;
 	}
-	public void setAirline(AirlineDto airline) {
+	public void setAirline(Airline airline) {
 		this.airline = airline;
 	}
 	public Airport getDepartureAirport() {

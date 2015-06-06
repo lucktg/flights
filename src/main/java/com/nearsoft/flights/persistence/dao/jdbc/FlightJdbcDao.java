@@ -16,7 +16,7 @@ import javax.sql.DataSource;
 
 import com.nearsoft.flights.domain.model.flight.TripInformationRequest;
 import com.nearsoft.flights.persistence.dao.FlightDao;
-import com.nearsoft.flights.persistence.dto.AirlineDto;
+import com.nearsoft.flights.persistence.dto.Airline;
 import com.nearsoft.flights.persistence.dto.Airport;
 import com.nearsoft.flights.persistence.dto.FlightDto;
 
@@ -144,8 +144,8 @@ public class FlightJdbcDao implements FlightDao {
 		return dto;
 	}
 
-	private AirlineDto getAirlineDto(ResultSet rs, int index) throws SQLException {
-		AirlineDto dto = new AirlineDto();
+	private Airline getAirlineDto(ResultSet rs, int index) throws SQLException {
+		Airline dto = new Airline();
 		dto.setAirlineCode(rs.getString(index++));
 		dto.setAirlineName(rs.getString(index++));
 		dto.setPhoneNumber(rs.getString(index++));
@@ -227,7 +227,7 @@ public class FlightJdbcDao implements FlightDao {
 		}
 	}
 	
-	private void insertAirline(Connection conn, AirlineDto airline) throws PersistenceException {
+	private void insertAirline(Connection conn, Airline airline) throws PersistenceException {
 		PreparedStatement st = null;
 		PreparedStatement inSt = null;
 		ResultSet rs = null;

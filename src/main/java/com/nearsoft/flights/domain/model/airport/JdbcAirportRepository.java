@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import com.nearsoft.flights.domain.model.airport.Airport.AirportBuilder;
 import com.nearsoft.flights.persistence.dao.jdbc.PersistenceException;
+import com.nearsoft.flights.persistence.dao.jdbc.utils.JdbcUtils;
 
 @Repository
 public class JdbcAirportRepository implements AirportRepository {
@@ -38,12 +39,7 @@ public class JdbcAirportRepository implements AirportRepository {
 		} catch (SQLException ex) {
 			throw new PersistenceException("Error occured while insert airport data ["+airport+"].", ex);
 		} finally {
-			try {
-			if(st != null) st.close();
-			if(conn != null) conn.close();
-			} catch (SQLException e) {
-				throw new PersistenceException("Error occured while closing database resources.", e);
-			}
+			JdbcUtils.close(conn, st);
 		}		
 	}
 	
@@ -63,12 +59,7 @@ public class JdbcAirportRepository implements AirportRepository {
 		} catch (SQLException ex) {
 			throw new PersistenceException("Error occured while insert airport data set", ex);
 		} finally {
-			try {
-				if(st != null) st.close();
-				if(conn != null) conn.close();
-				} catch (SQLException e) {
-					throw new PersistenceException("Error occured while closing database resources", e);
-				}
+			JdbcUtils.close(conn, st);
 		}		
 	}
 
@@ -84,13 +75,7 @@ public class JdbcAirportRepository implements AirportRepository {
 		} catch(SQLException ex) {
 			throw new PersistenceException("Error occured while fetching airport data.", ex);
 		} finally {
-			try {
-				if(rs != null) rs.close();
-				if(st != null) st.close();
-				if(conn != null) conn.close();
-			} catch(SQLException e) {
-				throw new PersistenceException("Error occured while closing database resources.", e);
-			}
+			JdbcUtils.close(conn, st, rs);
 		}
 	}
 
@@ -114,13 +99,7 @@ public class JdbcAirportRepository implements AirportRepository {
 		} catch(SQLException ex) {
 			throw new PersistenceException("Error occured while fetching airport data", ex);
 		} finally {
-			try {
-				if(rs != null) rs.close();
-				if(st != null) st.close();
-				if(conn != null) conn.close();
-			} catch(SQLException e) {
-				throw new PersistenceException("Error occured while closing database resources.", e);
-			}
+			JdbcUtils.close(conn, st, rs);
 		}
 	}
 
@@ -142,13 +121,7 @@ public class JdbcAirportRepository implements AirportRepository {
 		} catch(SQLException ex) {
 			throw new PersistenceException("Error occured while fetching airport data", ex);
 		} finally {
-			try {
-				if(rs != null) rs.close();
-				if(st != null) st.close();
-				if(conn != null) conn.close();
-			} catch(SQLException e) {
-				throw new PersistenceException("Error occured while closing database resoruces", e);
-			}
+			JdbcUtils.close(conn, st, rs);
 		}
 	}
 	

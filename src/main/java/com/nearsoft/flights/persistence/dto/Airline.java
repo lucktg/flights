@@ -1,8 +1,8 @@
 package com.nearsoft.flights.persistence.dto;
 
 import java.io.Serializable;
-
-public class AirlineDto implements Serializable {
+@Deprecated
+public class Airline implements Serializable {
 
 	/**
 	 * serialVersionUID
@@ -55,7 +55,7 @@ public class AirlineDto implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		AirlineDto other = (AirlineDto) obj;
+		Airline other = (Airline) obj;
 		if (airlineCode == null) {
 			if (other.airlineCode != null)
 				return false;

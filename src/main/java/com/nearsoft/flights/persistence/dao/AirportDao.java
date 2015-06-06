@@ -1,16 +1,11 @@
 package com.nearsoft.flights.persistence.dao;
 
+import java.sql.Connection;
 import java.util.Set;
 
-import com.nearsoft.flights.persistence.dao.jdbc.PersistenceException;
-import com.nearsoft.flights.persistence.dto.Airport;
+import com.nearsoft.flights.domain.model.airport.Airport;
 
-@Deprecated
-public interface AirportDao {
-	
-	void insert(Airport airport) throws PersistenceException;
-	void insert(Set<Airport> airports) throws PersistenceException;
-	Set<Airport> findAll() throws PersistenceException;	
-	Airport findByAirportCode(String airportCode) throws PersistenceException;
-	void deleteAll() throws PersistenceException;
+public interface AirportDao {	
+	void safeInsert(Connection conn, Set<Airport> airports);
+	void deleteAll(Connection conn);
 }

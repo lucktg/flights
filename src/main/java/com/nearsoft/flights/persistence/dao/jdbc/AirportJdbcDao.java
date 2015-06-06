@@ -4,179 +4,106 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
-import com.nearsoft.flights.persistence.dao.AirportDao;
-import com.nearsoft.flights.persistence.dto.Airport;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import com.nearsoft.flights.domain.model.airport.Airport;
+import com.nearsoft.flights.domain.model.airport.Airport.AirportBuilder;
+import com.nearsoft.flights.persistence.dao.AirportDao;
+import com.nearsoft.flights.persistence.dao.jdbc.utils.JdbcUtils;
+
+@Component
 public class AirportJdbcDao implements AirportDao {
 
+	@Autowired
 	private DataSource datasource;
 	
 	private static final String INSERT = "INSERT INTO AIRPORT (AIRPORT_CODE,AIRPORT_NAME,CITY,CITY_CODE,COUNTRY_CODE,COUNTRY_NAME,LATITUDE,LONGITUDE) VALUES (?,?,?,?,?,?,?,?)";
-	private static final String SELECT = "SELECT AIRPORT_CODE,AIRPORT_NAME,CITY,CITY_CODE,COUNTRY_CODE,COUNTRY_NAME,LATITUDE,LONGITUDE FROM AIRPORT";
-	private static final String FIND_BY_AIRPORT_CODE = "SELECT AIRPORT_CODE,AIRPORT_NAME,CITY,CITY_CODE,COUNTRY_CODE,COUNTRY_NAME,LATITUDE,LONGITUDE FROM AIRPORT WHERE AIRPORT_CODE=?";
 	private static final String DELETE = "DELETE FROM AIRPORT";
+	private static final String SELECT_AIRPORT = "SELECT AIRPORT_CODE, LATITUDE, LONGITUDE FROM AIRPORT WHERE AIRPORT_CODE IN (?)";
+
 	
-	public AirportJdbcDao(DataSource datasource) {
-		this.datasource = datasource;
-	}
-	
-	@Override
-	public void insert(Airport airportDto) throws PersistenceException {
-		Connection conn = null;
+	public void safeInsert(Connection conn, Set<Airport> airports) {
 		PreparedStatement st = null;
+		ResultSet rs = null;
 		try {
-			conn = datasource.getConnection();
-			st = conn.prepareStatement(INSERT);
-			setAirportDto(st, airportDto);
-			st.executeUpdate();
-		} catch (SQLException ex) {
-			throw new PersistenceException("Error occured while insert airport data ["+airportDto+"]", ex);
-		} finally {
-			try {
-			if(st != null) st.close();
-			if(conn != null) conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
+			List<String> params = Collections.nCopies(airports.size(), "?");
+			String str = params.stream().collect(Collectors.joining(","));
+			st = conn.prepareStatement(SELECT_AIRPORT.replace("?", str));
+			int index=1;
+			for(Airport airport:airports) {
+				st.setString(index++, airport.getAirportCode());
 			}
-		}		
+			rs = st.executeQuery();
+			while(rs != null && rs.next()) {
+				AirportBuilder builder = new AirportBuilder(rs.getString(1));
+				builder.addLatitude(rs.getString(2));
+				builder.addLongitude(rs.getString(3));
+				airports.remove(builder.build());
+			}
+			insert(conn, airports);
+		} catch(SQLException ex) {
+			throw new PersistenceException("Error occured while insert airport data.", ex);
+		} finally {
+			JdbcUtils.close(st, rs);
+		}
+			
 	}
 	
-	
-	@Override
-	public void insert(Set<Airport> airports) throws PersistenceException {
-		Connection conn = null;
+	public void insert(Connection conn, Set<Airport> airports) {
 		PreparedStatement st = null;
 		try {
-			conn = datasource.getConnection();
 			st = conn.prepareStatement(INSERT);
 			Iterator<Airport> it = airports!= null ? airports.iterator() : null;
 			Airport airportDto = null;
 			while(it != null && it.hasNext()) {
 				airportDto = it.next();
-				setAirportDto(st, airportDto);
+				fillPreparedStatement(st, airportDto);
 				st.addBatch();
 			}
 			st.executeBatch();
 		} catch (SQLException ex) {
-			throw new PersistenceException("Error occured while insert airport data set", ex);
+			throw new PersistenceException("Error occured while insert airport data.", ex);
 		} finally {
-			try {
-			if(st != null) st.close();
-			if(conn != null) conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			JdbcUtils.close(st);
 		}		
 	}
 
 	@Override
-	public void deleteAll() throws PersistenceException {
-		Connection conn = null;
+	public void deleteAll(Connection conn) throws PersistenceException {
 		PreparedStatement st = null;
-		ResultSet rs = null;
 		try {
-			conn = datasource.getConnection();
 			st = conn.prepareStatement(DELETE);
 			st.executeUpdate();
 		} catch(SQLException ex) {
 			throw new PersistenceException("Error occured while fetching airport data",ex);
 		} finally {
-			try {
-				if(rs != null) rs.close();
-				if(st != null) st.close();
-				if(conn != null) conn.close();
-			} catch(SQLException e) {
-				e.printStackTrace();
-			}
+			JdbcUtils.close(st);
 		}
 	}
 
 	
-
-	@Override
-	public Set<Airport> findAll() throws PersistenceException {
-		Connection conn = null;
-		PreparedStatement st = null;
-		ResultSet rs = null;
-		try {
-			conn = datasource.getConnection();
-			st = conn.prepareStatement(SELECT);
-			rs  = st.executeQuery();
-			Set<Airport> airports = new HashSet<Airport>();
-			while(rs != null && rs.next()){
-				airports.add(extractDto(rs));
-			}
-			return airports;
-		} catch(SQLException ex) {
-			throw new PersistenceException("Error occured while fetching airport data",ex);
-		} finally {
-			try {
-				if(rs != null) rs.close();
-				if(st != null) st.close();
-				if(conn != null) conn.close();
-			} catch(SQLException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	@Override
-	public Airport findByAirportCode(String airportCode) throws PersistenceException {
-		Connection conn = null;
-		PreparedStatement st = null;
-		ResultSet rs = null;
-		try {
-			conn = datasource.getConnection();
-			st = conn.prepareStatement(FIND_BY_AIRPORT_CODE);
-			st.setString(1, airportCode);
-			rs  = st.executeQuery();
-			Airport airportDto = null;
-			while(rs != null && rs.next()){
-				airportDto = extractDto(rs);
-			}
-			return airportDto;
-		} catch(SQLException ex) {
-			throw new PersistenceException("Error occured while fetching airport data",ex);
-		} finally {
-			try {
-				if(rs != null) rs.close();
-				if(st != null) st.close();
-				if(conn != null) conn.close();
-			} catch(SQLException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	private Airport extractDto(ResultSet rs) throws SQLException {
-		Airport airport = new Airport();
-		airport.setAirportCode(rs.getString(1));
-		airport.setAirportName(rs.getString(2));
-		airport.setCity(rs.getString(3));
-		airport.setCityCode(rs.getString(4));
-		airport.setCountryCode(rs.getString(5));
-		airport.setCountryName(rs.getString(6));
-		airport.setLatitude(rs.getString(7));
-		airport.setLongitude(rs.getString(8));
-		return airport;
-	}
-	
-	private void setAirportDto(PreparedStatement st, Airport airportDto)
+	private void fillPreparedStatement(PreparedStatement st, Airport airport)
 			throws SQLException {
-		st.setString(1, airportDto.getAirportCode());
-		st.setString(2, airportDto.getAirportName());
-		st.setString(3, airportDto.getCity());
-		st.setString(4, airportDto.getCityCode());
-		st.setString(5, airportDto.getCountryCode());
-		st.setString(6, airportDto.getCountryName());
-		st.setString(7, airportDto.getLatitude());
-		st.setString(8, airportDto.getLongitude());
+		st.setString(1, airport.getAirportCode());
+		st.setString(2, airport.getName());
+		st.setString(3, airport.getCity());
+		st.setString(4, airport.getCityCode());
+		st.setString(5, airport.getCountryCode());
+		st.setString(6, airport.getCountryName());
+		st.setString(7, airport.getLatitude());
+		st.setString(8, airport.getLongitude());
 	}
+
+	
+	
 
 }

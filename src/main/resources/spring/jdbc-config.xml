@@ -13,13 +13,5 @@
         <property name="username" value="${jdbc.username}"/>
         <property name="password" value="#{systemProperties['jdbc.password']}" />
     </bean>
-    <bean id="airportDao" class="com.nearsoft.flights.persistence.dao.jdbc.AirportJdbcDao">
-        <constructor-arg ref="dataSource"/>
-    </bean>
-    <bean id="airlineDao" class="com.nearsoft.flights.persistence.dao.jdbc.AirlineJdbcDao">
-        <constructor-arg ref="dataSource"/>
-    </bean>
-    <bean id="flightDao" class="com.nearsoft.flights.persistence.dao.jdbc.FlightJdbcDao">
-        <constructor-arg ref="dataSource"/>
-    </bean>
+    
 </beans>

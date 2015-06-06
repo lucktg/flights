@@ -2,13 +2,22 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:util="http://www.springframework.org/schema/util"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
     
-    <import resource="classpath:spring/domain-config.xml"/>
+    <util:map map-class="java.util.HashMap" id="apiConfig">
+            <entry key="appId" value="#{systemProperties['flex.appId']}"/>
+            <entry key="appKey" value="#{systemProperties['flex.appKey']}"/>
+            <entry key="extendedOptions" value="useHTTPErrors"/>
+            <entry key="languageCode" value="es"/>
+    </util:map>
+    <util:list list-class="java.util.ArrayList" id="mediaType">
+       <util:constant static-field="org.springframework.http.MediaType.APPLICATION_JSON"/>
+    </util:list>
+    
+    <context:component-scan base-package="com.nearsoft.flights.*" />
     <import resource="classpath:spring/jdbc-config.xml"/>
-    <import resource="classpath:spring/flexapi-config.xml"/>
     <import resource="classpath:spring/cache-config.xml"/>
-    <context:component-scan base-package="com.nearsoft.flights.rest.*" />
-
 </beans>

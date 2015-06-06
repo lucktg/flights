@@ -5,8 +5,10 @@ import java.util.Map;
 
 import javax.ws.rs.core.UriBuilder;
 
+import org.apache.log4j.Logger;
+
 public class UriUtils {	
-	
+	private static final Logger logger = Logger.getLogger(UriUtils.class);
 	private static final String mainPath= "https://api.flightstats.com";
 	private static final String ACTIVE_AIRPORTS_JSON = "flex/airports/rest/v1/json/active";
 	private static final String SCHEDULED_FLIGHTS_BY_ROUTE_N_DATE_JSON = "flex/schedules/rest/v1/json/from/{departureAirportCode}/to/{arrivalAirportCode}/departing/{year}/{month}/{day}";
@@ -16,10 +18,12 @@ public class UriUtils {
 	}
 	
 	public static URI buildAirportsJSONURI(Map<String,?> queryParams, Map<String,?> urlParams) {
+		logger.debug("Building URL with path["+AIRPORT_BY_CODE+"], queryParams["+(queryParams != null ? queryParams : null)+"] and urlParams["+(urlParams != null ? urlParams : null)+"]");
 		return buildUri(queryParams, urlParams, AIRPORT_BY_CODE);
 	}
 	
 	public static URI buildScheduledDepartingFlightsByRouteNDateJSON(Map<String,?> queryParams, Map<String,?> urlParams){
+		logger.debug("Building URL with path["+AIRPORT_BY_CODE+"], queryParams["+(queryParams != null ? queryParams : null)+"] and urlParams["+(urlParams != null ? urlParams : null)+"]");
 		return buildUri(queryParams, urlParams, SCHEDULED_FLIGHTS_BY_ROUTE_N_DATE_JSON);
 	}
 	

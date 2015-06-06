@@ -1,18 +1,15 @@
 package com.nearsoft.flights.persistence.dao;
 
-import java.sql.SQLException;
-import java.util.Set;
+import java.sql.Connection;
 
-import com.nearsoft.flights.persistence.dao.jdbc.PersistenceException;
-import com.nearsoft.flights.persistence.dto.AirlineDto;
+import com.nearsoft.flights.domain.model.flight.Airline;
 
-@Deprecated
+
+
 public interface AirlineDao {
-	Set<AirlineDto> findAll() throws SQLException;
-	AirlineDto findByAirlineCode(String airlineCode) throws PersistenceException;
-	void insert(Set<AirlineDto> airlines) throws PersistenceException;
-	void insert(AirlineDto airline) throws PersistenceException;
-	void deleteAll() throws PersistenceException;
+	void safeInsert(Connection conn, Airline airline);
+	void deleteAll(Connection conn) ;
+	Airline findByAirlineCode(Connection conn, String airlineCode);
 	
 	
 }

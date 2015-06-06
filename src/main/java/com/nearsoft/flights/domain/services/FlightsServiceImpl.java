@@ -3,14 +3,14 @@ package com.nearsoft.flights.domain.services;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.jvnet.hk2.annotations.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.googlecode.ehcache.annotations.Cacheable;
 import com.nearsoft.flights.domain.model.flight.Flight;
 import com.nearsoft.flights.domain.model.flight.FlightRepository;
 import com.nearsoft.flights.domain.model.flight.TripInformationRequest;
-import com.nearsoft.flights.interfaces.FlightFlexApiService;
+import com.nearsoft.flights.interfaces.FlightApiService;
 
 @Service
 public class FlightsServiceImpl implements FlightsService {
@@ -21,11 +21,12 @@ public class FlightsServiceImpl implements FlightsService {
 	private FlightRepository flightRepository;
 	
 	@Autowired
-	private FlightFlexApiService flightApiService;
+	private FlightApiService flightApiService;
 	
 
 	@Override
 	public RoundTrip getRoundTripFlights(TripInformationRequest origin, TripInformationRequest destiny) {
+		logger.debug("Getting round trip flights");
 		Set<Flight> originFlights = getOneWayFlights(origin);
 		Set<Flight> destinyFlights = getOneWayFlights(destiny);
 		RoundTrip roundTrip = new RoundTrip(originFlights, destinyFlights);
@@ -35,9 +36,10 @@ public class FlightsServiceImpl implements FlightsService {
 	@Cacheable(cacheName="flights")
 	@Override
 	public Set<Flight> getOneWayFlights(TripInformationRequest origin) {
-		logger.debug("Entering method getOneWayFlights, means no using cache");
+		logger.debug("Getting one way flights, means no using cache");
 		Set<Flight> flights = null;
-		if((flights = flightRepository.findFlightsByDeparture(origin)) == null || flights.isEmpty()){
+		if((flights = flightRepository.findDepartingFlightsByTripInformationRequest(origin)) == null || flights.isEmpty()){
+			logger.debug("Getting one way flights from flight API service");
 			flightRepository.add(flights = flightApiService.getDepartingFlightsByTripInformation(origin));
 		}
 		return flights;

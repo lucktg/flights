@@ -13,7 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.nearsoft.flights.persistence.dao.jdbc.PersistenceException;
-import com.nearsoft.flights.persistence.dto.AirlineDto;
+import com.nearsoft.flights.persistence.dto.Airline;
 import com.nearsoft.flights.persistence.dto.Airport;
 import com.nearsoft.flights.persistence.dto.FlightDto;
 import com.nearsoft.flights.persistence.dto.TripInformationRequestDto;
@@ -71,8 +71,8 @@ public class FlightDaoTest {
 		//airportDao.deleteAll();
 	}
 	
-	private AirlineDto getAirline(){
-		AirlineDto airlineDto = new AirlineDto();
+	private Airline getAirline(){
+		Airline airlineDto = new Airline();
 		airlineDto.setAirlineCode("AR");
 		airlineDto.setAirlineName("Airline test");
 		airlineDto.setPhoneNumber("555-555-55");

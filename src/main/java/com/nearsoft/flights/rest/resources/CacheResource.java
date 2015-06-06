@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.nearsoft.flights.domain.services.CacheService;
 
-@Component
+
 @Path("cache")
 public class CacheResource {
 

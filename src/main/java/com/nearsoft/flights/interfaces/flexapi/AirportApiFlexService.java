@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RequestCallback;
@@ -18,35 +20,38 @@ import com.nearsoft.flights.interfaces.flexapi.extractor.MediaTypeResponseExtrac
 import com.nearsoft.flights.rest.util.UriUtils;
 
 @Service
-public class AirportFlexApiService implements AirportApiService {
+public class AirportApiFlexService implements AirportApiService {
+	private static Logger logger = Logger.getLogger(AirportApiFlexService.class);
+	
 	enum URLParams{
 		code
 	}
 	
-	@Autowired
-	private RestTemplate restTemplate;
+	private RestTemplate restTemplate = new RestTemplate();
 	@Autowired
 	private RequestCallback requestCallback;
-	@Autowired
+	@Value("#{apiConfig}")
 	private Map<String, String> apiConfig;
 	
 	
 	@Override
 	public Set<Airport> getAllActiveAirports() {
+		logger.debug("Getting all airports from FlexApiService");
 		return restTemplate.execute(UriUtils.buildAllActiveAirportsJSONURI(apiConfig), 
 				HttpMethod.GET, 
 				requestCallback, 
-				new MediaTypeResponseExtractor<Set<Airport>>(new AirportSetExtractorFactory()));
+				new MediaTypeResponseExtractor<Set<Airport>>(AirportSetExtractorFactory.getInstance()));
 	}
 
 	@Override
 	public Airport getAirportByCode(String airportCode) {
+		logger.debug("Getting airport by airportCode ["+airportCode+"] from FlexApiService");
 		Map<String,String> urlParams = new HashMap<>();
 		urlParams.put(URLParams.code.name(), airportCode);
 		return restTemplate.execute(UriUtils.buildAirportsJSONURI(apiConfig, urlParams), 
 				HttpMethod.GET, 
 				requestCallback, 
-				new MediaTypeResponseExtractor<Airport>(new AirportExtractorFactory()));
+				new MediaTypeResponseExtractor<Airport>(AirportExtractorFactory.getInstance()));
 	}
 
 }
