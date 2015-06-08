@@ -75,6 +75,7 @@ public class JdbcFlightRepository implements FlightRepository {
 			st.executeBatch();
 			conn.commit();
 		} catch(SQLException ex) {
+			logger.debug(ex);
 			if(conn != null)
 				try {
 					conn.rollback();
@@ -90,7 +91,7 @@ public class JdbcFlightRepository implements FlightRepository {
 	@Override
 	public Set<Flight> findDepartingFlightsByTripInformationRequest(
 			TripInformationRequest tripInformationRequest) {
-		
+		logger.debug("searching flights by trip information ["+tripInformationRequest+"]");
 		Connection conn = null;
 		PreparedStatement st = null;
 		ResultSet rs = null;
@@ -103,16 +104,17 @@ public class JdbcFlightRepository implements FlightRepository {
 			st.setTimestamp(4, new Timestamp(tripInformationRequest.getDepartureDateEndDay().getTime()));
 			rs  = st.executeQuery();
 			Set<Flight> flights = new HashSet<>();
-			Flight flight = null;
+			FlightBuilder builder = null;
 			while(rs != null && rs.next()) {
-				FlightBuilder builder = new FlightBuilder(rs.getString(1), new Airline(rs.getString(7), rs.getString(9), rs.getString(8), null));				
+				builder = new FlightBuilder(rs.getString(1), new Airline(rs.getString(7), rs.getString(9), rs.getString(8), null));				
 				builder.addDeparture(new ScheduledTrip(getAirport(rs, 10), rs.getTimestamp(2), rs.getString(3)));
 				builder.addArrival(new ScheduledTrip(getAirport(rs,18), rs.getTimestamp(4), rs.getString(5)));
 				builder.addServiceType(rs.getString(6));
-				flights.add(flight);
+				flights.add(builder.build());
 			}
 			return flights;
 		} catch(SQLException ex) {
+			logger.debug(ex);
 			throw new PersistenceException("Error occured while fetching flight data",ex);
 		} finally {
 			JdbcUtils.close(conn, st, rs);
@@ -133,15 +135,17 @@ public class JdbcFlightRepository implements FlightRepository {
 
 	@Override
 	public void removeAll() {
+		logger.debug("Deleting all flights and dependencies");
 		Connection conn = null;
 		PreparedStatement st = null;
 		try {
 			conn = datasource.getConnection();
-			airportDao.deleteAll(conn);
-			airlineDao.deleteAll(conn);
 			st = conn.prepareStatement(DELETE);
 			st.executeUpdate();
+			airportDao.deleteAll(conn);
+			airlineDao.deleteAll(conn);
 		} catch (SQLException ex) {
+			logger.debug(ex);
 			throw new PersistenceException("Error ocurred while deleting flights data",ex);
 		} finally {
 			JdbcUtils.close(conn, st);

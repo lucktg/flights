@@ -10,6 +10,7 @@ import java.util.Set;
 
 import javax.sql.DataSource;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -19,6 +20,8 @@ import com.nearsoft.flights.persistence.dao.jdbc.utils.JdbcUtils;
 
 @Repository
 public class JdbcAirportRepository implements AirportRepository {
+	private static final Logger logger = Logger
+			.getLogger(JdbcAirportRepository.class);
 	private static final String INSERT = "INSERT INTO AIRPORT (AIRPORT_CODE,AIRPORT_NAME,CITY,CITY_CODE,COUNTRY_CODE,COUNTRY_NAME,LATITUDE,LONGITUDE) VALUES (?,?,?,?,?,?,?,?)";
 	private static final String SELECT = "SELECT AIRPORT_CODE,AIRPORT_NAME,CITY,CITY_CODE,COUNTRY_CODE,COUNTRY_NAME,LATITUDE,LONGITUDE FROM AIRPORT";
 	private static final String FIND_BY_AIRPORT_CODE = "SELECT AIRPORT_CODE,AIRPORT_NAME,CITY,CITY_CODE,COUNTRY_CODE,COUNTRY_NAME,LATITUDE,LONGITUDE FROM AIRPORT WHERE AIRPORT_CODE=?";
@@ -29,6 +32,7 @@ public class JdbcAirportRepository implements AirportRepository {
 	
 	@Override
 	public void add(Airport airport) {
+		logger.debug("Adding airport ["+airport+"]");
 		Connection conn = null;
 		PreparedStatement st = null;
 		try {
@@ -37,6 +41,7 @@ public class JdbcAirportRepository implements AirportRepository {
 			fillPreparedStatement(st, airport);
 			st.executeUpdate();
 		} catch (SQLException ex) {
+			logger.error(ex);
 			throw new PersistenceException("Error occured while insert airport data ["+airport+"].", ex);
 		} finally {
 			JdbcUtils.close(conn, st);
@@ -46,6 +51,7 @@ public class JdbcAirportRepository implements AirportRepository {
 	
 	@Override
 	public void add(Set<Airport> airports) {
+		logger.debug("Adding airports ");
 		Connection conn = null;
 		PreparedStatement st = null;
 		try {
@@ -57,6 +63,7 @@ public class JdbcAirportRepository implements AirportRepository {
 			}
 			st.executeBatch();
 		} catch (SQLException ex) {
+			logger.error(ex);
 			throw new PersistenceException("Error occured while insert airport data set", ex);
 		} finally {
 			JdbcUtils.close(conn, st);
@@ -65,6 +72,7 @@ public class JdbcAirportRepository implements AirportRepository {
 
 	@Override
 	public void removeAll() {
+		logger.debug("Deleting all airport elements");
 		Connection conn = null;
 		PreparedStatement st = null;
 		ResultSet rs = null;
@@ -73,6 +81,7 @@ public class JdbcAirportRepository implements AirportRepository {
 			st = conn.prepareStatement(DELETE);
 			st.executeUpdate();
 		} catch(SQLException ex) {
+			logger.error(ex);
 			throw new PersistenceException("Error occured while fetching airport data.", ex);
 		} finally {
 			JdbcUtils.close(conn, st, rs);
@@ -83,6 +92,7 @@ public class JdbcAirportRepository implements AirportRepository {
 
 	@Override
 	public Set<Airport> findAllActiveAirports() {
+		logger.debug("Searching all airports");
 		Connection conn = null;
 		PreparedStatement st = null;
 		ResultSet rs = null;
@@ -97,6 +107,7 @@ public class JdbcAirportRepository implements AirportRepository {
 			}
 			return airports;
 		} catch(SQLException ex) {
+			logger.debug(ex);
 			throw new PersistenceException("Error occured while fetching airport data", ex);
 		} finally {
 			JdbcUtils.close(conn, st, rs);
@@ -105,6 +116,7 @@ public class JdbcAirportRepository implements AirportRepository {
 
 	@Override
 	public Airport findByAirportCode(String airportCode) throws PersistenceException {
+		logger.debug("Searching Airport by code ["+airportCode+"]");
 		Connection conn = null;
 		PreparedStatement st = null;
 		ResultSet rs = null;
@@ -119,6 +131,7 @@ public class JdbcAirportRepository implements AirportRepository {
 			}
 			return airport;
 		} catch(SQLException ex) {
+			logger.error(ex);
 			throw new PersistenceException("Error occured while fetching airport data", ex);
 		} finally {
 			JdbcUtils.close(conn, st, rs);

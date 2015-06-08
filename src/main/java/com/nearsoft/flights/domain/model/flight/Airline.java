@@ -62,6 +62,12 @@ public class Airline {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "Airline [airlineCode=" + airlineCode + ", phoneNumber="
+				+ phoneNumber + ", name=" + name + ", active=" + active + "]";
+	}
 	
 	
 	

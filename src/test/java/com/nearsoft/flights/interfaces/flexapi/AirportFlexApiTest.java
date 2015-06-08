@@ -17,7 +17,7 @@ import com.nearsoft.flights.interfaces.AirportApiService;
 import static org.hamcrest.Matchers.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:spring/flexapi-config.xml")
+@ContextConfiguration("classpath:spring/application-config.xml")
 public class AirportFlexApiTest {
 		
 	@Autowired

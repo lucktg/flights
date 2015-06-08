@@ -26,7 +26,7 @@ public class AirportsServiceImpl implements AirportsService {
 	@Override
 	public Set<Airport> getActiveAirports() {
 		Set<Airport> airports = null;
-		if((airports =airportApiService.getAllActiveAirports())== null || airports.isEmpty()) {
+		if((airports =airportRepository.findAllActiveAirports())== null || airports.isEmpty()) {
 			logger.debug("Airports not found in database, getting info from airportApiService");
 			airportRepository.add(airports = airportApiService.getAllActiveAirports());
 		}

@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +24,7 @@ import com.nearsoft.flights.persistence.dao.jdbc.utils.JdbcUtils;
 @Component
 public class AirportJdbcDao implements AirportDao {
 
+	private static final Logger logger = Logger.getLogger(AirportJdbcDao.class);
 	@Autowired
 	private DataSource datasource;
 	
@@ -32,6 +34,7 @@ public class AirportJdbcDao implements AirportDao {
 
 	
 	public void safeInsert(Connection conn, Set<Airport> airports) {
+		logger.debug("Inserting airports ["+airports+"], verifying if already exist");
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
@@ -49,8 +52,9 @@ public class AirportJdbcDao implements AirportDao {
 				builder.addLongitude(rs.getString(3));
 				airports.remove(builder.build());
 			}
-			insert(conn, airports);
+			if (airports != null && !airports.isEmpty()) insert(conn, airports);
 		} catch(SQLException ex) {
+			logger.error(ex);
 			throw new PersistenceException("Error occured while insert airport data.", ex);
 		} finally {
 			JdbcUtils.close(st, rs);
@@ -59,6 +63,7 @@ public class AirportJdbcDao implements AirportDao {
 	}
 	
 	public void insert(Connection conn, Set<Airport> airports) {
+		logger.debug("Inserting airports ["+airports+"]");
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(INSERT);
@@ -79,6 +84,7 @@ public class AirportJdbcDao implements AirportDao {
 
 	@Override
 	public void deleteAll(Connection conn) throws PersistenceException {
+		logger.debug("Deleting airports");
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(DELETE);

@@ -3,9 +3,11 @@
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:context="http://www.springframework.org/schema/context"
     xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:task="http://www.springframework.org/schema/task"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
+        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
     
     <util:map map-class="java.util.HashMap" id="apiConfig">
             <entry key="appId" value="#{systemProperties['flex.appId']}"/>
@@ -16,7 +18,9 @@
     <util:list list-class="java.util.ArrayList" id="mediaType">
        <util:constant static-field="org.springframework.http.MediaType.APPLICATION_JSON"/>
     </util:list>
-    
+    <task:scheduler id="taskScheduler" />
+	<task:executor id="taskExecutor" pool-size="1" />
+	<task:annotation-driven executor="taskExecutor" scheduler="taskScheduler" />
     <context:component-scan base-package="com.nearsoft.flights.*" />
     <import resource="classpath:spring/jdbc-config.xml"/>
     <import resource="classpath:spring/cache-config.xml"/>
