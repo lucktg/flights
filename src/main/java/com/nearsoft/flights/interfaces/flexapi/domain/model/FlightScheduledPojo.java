@@ -1,4 +1,4 @@
-package com.nearsoft.flights.interfaces.flexapi.extractor.json;
+package com.nearsoft.flights.interfaces.flexapi.domain.model;
 
 import java.util.Date;
 import java.util.List;
@@ -30,63 +30,63 @@ public class FlightScheduledPojo {
 		
 	}
 
-	protected String getCarrierFsCode() {
+	public String getCarrierFsCode() {
 		return carrierFsCode;
 	}
 
-	protected String getFlightNumber() {
+	public String getFlightNumber() {
 		return flightNumber;
 	}
 
-	protected String getDepartureAirportFsCode() {
+	public String getDepartureAirportFsCode() {
 		return departureAirportFsCode;
 	}
 
-	protected String getArrivalAirportFsCode() {
+	public String getArrivalAirportFsCode() {
 		return arrivalAirportFsCode;
 	}
 
-	protected String getStops() {
+	public String getStops() {
 		return stops;
 	}
 
-	protected String getArrivalTerminal() {
+	public String getArrivalTerminal() {
 		return arrivalTerminal;
 	}
 
-	protected String getDepartureTerminal() {
+	public String getDepartureTerminal() {
 		return departureTerminal;
 	}
 
-	protected Date getDepartureTime() {
+	public Date getDepartureTime() {
 		return departureTime;
 	}
 
-	protected Date getArrivalTime() {
+	public Date getArrivalTime() {
 		return arrivalTime;
 	}
 
-	protected String getFlightEquipmentIataCode() {
+	public String getFlightEquipmentIataCode() {
 		return flightEquipmentIataCode;
 	}
 
-	protected String getIsCodeshare() {
+	public String getIsCodeshare() {
 		return isCodeshare;
 	}
 
-	protected String getIsWetlease() {
+	public String getIsWetlease() {
 		return isWetlease;
 	}
 
-	protected String getServiceType() {
+	public String getServiceType() {
 		return serviceType;
 	}
 
-	protected Set<String> getServiceClasses() {
+	public Set<String> getServiceClasses() {
 		return serviceClasses;
 	}
 
-	protected List<String> getTrafficRestrictions() {
+	public List<String> getTrafficRestrictions() {
 		return trafficRestrictions;
 	}
 	
@@ -94,11 +94,11 @@ public class FlightScheduledPojo {
 		return operator;
 	}
 
-	protected List<CodeSharePojo> getCodeshares() {
+	public List<CodeSharePojo> getCodeshares() {
 		return codeshares;
 	}
 
-	protected String getReferenceCode() {
+	public String getReferenceCode() {
 		return referenceCode;
 	}
 

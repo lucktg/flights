@@ -27,8 +27,9 @@ public class AirportResource {
 	@GET
 	@Path("active")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Set<Airport> getAllActiveAirports(){
+	public Set<Airport> getAllActiveAirports() {
 		logger.debug("Searching all airports");
+		
 		return airportService.getActiveAirports();
 	}
 	

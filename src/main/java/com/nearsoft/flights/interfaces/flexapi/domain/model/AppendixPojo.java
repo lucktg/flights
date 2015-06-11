@@ -1,4 +1,4 @@
-package com.nearsoft.flights.interfaces.flexapi.extractor.json;
+package com.nearsoft.flights.interfaces.flexapi.domain.model;
 
 import java.util.Set;
 
@@ -13,15 +13,15 @@ public class AppendixPojo {
 		
 	}
 
-	protected Set<AirlinePojo> getAirlines() {
+	public Set<AirlinePojo> getAirlines() {
 		return airlines;
 	}
 
-	protected Set<AirportPojo> getAirports() {
+	public Set<AirportPojo> getAirports() {
 		return airports;
 	}
 
-	protected Set<EquipmentPojo> getEquipments() {
+	public Set<EquipmentPojo> getEquipments() {
 		return equipments;
 	}
 	

@@ -1,4 +1,4 @@
-package com.nearsoft.flights.interfaces.flexapi;
+package com.nearsoft.flights.interfaces.flexapi.domain.services;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -8,20 +8,15 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RequestCallback;
-import org.springframework.web.client.RestTemplate;
 
 import com.nearsoft.flights.domain.model.flight.Flight;
 import com.nearsoft.flights.domain.model.flight.TripInformationRequest;
 import com.nearsoft.flights.interfaces.FlightApiService;
-import com.nearsoft.flights.interfaces.flexapi.extractor.FlightSetExtractorFactory;
-import com.nearsoft.flights.interfaces.flexapi.extractor.MediaTypeResponseExtractor;
 import com.nearsoft.flights.rest.util.UriUtils;
 
 @Service
-public class FlightFlexApiServiceImpl implements FlightApiService {
+public class FlightFlexApiServiceImpl extends RestServiceInvoker implements FlightApiService {
 	enum URLParams {
 		departureAirportCode,
 		arrivalAirportCode,
@@ -30,21 +25,21 @@ public class FlightFlexApiServiceImpl implements FlightApiService {
 		day
 	}
 	
-	private RestTemplate restTemplate = new RestTemplate();
+	
 	@Value("#{apiConfig}")
 	private Map<String, String> apiConfig;
+	
 	@Autowired
-	private RequestCallback requestCallback;
-
+	private RestServiceInvoker restServiceInvoker;
+	
 	@Override
 	public Set<Flight> getDepartingFlightsByTripInformation(TripInformationRequest infoRequest) {
 		Map<String,String> urlParams = urlParamsFromTripInformation(infoRequest.getDepartureAirportCode(), 
 				infoRequest.getArrivalAirportCode(), 
 				infoRequest.getDepartureDate());
-		return restTemplate.execute(UriUtils.buildScheduledDepartingFlightsByRouteNDateJSON(apiConfig, urlParams), 
-				HttpMethod.GET, 
-				requestCallback, 
-				new MediaTypeResponseExtractor<Set<Flight>>(new FlightSetExtractorFactory()));
+		return restServiceInvoker.invoke(UriUtils.buildScheduledDepartingFlightsByRouteNDateJSON(apiConfig, urlParams), 
+				ExtractorJsonUtils::flightJsonSetToFlightSet, 
+				FlightJsonSetWrapper.class);
 	}
 	
 	private Map<String, String> urlParamsFromTripInformation(String departureAirportCode, 
@@ -60,5 +55,4 @@ public class FlightFlexApiServiceImpl implements FlightApiService {
 		urlParams.put(URLParams.day.toString(), Integer.toString(calendar.get(Calendar.DAY_OF_MONTH)));
 		return urlParams;
 	}
-
 }

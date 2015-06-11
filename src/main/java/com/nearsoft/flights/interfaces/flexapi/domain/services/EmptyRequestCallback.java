@@ -1,4 +1,4 @@
-package com.nearsoft.flights.interfaces.flexapi;
+package com.nearsoft.flights.interfaces.flexapi.domain.services;
 
 import java.io.IOException;
 import java.util.List;

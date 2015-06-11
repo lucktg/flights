@@ -1,4 +1,4 @@
-package com.nearsoft.flights.interfaces.flexapi.extractor.json;
+package com.nearsoft.flights.interfaces.flexapi.domain.model;
 
 public class AirlinePojo {
 	private String fs;
@@ -11,31 +11,31 @@ public class AirlinePojo {
 	
 	public AirlinePojo() {}
 
-	protected String getFs() {
+	public String getFs() {
 		return fs;
 	}
 
-	protected String getIata() {
+	public String getIata() {
 		return iata;
 	}
 
-	protected String getIcao() {
+	public String getIcao() {
 		return icao;
 	}
 
-	protected String getName() {
+	public String getName() {
 		return name;
 	}
 
-	protected String getActive() {
+	public String getActive() {
 		return active;
 	}
 	
-	protected String getShortName() {
+	public String getShortName() {
 		return shortName;
 	}
 
-	protected String getPhoneNumber() {
+	public String getPhoneNumber() {
 		return phoneNumber;
 	}
 

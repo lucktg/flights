@@ -114,10 +114,22 @@ public class Airport implements Serializable {
 	}
 	@Override
 	public String toString() {
-		return "AirportDto [airportCode=" + airportCode + ", airportName="
-				+ airportName + ", city=" + city + ", cityCode=" + cityCode
-				+ ", countryCode=" + countryCode + ", countryName="
-				+ countryName + ", latitude=" + latitude + ", longitude="
-				+ longitude + "]";
+		return new StringBuilder("AirportDto [airportCode=")
+			.append(airportCode)
+			.append(", airportName=")
+			.append(airportName)
+			.append(", city=")
+			.append(city)
+			.append(", cityCode=")
+			.append(cityCode)
+			.append(", countryCode=")
+			.append(countryCode)
+			.append(", countryName=")
+			.append(countryName)
+			.append(", latitude=")
+			.append(latitude)
+			.append(", longitude=")
+			.append(longitude)
+			.append("]").toString();
 	}
 }

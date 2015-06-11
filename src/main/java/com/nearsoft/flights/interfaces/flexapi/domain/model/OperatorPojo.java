@@ -1,4 +1,4 @@
-package com.nearsoft.flights.interfaces.flexapi.extractor.json;
+package com.nearsoft.flights.interfaces.flexapi.domain.model;
 
 import java.util.List;
 

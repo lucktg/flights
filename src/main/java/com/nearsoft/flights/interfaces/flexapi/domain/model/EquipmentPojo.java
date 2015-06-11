@@ -1,4 +1,4 @@
-package com.nearsoft.flights.interfaces.flexapi.extractor.json;
+package com.nearsoft.flights.interfaces.flexapi.domain.model;
 
 public class EquipmentPojo {
 	private String iata;
@@ -10,27 +10,27 @@ public class EquipmentPojo {
 	
 	public EquipmentPojo() {}
 
-	protected String getIata() {
+	public String getIata() {
 		return iata;
 	}
 
-	protected String getName() {
+	public String getName() {
 		return name;
 	}
 
-	protected String getTurboProp() {
+	public String getTurboProp() {
 		return turboProp;
 	}
 
-	protected String getJet() {
+	public String getJet() {
 		return jet;
 	}
 
-	protected String getWidebody() {
+	public String getWidebody() {
 		return widebody;
 	}
 
-	protected String getRegional() {
+	public String getRegional() {
 		return regional;
 	}
 }

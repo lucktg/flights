@@ -1,6 +1,6 @@
 package com.nearsoft.flights.domain.model.flight;
 
-import java.util.LinkedHashSet;
+import java.util.Collections;
 import java.util.Set;
 
 public class Flight {
@@ -8,8 +8,7 @@ public class Flight {
 	private static final Flight EMPTY_FLIGHT = new Flight();
 	
 	private String flightNumber;
-	//TODO replace with a Set and initialize with an empty Set
-	private LinkedHashSet<Flight> connectionFlights;
+	private Set<Flight> connectionFlights= Collections.emptySet();
 	private Airline airline;
 	private ScheduledTrip departure;
 	private ScheduledTrip arrival;
@@ -94,9 +93,11 @@ public class Flight {
 		return true;
 	}
 	
+	
+	
 	public static class FlightBuilder {
 		private String flightNumber;
-		private LinkedHashSet<Flight> connectionFlights;
+		private Set<Flight> connectionFlights = Collections.emptySet();
 		private Airline airline;
 		private ScheduledTrip departure;
 		private ScheduledTrip arrival;
@@ -108,7 +109,7 @@ public class Flight {
 			this.airline = airline;
 		}
 		
-		public FlightBuilder addConnectionFlights(LinkedHashSet<Flight> connectionFlights){
+		public FlightBuilder addConnectionFlights(Set<Flight> connectionFlights){
 			this.connectionFlights = connectionFlights;
 			return this;
 		}
@@ -140,5 +141,26 @@ public class Flight {
 			return flight;
 		}
 		
+	}
+
+
+
+	@Override
+	public String toString() {
+		return new StringBuilder("Flight [flightNumber=")
+			.append(flightNumber)
+			.append(", connectionFlights=")
+			.append(connectionFlights)
+			.append(", airline=")
+			.append(airline)
+			.append(", departure=")
+			.append(departure)
+			.append(", arrival=")
+			.append(arrival)
+			.append(", serviceClasses=")
+			.append(serviceClasses)
+			.append(", serviceType=")
+			.append(serviceType)
+			.append("]").toString();
 	}
 }

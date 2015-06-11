@@ -65,8 +65,15 @@ public class Airline {
 
 	@Override
 	public String toString() {
-		return "Airline [airlineCode=" + airlineCode + ", phoneNumber="
-				+ phoneNumber + ", name=" + name + ", active=" + active + "]";
+		return new StringBuilder("Airline [airlineCode=")
+			.append(airlineCode)
+			.append(", phoneNumber=")
+			.append(phoneNumber)
+			.append(", name=")
+			.append(name )
+			.append(", active=")
+			.append(active)
+			.append("]").toString();
 	}
 	
 	

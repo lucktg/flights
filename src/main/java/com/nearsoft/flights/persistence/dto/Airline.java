@@ -66,8 +66,13 @@ public class Airline implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "AirlineDto [airlineCode=" + airlineCode + ", airlineName="
-				+ airlineName + ", phoneNumber=" + phoneNumber + "]";
+		return new StringBuilder("AirlineDto [airlineCode=")
+			.append(airlineCode)
+			.append(", airlineName=")
+			.append(airlineName)
+			.append(", phoneNumber=")
+			.append(phoneNumber)
+			.append("]").toString();
 	}
 	
 	

@@ -1,15 +1,16 @@
 package com.nearsoft.flights.domain.model.exception;
 
+import java.sql.SQLException;
 
-public class RepositoryException extends Exception {
+public class RepositoryException extends RuntimeException {
 
-	public RepositoryException(String string, Exception e) {
-		super(string, e);
+	public RepositoryException(String string, SQLException ex) {
+		super(string, ex);
 	}
 
 	/**
 	 * serialVersionUID
 	 */
-	private static final long serialVersionUID = -8077520438787515404L;
+	private static final long serialVersionUID = 8094544338330477847L;
 
 }

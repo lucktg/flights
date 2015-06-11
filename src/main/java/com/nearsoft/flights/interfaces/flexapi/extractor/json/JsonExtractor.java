@@ -2,32 +2,39 @@ package com.nearsoft.flights.interfaces.flexapi.extractor.json;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.function.Function;
 
 import org.apache.log4j.Logger;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nearsoft.flights.domain.model.airport.Airport;
 import com.nearsoft.flights.interfaces.flexapi.extractor.ExtractionException;
 import com.nearsoft.flights.interfaces.flexapi.extractor.Extractor;
 
-public class AirportExtractorJson implements Extractor<Airport>{
 
-	private static final Logger logger = Logger
-			.getLogger(AirportExtractorJson.class);
+public class JsonExtractor implements Extractor {
 	
-	@Override
-	public Airport extract(InputStream in) {
-		logger.debug("Extracting Airport from JSON response");
-		ObjectMapper mapper = new ObjectMapper();
+	private static Logger logger = Logger.getLogger(JsonExtractor.class);
+
+	private static final ObjectMapper mapper = new ObjectMapper(); 
+	
+	static {
+		logger.debug("Initializing jackson mapper");
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		mapper.setVisibilityChecker(mapper.getSerializationConfig().getDefaultVisibilityChecker()
                 .withFieldVisibility(JsonAutoDetect.Visibility.ANY));
-		Airport airport = null;
+	}
+	
+	
+	public <K, T> T extract(InputStream in, Function<K,T> function, Class<K> jsonClass) {
+		T objectDomain = null;
 		try {
-			AirportPojo airportJson = mapper.readValue(in, AirportPojo.class);
-			airport = ExtractorUtils.airportPojoToAirport(airportJson);
+			logger.debug("Parsing object from type ["+jsonClass+"] ");
+			K jsonObject = mapper.readValue(in, jsonClass);
+			objectDomain = function.apply(jsonObject);
 		} catch (JsonParseException e) {
 			logger.error(e);
 			throw new ExtractionException(e);
@@ -38,6 +45,8 @@ public class AirportExtractorJson implements Extractor<Airport>{
 			logger.error(e);
 			throw new ExtractionException(e);
 		}
-		return airport;
+		return objectDomain;
 	}
+	
+	
 }

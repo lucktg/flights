@@ -1,4 +1,4 @@
-package com.nearsoft.flights.interfaces.flexapi.extractor.json;
+package com.nearsoft.flights.interfaces.flexapi.domain.model;
 
 import java.util.List;
 
@@ -14,27 +14,27 @@ public class CodeSharePojo {
 		
 	}
 
-	protected String getCarrierFsCode() {
+	public String getCarrierFsCode() {
 		return carrierFsCode;
 	}
 
-	protected String getFlightNumber() {
+	public String getFlightNumber() {
 		return flightNumber;
 	}
 
-	protected String getServiceType() {
+	public String getServiceType() {
 		return serviceType;
 	}
 
-	protected List<String> getServiceClasses() {
+	public List<String> getServiceClasses() {
 		return serviceClasses;
 	}
 
-	protected List<String> getTrafficRestrictions() {
+	public List<String> getTrafficRestrictions() {
 		return trafficRestrictions;
 	}
 
-	protected String getReferenceCode() {
+	public String getReferenceCode() {
 		return referenceCode;
 	}
 

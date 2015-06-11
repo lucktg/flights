@@ -17,10 +17,10 @@ import org.springframework.stereotype.Repository;
 
 import com.nearsoft.flights.domain.model.airport.Airport;
 import com.nearsoft.flights.domain.model.airport.Airport.AirportBuilder;
+import com.nearsoft.flights.domain.model.exception.RepositoryException;
 import com.nearsoft.flights.domain.model.flight.Flight.FlightBuilder;
 import com.nearsoft.flights.persistence.dao.AirlineDao;
 import com.nearsoft.flights.persistence.dao.AirportDao;
-import com.nearsoft.flights.persistence.dao.jdbc.PersistenceException;
 import com.nearsoft.flights.persistence.dao.jdbc.utils.JdbcUtils;
 
 @Repository
@@ -80,9 +80,9 @@ public class JdbcFlightRepository implements FlightRepository {
 				try {
 					conn.rollback();
 				} catch (SQLException e) {
-					throw new PersistenceException("Error occured while rolling back flight data", ex);
+					throw new RepositoryException("Error occured while rolling back flight data", ex);
 				}
-			throw new PersistenceException("Error occured while inserting flight data", ex);
+			throw new RepositoryException("Error occured while inserting flight data", ex);
 		} finally {
 			JdbcUtils.close(conn, st, rs);
 		}
@@ -115,7 +115,7 @@ public class JdbcFlightRepository implements FlightRepository {
 			return flights;
 		} catch(SQLException ex) {
 			logger.debug(ex);
-			throw new PersistenceException("Error occured while fetching flight data",ex);
+			throw new RepositoryException("Error occured while fetching flight data",ex);
 		} finally {
 			JdbcUtils.close(conn, st, rs);
 		}
@@ -146,7 +146,7 @@ public class JdbcFlightRepository implements FlightRepository {
 			airlineDao.deleteAll(conn);
 		} catch (SQLException ex) {
 			logger.debug(ex);
-			throw new PersistenceException("Error ocurred while deleting flights data",ex);
+			throw new RepositoryException("Error ocurred while deleting flights data",ex);
 		} finally {
 			JdbcUtils.close(conn, st);
 		}

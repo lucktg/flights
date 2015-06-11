@@ -1,4 +1,4 @@
-package com.nearsoft.flights.interfaces.flexapi.extractor.json;
+package com.nearsoft.flights.interfaces.flexapi.domain.model;
 
 
 public class AirportPojo {
@@ -73,79 +73,98 @@ public class AirportPojo {
 				return false;
 			return true;
 		}
-		protected String getFs() {
+		public String getFs() {
 			return fs;
 		}
-		protected String getIata() {
+		public String getIata() {
 			return iata;
 		}
-		protected String getIcao() {
+		public String getIcao() {
 			return icao;
 		}
-		protected String getFaa() {
+		public String getFaa() {
 			return faa;
 		}
-		protected String getName() {
+		public String getName() {
 			return name;
 		}
-		protected String getStreet1() {
+		public String getStreet1() {
 			return street1;
 		}
-		protected String getStreet2() {
+		public String getStreet2() {
 			return street2;
 		}
-		protected String getCity() {
+		public String getCity() {
 			return city;
 		}
-		protected String getCityCode() {
+		public String getCityCode() {
 			return cityCode;
 		}
-		protected String getStateCode() {
+		public String getStateCode() {
 			return stateCode;
 		}
-		protected String getPostalCode() {
+		public String getPostalCode() {
 			return postalCode;
 		}
-		protected String getCountryCode() {
+		public String getCountryCode() {
 			return countryCode;
 		}
-		protected String getCountryName() {
+		public String getCountryName() {
 			return countryName;
 		}
-		protected String getRegionName() {
+		public String getRegionName() {
 			return regionName;
 		}
-		protected String getTimeZoneRegionName() {
+		public String getTimeZoneRegionName() {
 			return timeZoneRegionName;
 		}
-		protected String getWeatherZone() {
+		public String getWeatherZone() {
 			return weatherZone;
 		}
-		protected String getLocalTime() {
+		public String getLocalTime() {
 			return localTime;
 		}
-		protected String getUtcOffsetHours() {
+		public String getUtcOffsetHours() {
 			return utcOffsetHours;
 		}
-		protected String getLatitude() {
+		public String getLatitude() {
 			return latitude;
 		}
-		protected String getLongitude() {
+		public String getLongitude() {
 			return longitude;
 		}
-		protected String getElevationFeet() {
+		public String getElevationFeet() {
 			return elevationFeet;
 		}
-		protected String getClassification() {
+		public String getClassification() {
 			return classification;
 		}
-		protected String getActive() {
+		public String getActive() {
 			return active;
 		}
-		protected String getDelayIndexUrl() {
+		public String getDelayIndexUrl() {
 			return delayIndexUrl;
 		}
-		protected String getWeatherUrl() {
+		public String getWeatherUrl() {
 			return weatherUrl;
 		}
+		@Override
+		public String toString() {
+			return "AirportPojo [fs=" + fs + ", iata=" + iata + ", icao="
+					+ icao + ", faa=" + faa + ", name=" + name + ", street1="
+					+ street1 + ", street2=" + street2 + ", city=" + city
+					+ ", cityCode=" + cityCode + ", stateCode=" + stateCode
+					+ ", postalCode=" + postalCode + ", countryCode="
+					+ countryCode + ", countryName=" + countryName
+					+ ", regionName=" + regionName + ", timeZoneRegionName="
+					+ timeZoneRegionName + ", weatherZone=" + weatherZone
+					+ ", localTime=" + localTime + ", utcOffsetHours="
+					+ utcOffsetHours + ", latitude=" + latitude
+					+ ", longitude=" + longitude + ", elevationFeet="
+					+ elevationFeet + ", classification=" + classification
+					+ ", active=" + active + ", delayIndexUrl=" + delayIndexUrl
+					+ ", weatherUrl=" + weatherUrl + "]";
+		}
+		
+		
  }
