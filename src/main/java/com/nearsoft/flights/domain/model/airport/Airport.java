@@ -65,15 +65,15 @@ public class Airport {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder("Airport [");
-		builder.append("name=").append(name).append(",")
-		.append("city=").append(city).append(",")
-		.append("cityCode=").append(cityCode).append(",")
-		.append("stateCode=").append(stateCode).append(",")
-		.append("countryCode=").append(countryCode).append(",")
-		.append("countryName=").append(countryName).append(",")
-		.append("latitude=").append(latitude).append(",")
-		.append("longitude=").append(longitude);
-		
+		builder.append("airportCode=").append(airportCode).append(",")
+			.append("name=").append(name).append(",")
+			.append("city=").append(city).append(",")
+			.append("cityCode=").append(cityCode).append(",")
+			.append("stateCode=").append(stateCode).append(",")
+			.append("countryCode=").append(countryCode).append(",")
+			.append("countryName=").append(countryName).append(",")
+			.append("latitude=").append(latitude).append(",")
+			.append("longitude=").append(longitude);
 		return builder.toString();
 	}
 	

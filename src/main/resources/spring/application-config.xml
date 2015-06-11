@@ -21,6 +21,9 @@
     <task:scheduler id="taskScheduler" />
 	<task:executor id="taskExecutor" pool-size="1" />
 	<task:annotation-driven executor="taskExecutor" scheduler="taskScheduler" />
+	<bean id="jsonObjectMapper">
+	   
+	</bean>
     <context:component-scan base-package="com.nearsoft.flights.*" />
     <import resource="classpath:spring/jdbc-config.xml"/>
     <import resource="classpath:spring/cache-config.xml"/>

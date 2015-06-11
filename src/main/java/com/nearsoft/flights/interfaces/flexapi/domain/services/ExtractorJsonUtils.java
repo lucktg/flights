@@ -69,18 +69,16 @@ public class ExtractorJsonUtils {
 	}
 	
 	public static Set<Airport> airportJsonSetToAirportSet(AirportJsonSetWrapper airports){
-		return airports != null && airports.getAirports() != null ? 
-				airports.getAirports().stream().map(airport -> airportPojoToAirport(airport)).collect(Collectors.toSet()) :
-					Collections.emptySet();
+		if(isNull(airports) || isNull(airports.getAirports())) return Collections.emptySet();
+		return airports.getAirports().stream().map(airport -> airportPojoToAirport(airport)).collect(Collectors.toSet());
 	}
 	
 	public static Set<Flight> flightJsonSetToFlightSet(FlightJsonSetWrapper flightsJson){
-		if (flightsJson == null || flightsJson.getFlights() == null) return Collections.emptySet();
+		if (isNull(flightsJson) || isNull(flightsJson.getFlights())) return Collections.emptySet();
 		AppendixPojo appendix = flightsJson.getAppendix();
 		Set<AirlinePojo> airlines = appendix.getAirlines();
 		Set<AirportPojo> airports = appendix.getAirports();
 		if(isNull(appendix)) appendix = new AppendixPojo();
-		
 		Map<String, AirlinePojo> airlinesMap = !isNull(airlines) ? 
 				airlines.stream().collect(Collectors.toMap(AirlinePojo::getFs, p -> p)) :
 					Collections.emptyMap();
