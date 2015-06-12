@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.function.Function;
 
+import javax.ws.rs.core.MediaType;
+
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.junit.After;
@@ -30,6 +32,7 @@ import com.nearsoft.flights.domain.model.airport.Airport;
 import com.nearsoft.flights.interfaces.flexapi.domain.services.AirportJsonWrapper;
 import com.nearsoft.flights.interfaces.flexapi.domain.services.ExtractorJsonUtils;
 import com.nearsoft.flights.interfaces.flexapi.extractor.Extractor;
+import com.nearsoft.flights.interfaces.flexapi.extractor.MediaTypeExtractorFactory;
 
 @RunWith(MockitoJUnitRunner.class)
 @ContextConfiguration("classpath:spring/application-config.xml")
@@ -42,7 +45,7 @@ public class ExtractAirportSetTest {
 	private InputStream json;
 	
 	@Autowired
-	private Extractor extractor;
+	private Extractor extractor = MediaTypeExtractorFactory.getInstance().createExtractor(MediaType.APPLICATION_JSON);
 	
 	@Mock
 	private Function<AirportJsonWrapper,Airport> function;

@@ -7,12 +7,14 @@ import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.RestTemplate;
 
 import com.nearsoft.flights.interfaces.flexapi.extractor.Extractor;
 import com.nearsoft.flights.interfaces.flexapi.extractor.MediaTypeExtractorFactory;
 
+@Component
 public class RestServiceInvoker {
 	
 	@Autowired

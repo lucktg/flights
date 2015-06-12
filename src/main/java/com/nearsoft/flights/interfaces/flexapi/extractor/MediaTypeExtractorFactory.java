@@ -5,8 +5,6 @@ import javax.ws.rs.core.MediaType;
 import org.apache.log4j.Logger;
 import org.glassfish.jersey.internal.inject.ExtractorException;
 
-import com.nearsoft.flights.interfaces.flexapi.extractor.json.JsonExtractor;
-
 public class MediaTypeExtractorFactory  {
 
 	private static final Logger logger = Logger.getLogger(MediaTypeExtractorFactory.class);
@@ -18,7 +16,7 @@ public class MediaTypeExtractorFactory  {
 	}
 
 	public Extractor createExtractor(String mediaType) {
-		logger.debug("Creating Airport extractor for mediaType["+mediaType+"]");
+		logger.debug("Creating extractor for mediaType["+mediaType+"]");
 		switch(mediaType) {
 		case MediaType.APPLICATION_JSON: 
 			return new JsonExtractor();

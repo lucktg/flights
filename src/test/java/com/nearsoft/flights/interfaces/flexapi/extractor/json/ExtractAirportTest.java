@@ -8,12 +8,15 @@ import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.Matchers.*;
 import static com.nearsoft.flights.domain.model.airport.Airport.AirportBuilder;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.Set;
 import java.util.function.Function;
+
+import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
@@ -34,6 +37,8 @@ import com.nearsoft.flights.interfaces.flexapi.domain.services.AirportJsonSetWra
 import com.nearsoft.flights.interfaces.flexapi.domain.services.ExtractorJsonUtils;
 import com.nearsoft.flights.interfaces.flexapi.extractor.ExtractionException;
 import com.nearsoft.flights.interfaces.flexapi.extractor.Extractor;
+import com.nearsoft.flights.interfaces.flexapi.extractor.JsonExtractor;
+import com.nearsoft.flights.interfaces.flexapi.extractor.MediaTypeExtractorFactory;
 
 @RunWith(MockitoJUnitRunner.class)
 @ContextConfiguration("classpath:spring/application-config.xml")
@@ -45,7 +50,7 @@ public class ExtractAirportTest {
 	
 	private InputStream json;
 	
-	private Extractor extractor = new JsonExtractor();
+	private Extractor extractor = MediaTypeExtractorFactory.getInstance().createExtractor(MediaType.APPLICATION_JSON);
 	
 	@Mock
 	private Function<AirportJsonSetWrapper,Set<Airport>> function;
