@@ -23,6 +23,7 @@
 	<task:annotation-driven executor="taskExecutor" scheduler="taskScheduler" />
 	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate"/>
     <context:component-scan base-package="com.nearsoft.flights.interfaces.flexapi.*" />
+    <context:component-scan base-package="com.nearsoft.flights.domain.model.repository.*" />
     <import resource="classpath:spring/jdbc-config.xml"/>
     <import resource="classpath:spring/cache-config.xml"/>
 </beans>

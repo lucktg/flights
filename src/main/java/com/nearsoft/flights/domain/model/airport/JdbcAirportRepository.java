@@ -140,7 +140,7 @@ public class JdbcAirportRepository implements AirportRepository {
 	
 	private Airport extractAirport(ResultSet rs) throws SQLException {
 		AirportBuilder builder = new AirportBuilder(rs.getString(1));
-		builder.addName(rs.getString(2));
+		builder.addAirportName(rs.getString(2));
 		builder.addCity(rs.getString(3));
 		builder.addCityCode(rs.getString(4));
 		builder.addCountryCode(rs.getString(5));
@@ -153,7 +153,7 @@ public class JdbcAirportRepository implements AirportRepository {
 	private void fillPreparedStatement(PreparedStatement st, Airport airport)
 			throws SQLException {
 		st.setString(1, airport.getAirportCode());
-		st.setString(2, airport.getName());
+		st.setString(2, airport.getAirportName());
 		st.setString(3, airport.getCity());
 		st.setString(4, airport.getCityCode());
 		st.setString(5, airport.getCountryCode());

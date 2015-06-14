@@ -1,19 +1,26 @@
 package com.nearsoft.flights.domain.model.flight;
 
+import com.nearsoft.flights.domain.model.repository.IgnorePersistence;
+import com.nearsoft.flights.domain.model.repository.IgnorePersistence.Operation;
+import com.nearsoft.flights.domain.model.repository.Table;
+
+@Table(tableName="airline", idTable="airlineCode")
 public class Airline {
 	
+	@IgnorePersistence(ignore=Operation.ALL)
 	private static final Airline EMPTY_AIRLINE = new Airline();
-	
+	@IgnorePersistence(ignore=Operation.UPDATE)
 	private String airlineCode;
 	private String phoneNumber;
-	private String name;
+	private String airlineName;
+	@IgnorePersistence(ignore=Operation.ALL)
 	private String active;
 	
-	public Airline(String airlineCode, String phoneNumber, String name,
+	public Airline(String airlineCode, String phoneNumber, String airlineName,
 			String active) {
 		this.airlineCode = airlineCode;
 		this.phoneNumber = phoneNumber;
-		this.name = name;
+		this.airlineName = airlineName;
 		this.active = active;
 	}
 	
@@ -27,8 +34,8 @@ public class Airline {
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}
-	public String getName() {
-		return name;
+	public String getAirlineName() {
+		return airlineName;
 	}
 	public String getActive() {
 		return active;
@@ -70,7 +77,7 @@ public class Airline {
 			.append(", phoneNumber=")
 			.append(phoneNumber)
 			.append(", name=")
-			.append(name )
+			.append(airlineName )
 			.append(", active=")
 			.append(active)
 			.append("]").toString();

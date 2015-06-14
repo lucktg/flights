@@ -1,12 +1,20 @@
 package com.nearsoft.flights.domain.model.airport;
 
+import com.nearsoft.flights.domain.model.repository.IgnorePersistence;
+import com.nearsoft.flights.domain.model.repository.IgnorePersistence.Operation;
+import com.nearsoft.flights.domain.model.repository.Table;
+
+@Table(tableName="airport", idTable = "airportCode")
 public class Airport {
-	private static Airport EMPTY_AIRPORT = new Airport();
 	
+	@IgnorePersistence(ignore=Operation.ALL)
+	private static Airport EMPTY_AIRPORT = new Airport();
+	@IgnorePersistence(ignore=Operation.UPDATE)
 	private String airportCode;
-	private String name;
+	private String airportName;
 	private String city;
 	private String cityCode;
+	@IgnorePersistence(ignore=Operation.ALL)
 	private String stateCode;
 	private String countryCode;
 	private String countryName;
@@ -30,8 +38,8 @@ public class Airport {
 		return airportCode;
 	}
 
-	public String getName() {
-		return name;
+	public String getAirportName() {
+		return airportName;
 	}
 
 	public String getCity() {
@@ -66,7 +74,7 @@ public class Airport {
 	public String toString() {
 		StringBuilder builder = new StringBuilder("Airport [");
 		builder.append("airportCode=").append(airportCode).append(",")
-			.append("name=").append(name).append(",")
+			.append("name=").append(airportName).append(",")
 			.append("city=").append(city).append(",")
 			.append("cityCode=").append(cityCode).append(",")
 			.append("stateCode=").append(stateCode).append(",")
@@ -122,7 +130,7 @@ public class Airport {
 	
 	public static class AirportBuilder {
 		private String airportCode = "";
-		private String name = "";
+		private String airportName = "";
 		private String city = "";
 		private String cityCode = "";
 		private String stateCode = "";
@@ -135,8 +143,8 @@ public class Airport {
 			this.airportCode = airportCode;
 		}
 		
-		public AirportBuilder addName(String name){
-			this.name = name;
+		public AirportBuilder addAirportName(String airportName){
+			this.airportName = airportName;
 			return this;
 		}
 		
@@ -185,7 +193,7 @@ public class Airport {
 			airport.countryName = this.countryName;
 			airport.latitude = this.latitude;
 			airport.longitude = this.longitude;
-			airport.name = this.name;
+			airport.airportName = this.airportName;
 			airport.stateCode = this.stateCode;
 			return airport;
 		}

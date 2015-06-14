@@ -1,0 +1,8 @@
+<dataset>
+    <airport airport_code="1" airport_name="airport name test 1" city="city test1" city_code="CD1" country_code="TT" country_name="Testland" latitude="1234" longitude="4321"/>
+    <airport airport_code="2" airport_name="airport name test 2" city="city test2" city_code="CD2" country_code="TT" country_name="Testland" latitude="2234" longitude="4322"/>
+    <airport airport_code="3" airport_name="airport name test 3" city="city test3" city_code="CD3" country_code="TT" country_name="Testland" latitude="3234" longitude="4323"/>
+    <airline airline_code="AIR1" airline_name="Airline name one" phone_number="+5255265000000"/>
+    <airline airline_code="AIR2" airline_name="Airline name two" />
+    <airline airline_code="AIR3" airline_name="Airline name three" />
+</dataset>

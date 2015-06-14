@@ -39,7 +39,7 @@ public class ExtractorJsonUtils {
 		airportBuilder.addCountryName(airportPojo.getCountryName());
 		airportBuilder.addLatitude(airportPojo.getLatitude());
 		airportBuilder.addLongitude(airportPojo.getLongitude());
-		airportBuilder.addName(airportPojo.getName());
+		airportBuilder.addAirportName(airportPojo.getName());
 		airportBuilder.addStateCode(airportPojo.getStateCode());
 		return airportBuilder.build();
 	}

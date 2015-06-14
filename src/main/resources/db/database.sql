@@ -1,6 +1,6 @@
-drop table flight;
-drop table airport;
-drop table airline;
+--drop table flight;
+--drop table airport;
+--drop table airline;
 
 create table airport(
 airport_code varchar(10) not null primary key,

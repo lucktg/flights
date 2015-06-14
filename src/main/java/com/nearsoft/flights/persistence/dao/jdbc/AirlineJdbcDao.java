@@ -97,7 +97,7 @@ public class AirlineJdbcDao implements AirlineDao {
 	private void fillStatement(Airline airline, PreparedStatement st)
 			throws SQLException {
 		st.setString(1, airline.getAirlineCode());
-		st.setString(2, airline.getName());
+		st.setString(2, airline.getAirlineName());
 		st.setString(3, airline.getPhoneNumber());
 	}
 

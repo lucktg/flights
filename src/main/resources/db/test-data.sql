@@ -1,0 +1,3 @@
+INSERT INTO airport(airport_code,airport_name,city,city_code,country_code,country_name,latitude,longitude) VALUES ('1','Aiport test1','City test 1','CT1','CC1','Country test 1','1','1');
+INSERT INTO airport(airport_code,airport_name,city,city_code,country_code,country_name,latitude,longitude) VALUES ('2','Aiport test2','City test 2','CT2','CC2','Country test 2','2','2');
+INSERT INTO airport(airport_code,airport_name,city,city_code,country_code,country_name,latitude,longitude) VALUES ('3','Aiport test3','City test 3','CT3','CC3','Country test 3','3','3');

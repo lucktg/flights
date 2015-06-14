@@ -3,15 +3,24 @@ package com.nearsoft.flights.domain.model.flight;
 import java.util.Collections;
 import java.util.Set;
 
+import com.nearsoft.flights.domain.model.repository.ForeignKey;
+import com.nearsoft.flights.domain.model.repository.IgnorePersistence;
+import com.nearsoft.flights.domain.model.repository.IgnorePersistence.Operation;
+import com.nearsoft.flights.domain.model.repository.Table;
+
+@Table(tableName="Flight", idTable={"flightNumber","airlineCode"})
 public class Flight {
-	
+	@IgnorePersistence(ignore=Operation.ALL)
 	private static final Flight EMPTY_FLIGHT = new Flight();
-	
+	@IgnorePersistence(ignore=Operation.UPDATE)
 	private String flightNumber;
+	@IgnorePersistence(ignore=Operation.ALL)
 	private Set<Flight> connectionFlights= Collections.emptySet();
+	@ForeignKey
 	private Airline airline;
 	private ScheduledTrip departure;
 	private ScheduledTrip arrival;
+	@IgnorePersistence(ignore=Operation.ALL)
 	private Set<String> serviceClasses;
 	private String serviceType;
 	

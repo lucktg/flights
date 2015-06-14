@@ -100,7 +100,7 @@ public class AirportJdbcDao implements AirportDao {
 	private void fillPreparedStatement(PreparedStatement st, Airport airport)
 			throws SQLException {
 		st.setString(1, airport.getAirportCode());
-		st.setString(2, airport.getName());
+		st.setString(2, airport.getAirportName());
 		st.setString(3, airport.getCity());
 		st.setString(4, airport.getCityCode());
 		st.setString(5, airport.getCountryCode());

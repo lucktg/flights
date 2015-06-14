@@ -123,7 +123,7 @@ public class JdbcFlightRepository implements FlightRepository {
 	
 	private Airport getAirport(ResultSet rs, int index) throws SQLException {
 		AirportBuilder builder = new AirportBuilder(rs.getString(index++));
-		builder.addName(rs.getString(index++));
+		builder.addAirportName(rs.getString(index++));
 		builder.addCity(rs.getString(index++));
 		builder.addCityCode(rs.getString(index++));
 		builder.addCountryCode(rs.getString(index++));
