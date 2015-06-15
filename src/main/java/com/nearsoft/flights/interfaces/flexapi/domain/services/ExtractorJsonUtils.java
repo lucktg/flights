@@ -61,8 +61,7 @@ public class ExtractorJsonUtils {
 		ScheduledTrip arrival = getScheduledTrip(arrivalAirport,flightPojo.getArrivalTime(), flightPojo.getArrivalTerminal());
 		ScheduledTrip departure = getScheduledTrip(departureAirport,flightPojo.getDepartureTime(), flightPojo.getDepartureTerminal());
 		FlightBuilder builder = new FlightBuilder(flightPojo.getFlightNumber(), airline);
-		builder.addArrival(arrival);
-		builder.addDeparture(departure);
+		builder.addFlightRoute(departure, arrival);
 		builder.addServiceClasses(flightPojo.getServiceClasses());
 		builder.addServiceType(flightPojo.getServiceType());
 		return builder.build();

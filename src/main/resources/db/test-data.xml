@@ -5,4 +5,5 @@
     <airline airline_code="AIR1" airline_name="Airline name one" phone_number="+5255265000000"/>
     <airline airline_code="AIR2" airline_name="Airline name two" />
     <airline airline_code="AIR3" airline_name="Airline name three" />
+    <flight flight_number="14578" airline_code="AIR1"  departure_date="2015-06-14 06:00:00.0" departure_terminal="T1" departure_airport_code="1" arrival_date="2015-06-14 18:45:00.0" arrival_terminal="2" arrival_airport_code="3" service_type="K"/>
 </dataset>

@@ -3,12 +3,8 @@ package com.nearsoft.flights.domain.model.flight;
 import java.util.Date;
 
 import com.nearsoft.flights.domain.model.airport.Airport;
-import com.nearsoft.flights.domain.model.repository.ForeignKey;
-import com.nearsoft.flights.domain.model.repository.IgnorePersistence;
-import com.nearsoft.flights.domain.model.repository.IgnorePersistence.Operation;
 
 public class ScheduledTrip {
-	@ForeignKey
 	private Airport airport;
 	private Date scheduledDate;
 	private String terminal;

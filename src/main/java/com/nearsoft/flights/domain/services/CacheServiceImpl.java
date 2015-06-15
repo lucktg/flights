@@ -6,8 +6,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.googlecode.ehcache.annotations.TriggersRemove;
-import com.nearsoft.flights.domain.model.airport.AirportRepository;
-import com.nearsoft.flights.domain.model.flight.FlightRepository;
+import com.nearsoft.flights.domain.model.airport.Airport;
+import com.nearsoft.flights.domain.model.flight.Airline;
+import com.nearsoft.flights.domain.model.flight.Flight;
+import com.nearsoft.flights.domain.model.repository.Repository;
 
 @Service
 public class CacheServiceImpl implements CacheService {
@@ -15,10 +17,13 @@ public class CacheServiceImpl implements CacheService {
 	private static final Logger logger = Logger.getLogger(CacheServiceImpl.class);
 
 	@Autowired
-	private AirportRepository airportRepository;
+	private Repository<Airport> airportRepository;
 	
 	@Autowired
-	private FlightRepository flightRepository;
+	private Repository<Flight> flightRepository;
+	
+	@Autowired
+	private Repository<Airline> airlineRepository;
 
 	@TriggersRemove(cacheName={"airports","flights"}, removeAll=true)
 	@Scheduled(initialDelay=60000, fixedDelay=60000)
@@ -27,6 +32,7 @@ public class CacheServiceImpl implements CacheService {
 		logger.debug("Cleaning cache");
 		flightRepository.removeAll();
 		airportRepository.removeAll();
+		airlineRepository.removeAll();
 	}
 
 }

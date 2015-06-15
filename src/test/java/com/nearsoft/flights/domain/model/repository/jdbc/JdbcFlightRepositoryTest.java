@@ -2,6 +2,7 @@ package com.nearsoft.flights.domain.model.repository.jdbc;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.empty;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -9,7 +10,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -35,12 +38,15 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.nearsoft.flights.domain.model.airport.Airport;
 import com.nearsoft.flights.domain.model.airport.Airport.AirportBuilder;
 import com.nearsoft.flights.domain.model.flight.Airline;
 import com.nearsoft.flights.domain.model.flight.Flight;
+import com.nearsoft.flights.domain.model.flight.TripInformationRequest;
 import com.nearsoft.flights.domain.model.flight.Flight.FlightBuilder;
 import com.nearsoft.flights.domain.model.flight.ScheduledTrip;
 import com.nearsoft.flights.domain.model.repository.Repository;
+import com.nearsoft.flights.domain.model.repository.jdbc.specification.FlightSpecificationByTripInformation;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:spring/jdbc-test-config.xml")
@@ -85,29 +91,33 @@ public class JdbcFlightRepositoryTest {
 	}
 	
 
-	
+	@Test
 	public void shouldGetAllFlights() throws SQLException {
 		logger.debug("Testing get all flights");
-		int count = jdbcTemplate.queryForObject("select count(*) from flights", Integer.class);
+		int count = jdbcTemplate.queryForObject("select count(*) from flight", Integer.class);
 		List<Flight> flights = flightRepository.getAll();
 		logger.debug(flights);
 		Assert.assertThat(flights.size(), is(count));
 	}
 	
-	
+	@Test
 	public void shouldDeleteAllFlights() throws SQLException {
 		logger.debug("Testing delete all flights");
 		flightRepository.removeAll();
-		Assert.assertThat(jdbcTemplate.queryForObject("select count(*) from flights", Integer.class), is(0));
+		Assert.assertThat(jdbcTemplate.queryForObject("select count(*) from flight", Integer.class), is(0));
 	}
 	
-	
+	@Test
 	public void shouldUpdateFlight() throws SQLException {
 		logger.debug("Testing update flight");
+		Flight flight = getFlight();
+		String originalTerminal = flight.getDeparture().getTerminal();
+		flightRepository.add(flight);
 		int count = jdbcTemplate.queryForObject("select count(*) from flight", Integer.class);
-		flightRepository.update(getFlight());
+		flight.modifyDepartureSchedule(flight.getDeparture().getScheduledDate(), "T3");
+		flightRepository.update(flight);
 		Assert.assertThat(jdbcTemplate.queryForObject("select count(*) from flight", Integer.class), is(count));
-		Flight flight = jdbcTemplate.query("select * from flight where flight_number='804' and airline_code='AA1'", new ResultSetExtractor<Flight>(){
+		Flight flightModified = jdbcTemplate.query("select * from flight where flight_number='804' and airline_code='AIR1'", new ResultSetExtractor<Flight>(){
 			@Override
 			public Flight extractData(ResultSet rs) throws SQLException,
 					DataAccessException {
@@ -116,55 +126,102 @@ public class JdbcFlightRepositoryTest {
 				FlightBuilder builder = new FlightBuilder(rs.getString("flight_number"),airline);
 				AirportBuilder arrivalBuilder = new AirportBuilder(rs.getString("departure_airport_code"));
 				AirportBuilder departureBuilder = new AirportBuilder(rs.getString("arrival_airport_code"));
-				builder.addArrival(new ScheduledTrip(arrivalBuilder.build(), 
-						rs.getDate("arrival_date"),
-						rs.getString("arrival_terminal")));
-				builder.addDeparture(new ScheduledTrip(departureBuilder.build(), 
+				builder.addFlightRoute(new ScheduledTrip(departureBuilder.build(), 
 						rs.getDate("departure_date"), 
-						rs.getString("departure_terminal")));
+						rs.getString("departure_terminal")), 
+						new ScheduledTrip(arrivalBuilder.build(), 
+								rs.getDate("arrival_date"),
+								rs.getString("arrival_terminal")));
 				builder.addServiceType(rs.getString("service_type"));
 				return builder.build();
 			}
-			
 		});
 		
-		
+		Assert.assertNotNull(flightModified);
+		Assert.assertThat(flightModified.getDeparture().getTerminal(), is(not(originalTerminal)));
 	}
 	
-	
+	@Test
 	public void shouldDeleteFlight() throws SQLException {
 		logger.debug("Testing delete flight");
 		int count = jdbcTemplate.queryForObject("select count(*) from flight", Integer.class);
-		Flight flight = getFlight();
+		FlightBuilder builder = new FlightBuilder("14578", new Airline("AIR1", null, null,null));
+		Flight flight = builder.build();
 		flightRepository.remove(flight);
 		Assert.assertThat(jdbcTemplate.queryForObject("select count(*) from flight", Integer.class), is(count-1));
 		List<String> flights = jdbcTemplate.query("select airline_code from flight", (rs, rowNum) -> rs.getString(1));
 		Assert.assertThat(flights, not(flights.contains(flight)));
 	}
 	
+	
+	@Test
+	public void shouldAddAllFlights() throws SQLException {
+		logger.debug("Testing add all flights");
+		int count = jdbcTemplate.queryForObject("select count(*) from flight", Integer.class);
+		Set<Flight> flights = getFlights(5);
+		flightRepository.addAll(flights);
+		Assert.assertThat(jdbcTemplate.queryForObject("select count(*) from flight", Integer.class), is(count+5));
+		
+	}
+	
+	@Test
+	public void shouldFindFlightBySpecification() {
+		logger.debug("Testing find flight by specification");
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.YEAR, 2015);
+		calendar.set(Calendar.MONTH, Calendar.JUNE);
+		calendar.set(Calendar.DAY_OF_MONTH, 14);
+		calendar.set(Calendar.HOUR_OF_DAY, 1); 
+		FlightSpecificationByTripInformation specification = new FlightSpecificationByTripInformation(
+				new TripInformationRequest("1", calendar.getTime(), "3"));
+		List<Flight> flight = flightRepository.getAllBySpecification(specification);
+		Assert.assertNotNull(flight);
+		Assert.assertThat(flight, is(not(empty())));
+		Assert.assertThat(flight.size(), is(1));
+	}
+	
+	@Test
+	public void shouldNotFindFlightBySpecification() {
+		logger.debug("Testing find flight by specification");
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.YEAR, 2015);
+		calendar.set(Calendar.MONTH, Calendar.JUNE);
+		calendar.set(Calendar.DAY_OF_MONTH, 14);
+		calendar.set(Calendar.HOUR_OF_DAY, 1); 
+		FlightSpecificationByTripInformation specification = new FlightSpecificationByTripInformation(
+				new TripInformationRequest("1", calendar.getTime(), "2"));
+		List<Flight> flight = flightRepository.getAllBySpecification(specification);
+		Assert.assertNotNull(flight);
+		Assert.assertThat(flight, is(empty()));
+		Assert.assertThat(flight.size(), is(0));
+	}
+	
+	
 	private Flight getFlight() {
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.HOUR_OF_DAY, 5);
-		FlightBuilder flightBuilder = new FlightBuilder("804",new Airline("AA1", null, "Airline testland ", null));
-		AirportBuilder arrivalBuilder = new AirportBuilder("AAA")
-			.addAirportName("Arrival airport 1")
-			.addCity("City arrival 1")
-			.addCityCode("ARRCT1")
-			.addCountryCode("ARRCY1")
-			.addCountryName("Arrival country1")
-			.addLatitude("123456")
-			.addLongitude("7654321");
-		AirportBuilder departureBuilder = new AirportBuilder("DDD")
-			.addAirportName("Departure airport 1")
-			.addCity("City departure 1")
-			.addCityCode("DEPCT1")
-			.addCountryCode("DEPCY1")
-			.addCountryName("Departure country1")
-			.addLatitude("09876")
-			.addLongitude("67890");
-		flightBuilder.addArrival(new ScheduledTrip(arrivalBuilder.build(), new Date(calendar.getTimeInMillis()),"T1"));
-		flightBuilder.addDeparture(new ScheduledTrip(departureBuilder.build(), new Date(), "T2"));
+		FlightBuilder flightBuilder = new FlightBuilder("804",new Airline("AIR1", null, null, null));
+		AirportBuilder arrivalBuilder = new AirportBuilder("1");
+		AirportBuilder departureBuilder = new AirportBuilder("2");
+		flightBuilder.addFlightRoute(new ScheduledTrip(departureBuilder.build(), new Date(), "T2"),
+				new ScheduledTrip(arrivalBuilder.build(), new Date(calendar.getTimeInMillis()),"T1"));
 		flightBuilder.addServiceType("K");
 		return flightBuilder.build();
+	}
+	
+	private Set<Flight> getFlights(int flightsCount) {
+		Set<Flight> flights = new HashSet<>();
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.HOUR_OF_DAY, 5);
+		for(int i = 0 ;  i< flightsCount; i++ ){
+			FlightBuilder flightBuilder = new FlightBuilder("804"+i,new Airline("AIR3", null, null, null));
+			AirportBuilder arrivalBuilder = new AirportBuilder("1");
+			AirportBuilder departureBuilder = new AirportBuilder("2");
+			flightBuilder.addFlightRoute(new ScheduledTrip(departureBuilder.build(), new Date(), "T"+i),
+					new ScheduledTrip(arrivalBuilder.build(), new Date(calendar.getTimeInMillis()),"T1"+i));
+			flightBuilder.addServiceType("K");
+			flights.add(flightBuilder.build());
+		}
+		return flights;
 	}
 }

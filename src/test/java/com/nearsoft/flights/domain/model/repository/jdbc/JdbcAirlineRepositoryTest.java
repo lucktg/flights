@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -30,7 +32,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -64,7 +65,7 @@ public class JdbcAirlineRepositoryTest {
 		IDataSet ds = new FlatXmlDataFileLoader().getBuilder().build(resource.getFile());
 		IDatabaseConnection dbConn = new DatabaseDataSourceConnection(datasource);
 		DatabaseOperation.CLEAN_INSERT.execute(dbConn, ds);
-		
+		jdbcTemplate.update("DELETE FROM FLIGHT");
 	}
 	
 	public JdbcAirlineRepositoryTest() {
@@ -127,7 +128,25 @@ public class JdbcAirlineRepositoryTest {
 		Assert.assertThat(airportCodes, not(airportCodes.contains(airline)));
 	}
 	
+	@Test
+	public void shouldAddAllAirlines() throws SQLException {
+		logger.debug("Testing add all airlines");
+		int count = jdbcTemplate.queryForObject("select count(*) from airline", Integer.class);
+		Set<Airline> airlines = getAirlines(5);
+		airlineRepository.addAll(airlines);
+		Assert.assertThat(jdbcTemplate.queryForObject("select count(*) from airline", Integer.class), is(count+5));
+		
+	}
+	
 	private Airline getAirline() {
 		return new Airline("AA1", null, "Airline testland ", null);
+	}
+	
+	private Set<Airline> getAirlines(int airlinesNum) {
+		Set<Airline> airlines = new HashSet<>();
+		for (int i = 0; i < airlinesNum; i++) {
+			airlines.add(new Airline("AA"+i, null, "Airline testland ", null));
+		}
+		return airlines;
 	}
 }

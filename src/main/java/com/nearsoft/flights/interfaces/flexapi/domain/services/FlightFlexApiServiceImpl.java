@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import com.nearsoft.flights.domain.model.flight.Flight;
 import com.nearsoft.flights.domain.model.flight.TripInformationRequest;
 import com.nearsoft.flights.interfaces.FlightApiService;
-import com.nearsoft.flights.rest.util.UriUtils;
 
 @Service
 public class FlightFlexApiServiceImpl  implements FlightApiService {

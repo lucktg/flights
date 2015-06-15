@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.nearsoft.flights.domain.model.airport.Airport;
 import com.nearsoft.flights.interfaces.AirportApiService;
-import com.nearsoft.flights.rest.util.UriUtils;
 
 
 @Service

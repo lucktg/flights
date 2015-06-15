@@ -1,4 +1,4 @@
-package com.nearsoft.flights.rest.util;
+package com.nearsoft.flights.interfaces.flexapi.domain.services;
 
 import java.net.URI;
 import java.util.Map;
