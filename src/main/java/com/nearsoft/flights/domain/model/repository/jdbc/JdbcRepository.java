@@ -110,9 +110,9 @@ public abstract class JdbcRepository<T> implements Repository<T> {
 					}).collect(Collectors.joining(",")))+")";
 			logger.debug(sqlIdsSearch);
 			List<T> found = jdbcTemplate.query(sqlIdsSearch, (rs, rowNum) -> fillModelObject(rs, rowNum));
-			t.addAll(found);
+			t.removeAll(found);
 		}
-		logger.debug("Inserting elements with SQL statement  [" + sql + "] and values ["+t+"]");
+		//logger.debug("Inserting elements with SQL statement  [" + sql + "] and values ["+t+"]");
 		final List<T> list = t.stream().collect(Collectors.toList());
 		jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
 			@Override

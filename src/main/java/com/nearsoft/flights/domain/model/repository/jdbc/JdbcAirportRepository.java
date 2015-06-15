@@ -19,13 +19,14 @@ public class JdbcAirportRepository  extends JdbcRepository<Airport> {
 	@Override
 	public void fillInsertPreparedStatement(PreparedStatement ps, Airport t) throws SQLException {
 		ps.setString(1, t.getAirportCode());
-		ps.setString(2, t.getCity());
-		ps.setString(3, t.getCityCode());
-		ps.setString(4, t.getCountryCode());
-		ps.setString(5, t.getCountryName());
-		ps.setString(6, t.getLatitude());
-		ps.setString(7, t.getLongitude());
-		ps.setString(8, t.getAirportName());
+		ps.setString(2, t.getAirportName());
+		ps.setString(3, t.getCity());
+		ps.setString(4, t.getCityCode());
+		ps.setString(5, t.getCountryCode());
+		ps.setString(6, t.getCountryName());
+		ps.setString(7, t.getLatitude());
+		ps.setString(8, t.getLongitude());
+		
 		//ps.setString(9, t.getStateCode());
 	}
 

@@ -54,9 +54,15 @@ public class FlightsResource {
 				throw new WebApplicationException("Departure date must be lower than returning date", Response.Status.BAD_REQUEST);
 			RoundTrip roundTrip = flightsService.getRoundTripFlights(getTripInformation(fromAirport, returningAirport, departureDate), 
 					getTripInformation(returningAirport, fromAirport, returningDate));
+			logger.info("TERMINO DE EJECUTAR LA BUSQUEDA DE VUELOS");
+			logger.info(roundTrip.getDestinyFlights().size());
+			logger.info(roundTrip.getOriginFlights().size());
 			return roundTrip != null ? roundTripToRoundTripWrapper(roundTrip) : null;
-		} catch (ParseException e) {
-			throw new WebApplicationException("Wrong date format, must be yyyy-MM-dd", e, Response.Status.BAD_REQUEST);
+		} catch(Throwable  t) {
+			t.printStackTrace();
+			throw new RuntimeException(t);
+		//} catch (ParseException e) {
+			//throw new WebApplicationException("Wrong date format, must be yyyy-MM-dd", e, Response.Status.BAD_REQUEST);
 		}
 	}
 	

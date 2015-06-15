@@ -16,7 +16,7 @@ import com.nearsoft.flights.interfaces.FlightApiService;
 
 @Service
 public class FlightFlexApiServiceImpl  implements FlightApiService {
-	enum URLParams {
+	public enum URLParams {
 		departureAirportCode,
 		arrivalAirportCode,
 		year,

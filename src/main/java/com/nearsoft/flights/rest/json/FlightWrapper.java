@@ -10,6 +10,9 @@ public class FlightWrapper {
 	private Flight flight;
 	private ScheduledTripWrapper departure,arrival;
 	
+	public FlightWrapper() {
+		
+	}
 	
 	public FlightWrapper(Flight flight) {
 		this.flight = flight;

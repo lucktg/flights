@@ -10,6 +10,10 @@ public class Utils {
 		return obj == null;
 	}
 	
+	public static boolean isNotNull(Object obj){
+		return obj != null;
+	}
+	
 	public static boolean isEmptyString(String string) {
 		return isNull(string) || "".equals(string);
 	}

@@ -21,7 +21,7 @@ import com.nearsoft.flights.domain.model.repository.jdbc.specification.AirlineSp
 import com.nearsoft.flights.domain.model.repository.jdbc.specification.AirportSpecificationByCode;
 import com.nearsoft.flights.domain.model.repository.jdbc.specification.FlightSpecificationByTripInformation;
 import com.nearsoft.flights.interfaces.FlightApiService;
-
+import static com.nearsoft.flights.util.Utils.*;
 @Service
 public class FlightsServiceImpl implements FlightsService {
 	
@@ -59,20 +59,36 @@ public class FlightsServiceImpl implements FlightsService {
 		if(flights  == null || flights.isEmpty()) {
 			logger.debug("Getting one way flights from flight API service");
 			flightsSet = flightApiService.getDepartingFlightsByTripInformation(origin);
-			Set<Airline> airlines = flightsSet.stream().map(p -> p.getAirline()).collect(Collectors.toSet());
-			Set<Airport> airports = flightsSet.stream().map(p -> p.getArrival().getAirport()).collect(Collectors.toSet());
-			airports.addAll(flightsSet.stream().map(p -> p.getDeparture().getAirport()).collect(Collectors.toSet()));
-			airportRepository.addAll(airports);
-			airlineRepository.addAll(airlines);
-			flightRepository.addAll(flightsSet);
+			if(isNotNull(flightsSet)) {
+				Set<Airline> airlines = flightsSet.stream().map(p -> p.getAirline()).collect(Collectors.toSet());
+				Set<Airport> airports = flightsSet.stream().map(p -> p.getArrival().getAirport()).collect(Collectors.toSet());
+				airports.addAll(flightsSet.stream().map(p -> p.getDeparture().getAirport()).collect(Collectors.toSet()));
+				airportRepository.addAll(airports);
+				airlineRepository.addAll(airlines);
+				flightRepository.addAll(flightsSet);
+			}
 		} else {
 			flightsSet = flights.stream().map(p-> {
-				Airline airline = airlineRepository.getBySpecification(new AirlineSpecificationByCode(p.getAirline().getAirlineCode()));
+				Airline airline = Airline.emptyAirline();
+				Airport arrival = Airport.emptyAirport();
+				Airport departure = Airport.emptyAirport();
+				if(isNotNull(p.getAirline())) {
+					airline = airlineRepository.getBySpecification(new AirlineSpecificationByCode(p.getAirline().getAirlineCode()));
+				}
+				if(isNotNull(p.getDeparture()) && isNotNull(p.getDeparture().getAirport())) {
+					departure = airportRepository.getBySpecification(new AirportSpecificationByCode(p.getDeparture().getAirport().getAirportCode()));
+				}
+				
+				if(isNotNull(p.getArrival()) && isNotNull(p.getArrival().getAirport())){
+					arrival = airportRepository.getBySpecification(new AirportSpecificationByCode(p.getArrival().getAirport().getAirportCode()));
+				}
 				FlightBuilder builder = new FlightBuilder(p.getFlightNumber(), airline);
-				Airport departure = airportRepository.getBySpecification(new AirportSpecificationByCode(p.getDeparture().getAirport().getAirportCode()));
-				Airport arrival = airportRepository.getBySpecification(new AirportSpecificationByCode(p.getArrival().getAirport().getAirportCode()));
-				builder.addFlightRoute(new ScheduledTrip(departure, p.getDeparture().getScheduledDate(), p.getDeparture().getTerminal()), 
-						new ScheduledTrip(arrival, p.getArrival().getScheduledDate(), p.getArrival().getTerminal()));
+				if(isNotNull(departure) && isNotNull(arrival)) {
+					builder.addFlightRoute(new ScheduledTrip(departure, p.getDeparture().getScheduledDate(), p.getDeparture().getTerminal()), 
+							new ScheduledTrip(arrival, p.getArrival().getScheduledDate(), p.getArrival().getTerminal()));
+				} else {
+					logger.warn("Departure or Arrival not found in repository, this  shouldn't happen ");
+				}
 				return builder.build();
 			}).collect(Collectors.toSet());
 		}

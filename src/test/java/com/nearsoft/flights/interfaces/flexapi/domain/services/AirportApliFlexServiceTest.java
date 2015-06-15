@@ -117,16 +117,4 @@ public class AirportApliFlexServiceTest {
 				eq(AirportJsonWrapper.class));
 	}
 	
-	@Test
-	public void shouldThrowIllegalArgumentException() {
-		when(restServiceInvoker.invoke(any(), any(), any())).thenReturn(Airport.emptyAirport());
-		Airport airport = airportApiService.getAirportByCode(MEXICO_AIRPORT_CODE);
-		Map<String,String> urlParams = new HashMap<>();
-		urlParams.put(URLParams.code.name(), MEXICO_AIRPORT_CODE);
-		Assert.assertNotNull(airport);
-		verify(restServiceInvoker, times(1)).invoke(
-				eq(UriUtils.buildAirportsJSONURI(apiConfigs, urlParams)), 
-				any(), 
-				eq(AirportJsonWrapper.class));
-	}
 }

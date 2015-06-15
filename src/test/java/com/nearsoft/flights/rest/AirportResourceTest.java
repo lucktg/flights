@@ -12,13 +12,24 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.grizzly.GrizzlyTestContainerFactory;
 import org.glassfish.jersey.test.spi.TestContainerFactory;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.Assert;
 
 import com.nearsoft.flights.rest.resources.AirportResource;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("classpath:spring/application-config.xml")
 public class AirportResourceTest extends JerseyTest {
 	Logger logger = Logger.getLogger(AirportResourceTest.class);
+	
+	@Autowired
+	JdbcTemplate jdbcTemplate;
 	
 	@Override
 	protected Application configure() {
@@ -28,16 +39,30 @@ public class AirportResourceTest extends JerseyTest {
 		
 		return rc;
 	}
+	
+	
+	public void setup() {
+		jdbcTemplate.update("DELETE FROM AIRPORT");
+		jdbcTemplate.update("DELETE FROM AIRLINE");
+		jdbcTemplate.update("DELETE FROM FLIGHT");
+	}
+	
 	@Override
     public TestContainerFactory getTestContainerFactory() {
         return new GrizzlyTestContainerFactory();
     }
 	
 	@Test
-	public void shouldNotEmptyAirportsList() {
+	public void shouldGetNotEmptyAirports() {
 		Set response = target("/airports/active").request().get(Set.class);
-		System.out.println(response.size());
+		int inserted = jdbcTemplate.queryForObject("select count(*) from airport", Integer.class);
+		logger.info(response.size());
 		Assert.notNull(response);
+		Assert.isTrue(inserted == response.size(), "Airports from api service are not the same");
+		response = target("/airports/active").request().get(Set.class);
+		logger.info(response.size());
+		Assert.notNull(response);
+		
 	}
 	
 }

@@ -29,7 +29,6 @@ public class AirportResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Set<Airport> getAllActiveAirports() {
 		logger.debug("Searching all airports");
-		
 		return airportService.getActiveAirports();
 	}
 	

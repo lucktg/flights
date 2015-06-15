@@ -7,7 +7,9 @@ public class RoundTripWrapper {
 	private Set<FlightWrapper> origin;
 	private Set<FlightWrapper> destiny;
 	
-	
+	public RoundTripWrapper(){
+		
+	}
 	
 	
 	public RoundTripWrapper(Set<FlightWrapper> origin,

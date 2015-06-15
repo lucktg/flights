@@ -29,6 +29,7 @@ public class AirportsServiceImpl implements AirportsService {
 	@Cacheable( cacheName="airports")
 	@Override
 	public Set<Airport> getActiveAirports() {
+		logger.debug("Airports not found in cache");
 		List<Airport> airports = airportRepository.getAll();
 		Set<Airport> airportsSet = Collections.emptySet();
 		if(airports == null || airports.isEmpty()) {
