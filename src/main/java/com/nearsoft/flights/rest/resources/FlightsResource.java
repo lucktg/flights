@@ -58,11 +58,8 @@ public class FlightsResource {
 			logger.info(roundTrip.getDestinyFlights().size());
 			logger.info(roundTrip.getOriginFlights().size());
 			return roundTrip != null ? roundTripToRoundTripWrapper(roundTrip) : null;
-		} catch(Throwable  t) {
-			t.printStackTrace();
-			throw new RuntimeException(t);
-		//} catch (ParseException e) {
-			//throw new WebApplicationException("Wrong date format, must be yyyy-MM-dd", e, Response.Status.BAD_REQUEST);
+		} catch (ParseException e) {
+			throw new WebApplicationException("Wrong date format, must be yyyy-MM-dd", e, Response.Status.BAD_REQUEST);
 		}
 	}
 	
