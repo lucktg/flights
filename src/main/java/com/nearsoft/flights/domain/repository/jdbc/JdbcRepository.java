@@ -31,8 +31,10 @@ public abstract class JdbcRepository<T> implements Repository<T> {
 	
 	private final String tableName;
 	private final String[]  columnNames;
+	private final String[]  selectColumnNames;
 	private final String[] updateColumNames;
 	private final String[] idTable;
+	private List<Field> fkList = new ArrayList<>();
 	private Class<T> clazz;
 	
 	@Autowired
@@ -53,6 +55,7 @@ public abstract class JdbcRepository<T> implements Repository<T> {
 		Field[] fields = this.clazz.getDeclaredFields();
 		columnNames = getColumns(fields, Operation.INSERT);
 		updateColumNames = getColumns(fields, Operation.UPDATE);
+		selectColumnNames = getSelectColumns(fields, Operation.INSERT, "");
 	}
 
 	private String[] getColumns(Field[] fields, Operation operation) {
@@ -89,6 +92,43 @@ public abstract class JdbcRepository<T> implements Repository<T> {
 		return list.toArray(new String[list.size()]);
 	}
 	
+	
+	private String[] getSelectColumns(Field[] fields, Operation operation, String fieldName) {
+		List<String> list = new ArrayList<String>();
+		Arrays.stream(fields)
+		//Ordered by field name
+			.sorted((first, second) -> first.getName().compareTo(second.getName()))
+			//Filtered by operation
+			.filter( p -> ignoreField(p, operation)).forEach(p -> {
+				String tableName = p.getDeclaringClass().getSimpleName();
+			//Verify if ForeignKey annotation is present
+				if(p.isAnnotationPresent(ForeignKey.class)) {
+					ForeignKey fk = p.getAnnotation(ForeignKey.class);
+					//If Foreignkey annotation contains columns names, add values to list
+					if(!isNull(fk.columns()) && fk.columns().length > 0){
+						Arrays.stream(fk.columns()).forEach(f -> list.add(tableName + "_"+fieldName+"."+f));
+						fkList.add(p);
+						list.addAll(Arrays.asList(getSelectColumns(p.getType().getDeclaredFields(), operation, p.getName())));
+					} else {
+					//Otherwise the column name is extracted from idTable from @Table annotation
+						Table table = p.getType().getAnnotation(Table.class);
+						if(isNull(table)) throw new NullPointerException("@Table annotation is missing for @ForeignKey annotated element");
+						if(isNull(table.idTable()) || table.idTable().length == 0) throw new NullPointerException("idTable in @Table annotation is missing for @ForeignKey annotated element");
+						Arrays.stream(table.idTable()).forEach(a -> {
+							try {
+								list.add(tableName + "_"+fieldName+"."+camelCaseDash(p.getType().getDeclaredField(a).getName()));
+							} catch (NoSuchFieldException | SecurityException e) {
+								throw new RuntimeException(e);
+							}
+						});
+					}
+				//There is no ForeignKey annotation, so take the field name
+				} else {
+					list.add(tableName + "_"+fieldName+"."+camelCaseDash(p.getName()));
+				}
+			}); 
+		return list.toArray(new String[list.size()]);
+	}
 	
 	
 	public void add(T t) {
@@ -207,8 +247,20 @@ public abstract class JdbcRepository<T> implements Repository<T> {
 	}
 	
 	private String buildSelectAllStatement() {
-		String[] columnNames = getColumnNames();
-		return "SELECT " +Arrays.stream(columnNames).collect(Collectors.joining(",")) +  " FROM " + tableName;
+		String[] columnNames = selectColumnNames;
+		String cond  = fkList.stream().map(p -> {
+			p.getType().getSimpleName() + "_"+p.getName()+"."+ camelCaseDash(p.getName())+ "="+tableName+"."+camelCaseDash(p.getName())).collect(Collectors.joining(" and "));
+		
+		});
+		return "SELECT " +Arrays.stream(columnNames).collect(Collectors.joining(",")) +  " FROM " + tableName + " as " + tableName + "_, "+
+			fkList.stream().map(p -> {
+					Table table = p.getType().getAnnotation(Table.class);
+					StringBuffer buffer = new StringBuffer();
+					Arrays.stream(table.idTable()).forEach(a -> buffer.append(p.getType().getSimpleName() + " AS " +p.getType().getSimpleName() + "_"+p.getName()));
+					return buffer.toString();
+				}
+				).collect(Collectors.joining(",")) + " where " + cond;
+			
 	}
 	
 	private String getIdClausule() {

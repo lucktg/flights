@@ -3,9 +3,7 @@ package com.nearsoft.flights.rest.resources;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Set;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -23,8 +21,6 @@ import org.springframework.stereotype.Component;
 import com.nearsoft.flights.domain.model.RoundTrip;
 import com.nearsoft.flights.domain.model.TripInformationRequest;
 import com.nearsoft.flights.domain.services.FlightsService;
-import com.nearsoft.flights.rest.json.FlightWrapper;
-import com.nearsoft.flights.rest.json.RoundTripWrapper;
 
 @Component
 @Path("/flights")
@@ -76,11 +72,5 @@ public class FlightsResource {
 	
 	private boolean isNullOrEmpty(String string) {
 		return string == null || "".equals(string.trim());
-	}
-	
-	private RoundTripWrapper roundTripToRoundTripWrapper(RoundTrip roundTrip) {
-		Set<FlightWrapper> origin = roundTrip.getOriginFlights().stream().map(p-> new FlightWrapper(p)).collect(Collectors.toSet());
-		Set<FlightWrapper> destiny = roundTrip.getDestinyFlights().stream().map(p-> new FlightWrapper(p)).collect(Collectors.toSet());
-		return new RoundTripWrapper(origin, destiny);
 	}
 }
