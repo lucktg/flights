@@ -1,20 +1,24 @@
-package com.nearsoft.flights.domain.model.repository.jdbc;
+package com.nearsoft.flights.domain.repository.jdbc;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.nearsoft.flights.domain.model.airport.Airport.AirportBuilder;
-import com.nearsoft.flights.domain.model.flight.Airline;
-import com.nearsoft.flights.domain.model.flight.Flight;
-import com.nearsoft.flights.domain.model.flight.Flight.FlightBuilder;
-import com.nearsoft.flights.domain.model.flight.ScheduledTrip;
+import com.nearsoft.flights.domain.model.Airline;
+import com.nearsoft.flights.domain.model.Flight;
+import com.nearsoft.flights.domain.model.ScheduledTrip;
+import com.nearsoft.flights.domain.model.Airport.AirportBuilder;
+import com.nearsoft.flights.domain.model.Flight.FlightBuilder;
+import com.nearsoft.flights.domain.model.TripInformationRequest;
+import com.nearsoft.flights.domain.repository.FlightRepository;
+import com.nearsoft.flights.domain.repository.jdbc.specification.FlightSpecificationByTripInformation;
 
 @Repository("flightRepository")
-public class JdbcFlightRepository extends JdbcRepository<Flight> {
+public class JdbcFlightRepository extends JdbcRepository<Flight> implements FlightRepository{
 	
 	public JdbcFlightRepository() {
 		super(Flight.class);
@@ -64,6 +68,12 @@ public class JdbcFlightRepository extends JdbcRepository<Flight> {
 				new ScheduledTrip(arrivalBuilder.build(), rs.getDate("arrival_date"),rs.getString("arrival_terminal")));
 		builder.addServiceType(rs.getString("service_type"));
 		return builder.build();
+	}
+
+	@Override
+	public List<Flight> getBytTripInformation(
+			TripInformationRequest tripInformation) {
+		return getAllBySpecification(new FlightSpecificationByTripInformation(tripInformation));
 	}
 
 }

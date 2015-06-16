@@ -7,7 +7,7 @@ import static org.mockito.Mockito.when;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.Matchers.*;
-import static com.nearsoft.flights.domain.model.airport.Airport.AirportBuilder;
+import static com.nearsoft.flights.domain.model.Airport.AirportBuilder;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -32,7 +32,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.test.context.ContextConfiguration;
 
-import com.nearsoft.flights.domain.model.airport.Airport;
+import com.nearsoft.flights.domain.model.Airport;
 import com.nearsoft.flights.interfaces.flexapi.domain.services.AirportJsonSetWrapper;
 import com.nearsoft.flights.interfaces.flexapi.domain.services.ExtractorJsonUtils;
 import com.nearsoft.flights.interfaces.flexapi.extractor.ExtractionException;

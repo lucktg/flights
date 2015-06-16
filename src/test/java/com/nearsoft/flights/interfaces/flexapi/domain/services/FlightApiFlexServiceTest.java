@@ -29,8 +29,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.nearsoft.flights.domain.model.flight.Flight;
-import com.nearsoft.flights.domain.model.flight.TripInformationRequest;
+import com.nearsoft.flights.domain.model.Flight;
+import com.nearsoft.flights.domain.model.TripInformationRequest;
 import com.nearsoft.flights.interfaces.FlightApiService;
 import com.nearsoft.flights.interfaces.flexapi.domain.services.FlightFlexApiServiceImpl.URLParams;
 

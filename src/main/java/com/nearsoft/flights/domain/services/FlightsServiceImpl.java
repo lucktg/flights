@@ -1,5 +1,7 @@
 package com.nearsoft.flights.domain.services;
 
+import static com.nearsoft.flights.util.Utils.isNotNull;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -8,38 +10,38 @@ import java.util.stream.Collectors;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.googlecode.ehcache.annotations.Cacheable;
-import com.nearsoft.flights.domain.model.airport.Airport;
-import com.nearsoft.flights.domain.model.flight.Airline;
-import com.nearsoft.flights.domain.model.flight.Flight;
-import com.nearsoft.flights.domain.model.flight.Flight.FlightBuilder;
-import com.nearsoft.flights.domain.model.flight.ScheduledTrip;
-import com.nearsoft.flights.domain.model.flight.TripInformationRequest;
-import com.nearsoft.flights.domain.model.repository.Repository;
-import com.nearsoft.flights.domain.model.repository.jdbc.specification.AirlineSpecificationByCode;
-import com.nearsoft.flights.domain.model.repository.jdbc.specification.AirportSpecificationByCode;
-import com.nearsoft.flights.domain.model.repository.jdbc.specification.FlightSpecificationByTripInformation;
+import com.nearsoft.flights.domain.model.Airline;
+import com.nearsoft.flights.domain.model.Airport;
+import com.nearsoft.flights.domain.model.Flight;
+import com.nearsoft.flights.domain.model.Flight.FlightBuilder;
+import com.nearsoft.flights.domain.model.RoundTrip;
+import com.nearsoft.flights.domain.model.ScheduledTrip;
+import com.nearsoft.flights.domain.model.TripInformationRequest;
+import com.nearsoft.flights.domain.repository.AirlineRepository;
+import com.nearsoft.flights.domain.repository.AirportRepository;
+import com.nearsoft.flights.domain.repository.FlightRepository;
 import com.nearsoft.flights.interfaces.FlightApiService;
-import static com.nearsoft.flights.util.Utils.*;
-@Service
+@Service("flightService")
 public class FlightsServiceImpl implements FlightsService {
 	
 	private static final Logger logger = Logger.getLogger(FlightsServiceImpl.class);
 	
 	@Autowired
-	private Repository<Flight> flightRepository;
+	private FlightRepository flightRepository;
 	
 	@Autowired
-	private Repository<Airport> airportRepository;
+	private AirportRepository airportRepository;
 	
 	@Autowired
-	private Repository<Airline> airlineRepository;
+	private AirlineRepository airlineRepository;
 	
 	@Autowired
 	private FlightApiService flightApiService;
 	
-
+	@Transactional
 	@Override
 	public RoundTrip getRoundTripFlights(TripInformationRequest origin, TripInformationRequest destiny) {
 		logger.debug("Getting round trip flights");
@@ -48,13 +50,14 @@ public class FlightsServiceImpl implements FlightsService {
 		RoundTrip roundTrip = new RoundTrip(originFlights, destinyFlights);
 		return roundTrip;
 	}
+	
 
 	@Cacheable(cacheName="flights")
 	@Override
+	@Transactional
 	public Set<Flight> getOneWayFlights(TripInformationRequest origin) {
 		logger.debug("Getting one way flights, means not using cache");
-		FlightSpecificationByTripInformation specification = new FlightSpecificationByTripInformation(origin);
-		List<Flight> flights = flightRepository.getAllBySpecification(specification);
+		List<Flight> flights = flightRepository.getBytTripInformation(origin);
 		Set<Flight> flightsSet = Collections.emptySet();
 		if(flights  == null || flights.isEmpty()) {
 			logger.debug("Getting one way flights from flight API service");
@@ -73,14 +76,14 @@ public class FlightsServiceImpl implements FlightsService {
 				Airport arrival = Airport.emptyAirport();
 				Airport departure = Airport.emptyAirport();
 				if(isNotNull(p.getAirline())) {
-					airline = airlineRepository.getBySpecification(new AirlineSpecificationByCode(p.getAirline().getAirlineCode()));
+					airline = airlineRepository.getByAirlineCode(p.getAirline().getAirlineCode());
 				}
 				if(isNotNull(p.getDeparture()) && isNotNull(p.getDeparture().getAirport())) {
-					departure = airportRepository.getBySpecification(new AirportSpecificationByCode(p.getDeparture().getAirport().getAirportCode()));
+					departure = airportRepository.getByAirportCode(p.getDeparture().getAirport().getAirportCode());
 				}
 				
 				if(isNotNull(p.getArrival()) && isNotNull(p.getArrival().getAirport())){
-					arrival = airportRepository.getBySpecification(new AirportSpecificationByCode(p.getArrival().getAirport().getAirportCode()));
+					arrival = airportRepository.getByAirportCode(p.getArrival().getAirport().getAirportCode());
 				}
 				FlightBuilder builder = new FlightBuilder(p.getFlightNumber(), airline);
 				if(isNotNull(departure) && isNotNull(arrival)) {

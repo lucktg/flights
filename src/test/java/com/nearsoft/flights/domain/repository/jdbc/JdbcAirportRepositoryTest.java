@@ -1,4 +1,4 @@
-package com.nearsoft.flights.domain.model.repository.jdbc;
+package com.nearsoft.flights.domain.repository.jdbc;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
@@ -35,11 +35,9 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.nearsoft.flights.domain.model.airport.Airport;
-import com.nearsoft.flights.domain.model.airport.Airport.AirportBuilder;
-import com.nearsoft.flights.domain.model.flight.Airline;
-import com.nearsoft.flights.domain.model.repository.Repository;
-import com.nearsoft.flights.domain.model.repository.jdbc.specification.AirportSpecificationByCode;
+import com.nearsoft.flights.domain.model.Airport;
+import com.nearsoft.flights.domain.model.Airport.AirportBuilder;
+import com.nearsoft.flights.domain.repository.AirportRepository;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -50,7 +48,7 @@ public class JdbcAirportRepositoryTest {
 			.getLogger(JdbcAirportRepositoryTest.class);
 
 	@Autowired
-	Repository<Airport> airportRepository;
+	AirportRepository airportRepository;
 	
 	@Autowired
 	JdbcTemplate jdbcTemplate;
@@ -158,7 +156,7 @@ public class JdbcAirportRepositoryTest {
 	@Test
 	public void shouldfindAirportByCodeSpecification() {
 		logger.debug("Testing find Airport by code specification");
-		Airport airport = airportRepository.getBySpecification(new AirportSpecificationByCode("3"));
+		Airport airport = airportRepository.getByAirportCode("3");
 		Assert.assertNotNull(airport);
 		Assert.assertThat(airport.getAirportName(), is("airport name test 3"));
 	}

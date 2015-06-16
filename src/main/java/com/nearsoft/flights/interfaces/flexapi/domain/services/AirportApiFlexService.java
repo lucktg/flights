@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.nearsoft.flights.domain.model.airport.Airport;
+import com.nearsoft.flights.domain.model.Airport;
 import com.nearsoft.flights.interfaces.AirportApiService;
 
 

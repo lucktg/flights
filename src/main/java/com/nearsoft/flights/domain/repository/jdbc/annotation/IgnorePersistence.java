@@ -1,4 +1,4 @@
-package com.nearsoft.flights.domain.model.repository.jdbc;
+package com.nearsoft.flights.domain.repository.jdbc.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -28,14 +28,16 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.nearsoft.flights.domain.model.airport.Airport;
-import com.nearsoft.flights.domain.model.airport.Airport.AirportBuilder;
-import com.nearsoft.flights.domain.model.flight.Airline;
-import com.nearsoft.flights.domain.model.flight.Flight;
-import com.nearsoft.flights.domain.model.flight.Flight.FlightBuilder;
-import com.nearsoft.flights.domain.model.flight.ScheduledTrip;
-import com.nearsoft.flights.domain.model.flight.TripInformationRequest;
-import com.nearsoft.flights.domain.model.repository.Repository;
+import com.nearsoft.flights.domain.model.Airline;
+import com.nearsoft.flights.domain.model.Airport;
+import com.nearsoft.flights.domain.model.Airport.AirportBuilder;
+import com.nearsoft.flights.domain.model.Flight;
+import com.nearsoft.flights.domain.model.Flight.FlightBuilder;
+import com.nearsoft.flights.domain.model.ScheduledTrip;
+import com.nearsoft.flights.domain.model.TripInformationRequest;
+import com.nearsoft.flights.domain.repository.AirlineRepository;
+import com.nearsoft.flights.domain.repository.AirportRepository;
+import com.nearsoft.flights.domain.repository.FlightRepository;
 import com.nearsoft.flights.interfaces.FlightApiService;
 @RunWith(MockitoJUnitRunner.class)
 public class FlightServiceTest {
@@ -46,13 +48,13 @@ public class FlightServiceTest {
 	FlightsServiceImpl flightsService;
 	
 	@Mock
-	private Repository<Flight> flightRepository;
+	private FlightRepository flightRepository;
 	
 	@Mock
-	private Repository<Airport> airportRepository;
+	private AirportRepository airportRepository;
 	
 	@Mock
-	private Repository<Airline> airlineRepository;
+	private AirlineRepository airlineRepository;
 	
 	@Mock
 	private FlightApiService flightApiService;
@@ -68,11 +70,11 @@ public class FlightServiceTest {
 	
 	@Test
 	public void shouldReturnNullAirportSet() {
-		when(flightRepository.getAllBySpecification(any())).thenReturn(null);
+		when(flightRepository.getBytTripInformation(any())).thenReturn(null);
 		when(flightApiService.getDepartingFlightsByTripInformation(any())).thenReturn(null);
 		Set<Flight> flights = flightsService.getOneWayFlights(any());
 		Assert.assertNull(flights);
-		verify(flightRepository, times(1)).getAllBySpecification(any());
+		verify(flightRepository, times(1)).getBytTripInformation(any());
 		verify(flightApiService, times(1)).getDepartingFlightsByTripInformation(any());
 		verifyZeroInteractions(airportRepository,airlineRepository);
 		verifyNoMoreInteractions(flightRepository,flightApiService);
@@ -81,24 +83,24 @@ public class FlightServiceTest {
 	
 	@Test
 	public void shouldGetAirportSetFromRepository() {
-		when(flightRepository.getAllBySpecification(any())).thenReturn(Collections.singletonList(getFlight()));
+		when(flightRepository.getBytTripInformation(any())).thenReturn(Collections.singletonList(getFlight()));
 		Set<Flight> flights = flightsService.getOneWayFlights(new TripInformationRequest("MEX", new Date(), "GDL"));
 		Assert.assertNotNull(flights);
 		Assert.assertThat(flights, is(not(empty())));
 		verifyZeroInteractions(flightApiService);
-		verify(flightRepository, times(1)).getAllBySpecification(any());
-		verify(airlineRepository, times(1)).getBySpecification(any());
-		verify(airportRepository, times(2)).getBySpecification(any());
+		verify(flightRepository, times(1)).getBytTripInformation(any());
+		verify(airlineRepository, times(1)).getByAirlineCode(any());
+		verify(airportRepository, times(2)).getByAirportCode(any());
 	}
 	
 	@Test
 	public void shouldGetFlightSetFromApi() {
-		when(flightRepository.getAllBySpecification(any())).thenReturn(null);
+		when(flightRepository.getBytTripInformation(any())).thenReturn(null);
 		when(flightApiService.getDepartingFlightsByTripInformation(any())).thenReturn(Collections.singleton(getFlight()));
 		Set<Flight> flights = flightsService.getOneWayFlights(any());
 		Assert.assertNotNull(flights);
 		Assert.assertThat(flights, is(not(empty())));
-		verify(flightRepository, times(1)).getAllBySpecification(any());
+		verify(flightRepository, times(1)).getBytTripInformation(any());
 		verify(flightApiService, times(1)).getDepartingFlightsByTripInformation(any());
 		Set<Airport> airports = flights.stream().map(p -> p.getDeparture().getAirport()).collect(Collectors.toSet());
 		airports.addAll(flights.stream().map(p -> p.getArrival().getAirport()).collect(Collectors.toSet()));

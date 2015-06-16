@@ -1,4 +1,4 @@
-package com.nearsoft.flights.domain.model.flight;
+package com.nearsoft.flights.domain.model;
 
 import java.sql.Timestamp;
 import java.util.Calendar;

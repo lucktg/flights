@@ -4,8 +4,8 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.nearsoft.flights.domain.model.airport.Airport;
-import com.nearsoft.flights.domain.model.flight.ScheduledTrip;
+import com.nearsoft.flights.domain.model.Airport;
+import com.nearsoft.flights.domain.model.ScheduledTrip;
 
 public class ScheduledTripWrapper {
 

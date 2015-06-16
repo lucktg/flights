@@ -1,4 +1,4 @@
-package com.nearsoft.flights.domain.model.repository.jdbc;
+package com.nearsoft.flights.domain.repository.jdbc;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -6,10 +6,12 @@ import java.sql.SQLException;
 
 import org.springframework.stereotype.Repository;
 
-import com.nearsoft.flights.domain.model.flight.Airline;
+import com.nearsoft.flights.domain.model.Airline;
+import com.nearsoft.flights.domain.repository.AirlineRepository;
+import com.nearsoft.flights.domain.repository.jdbc.specification.AirlineSpecificationByCode;
 
 @Repository("airlineRepository")
-public class JdbcAirlineRepository extends JdbcRepository<Airline>{
+public class JdbcAirlineRepository extends JdbcRepository<Airline> implements AirlineRepository {
 
 	public JdbcAirlineRepository() {
 		super(Airline.class);
@@ -46,4 +48,8 @@ public class JdbcAirlineRepository extends JdbcRepository<Airline>{
 				rs.getString("airline_name"), null);
 	}
 
+	@Override
+	public Airline getByAirlineCode(String airlineCode) {
+		return getBySpecification(new AirlineSpecificationByCode(airlineCode));
+	}
 }

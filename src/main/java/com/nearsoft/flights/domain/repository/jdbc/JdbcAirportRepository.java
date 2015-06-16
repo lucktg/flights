@@ -1,4 +1,4 @@
-package com.nearsoft.flights.domain.model.repository.jdbc;
+package com.nearsoft.flights.domain.repository.jdbc;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -6,11 +6,13 @@ import java.sql.SQLException;
 
 import org.springframework.stereotype.Repository;
 
-import com.nearsoft.flights.domain.model.airport.Airport;
-import com.nearsoft.flights.domain.model.airport.Airport.AirportBuilder;
+import com.nearsoft.flights.domain.model.Airport;
+import com.nearsoft.flights.domain.model.Airport.AirportBuilder;
+import com.nearsoft.flights.domain.repository.AirportRepository;
+import com.nearsoft.flights.domain.repository.jdbc.specification.AirportSpecificationByCode;
 
 @Repository("airportRepository")
-public class JdbcAirportRepository  extends JdbcRepository<Airport> {
+public class JdbcAirportRepository  extends JdbcRepository<Airport> implements AirportRepository {
 	
 	public JdbcAirportRepository() {
 		super(Airport.class);
@@ -58,6 +60,11 @@ public class JdbcAirportRepository  extends JdbcRepository<Airport> {
 		builder.addLatitude(rs.getString("latitude"));
 		builder.addLongitude(rs.getString("longitude"));
 		return builder.build();
+	}
+
+	@Override
+	public Airport getByAirportCode(String airportCode) {
+		return getBySpecification(new AirportSpecificationByCode(airportCode));
 	}
 
 }

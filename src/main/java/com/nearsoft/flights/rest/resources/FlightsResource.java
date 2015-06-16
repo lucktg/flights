@@ -20,9 +20,9 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.nearsoft.flights.domain.model.flight.TripInformationRequest;
+import com.nearsoft.flights.domain.model.RoundTrip;
+import com.nearsoft.flights.domain.model.TripInformationRequest;
 import com.nearsoft.flights.domain.services.FlightsService;
-import com.nearsoft.flights.domain.services.RoundTrip;
 import com.nearsoft.flights.rest.json.FlightWrapper;
 import com.nearsoft.flights.rest.json.RoundTripWrapper;
 
@@ -40,7 +40,7 @@ public class FlightsResource {
 	@GET
 	@Path("roundtrip")
 	@Produces(MediaType.APPLICATION_JSON)
-	public RoundTripWrapper getRoundTripFights(@NotEmpty @QueryParam("fromAirport") String fromAirport, 
+	public RoundTrip getRoundTripFights(@NotEmpty @QueryParam("fromAirport") String fromAirport, 
 			@NotEmpty @QueryParam("departing") String departing,
 			@NotEmpty @QueryParam ("returningAirport") String returningAirport,
 			@NotEmpty @QueryParam("returning") String returning) {
@@ -57,7 +57,7 @@ public class FlightsResource {
 			logger.info("TERMINO DE EJECUTAR LA BUSQUEDA DE VUELOS");
 			logger.info(roundTrip.getDestinyFlights().size());
 			logger.info(roundTrip.getOriginFlights().size());
-			return roundTrip != null ? roundTripToRoundTripWrapper(roundTrip) : null;
+			return roundTrip;
 		} catch (ParseException e) {
 			throw new WebApplicationException("Wrong date format, must be yyyy-MM-dd", e, Response.Status.BAD_REQUEST);
 		}

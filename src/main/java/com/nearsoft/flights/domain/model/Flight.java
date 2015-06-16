@@ -1,14 +1,13 @@
-package com.nearsoft.flights.domain.model.flight;
+package com.nearsoft.flights.domain.model;
 
 import java.util.Collections;
 import java.util.Date;
 import java.util.Set;
 
-import com.nearsoft.flights.domain.model.airport.Airport;
-import com.nearsoft.flights.domain.model.repository.jdbc.ForeignKey;
-import com.nearsoft.flights.domain.model.repository.jdbc.IgnorePersistence;
-import com.nearsoft.flights.domain.model.repository.jdbc.Table;
-import com.nearsoft.flights.domain.model.repository.jdbc.IgnorePersistence.Operation;
+import com.nearsoft.flights.domain.repository.jdbc.annotation.ForeignKey;
+import com.nearsoft.flights.domain.repository.jdbc.annotation.IgnorePersistence;
+import com.nearsoft.flights.domain.repository.jdbc.annotation.IgnorePersistence.Operation;
+import com.nearsoft.flights.domain.repository.jdbc.annotation.Table;
 
 @Table(tableName="Flight", idTable={"airlineCode", "flightNumber"})
 public class Flight {
@@ -37,8 +36,8 @@ public class Flight {
 	private Date arrivalDate;
 	private String arrivalTerminal;
 	
-	@IgnorePersistence(ignore=Operation.ALL)
-	private Set<String> serviceClasses;
+	//@IgnorePersistence(ignore=Operation.ALL)
+	//private Set<String> serviceClasses = Collections.emptySet();
 	private String serviceType;
 	
 	private Flight() {
@@ -50,9 +49,9 @@ public class Flight {
 		this.airline = airline;
 	}
 	
-	public Set<String> getServiceClass() {
+	/*public Set<String> getServiceClass() {
 		return serviceClasses;
-	}
+	}*/
 	
 	public String getServiceType() {
 		return serviceType;
@@ -140,7 +139,6 @@ public class Flight {
 		private Airport arrivalAirport;
 		private Date arrivalDate;
 		private String arrivalTerminal;
-		private Set<String> serviceClasses;
 		private String serviceType;
 		
 		public FlightBuilder(String flightNumber, Airline airline) {
@@ -164,10 +162,6 @@ public class Flight {
 			this.arrivalTerminal = arrival.getTerminal();
 			return this;
 		}
-		public FlightBuilder addServiceClasses(Set<String> serviceClasses){
-			this.serviceClasses = serviceClasses;
-			return this;
-		}
 		public FlightBuilder addServiceType(String serviceType){
 			this.serviceType = serviceType;
 			return this;
@@ -182,7 +176,7 @@ public class Flight {
 			flight.departureDate = this.departureDate;
 			flight.departureTerminal = this.departureTerminal;
 			flight.connectionFlights = this.connectionFlights;
-			flight.serviceClasses = this.serviceClasses;
+			//flight.serviceClasses = this.serviceClasses;
 			flight.serviceType = this.serviceType;
 			return flight;
 		}
@@ -212,7 +206,7 @@ public class Flight {
 			.append(", arrivalTerminal=")
 			.append(arrivalTerminal)
 			.append(", serviceClasses=")
-			.append(serviceClasses)
+			//.append(serviceClasses)
 			.append(", serviceType=")
 			.append(serviceType)
 			.append("]").toString();

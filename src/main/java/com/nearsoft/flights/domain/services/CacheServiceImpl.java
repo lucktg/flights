@@ -4,14 +4,16 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.googlecode.ehcache.annotations.TriggersRemove;
-import com.nearsoft.flights.domain.model.airport.Airport;
-import com.nearsoft.flights.domain.model.flight.Airline;
-import com.nearsoft.flights.domain.model.flight.Flight;
-import com.nearsoft.flights.domain.model.repository.Repository;
+import com.nearsoft.flights.domain.model.Airline;
+import com.nearsoft.flights.domain.model.Airport;
+import com.nearsoft.flights.domain.model.Flight;
+import com.nearsoft.flights.domain.repository.Repository;
 
 @Service
+@Transactional
 public class CacheServiceImpl implements CacheService {
 	
 	private static final Logger logger = Logger.getLogger(CacheServiceImpl.class);

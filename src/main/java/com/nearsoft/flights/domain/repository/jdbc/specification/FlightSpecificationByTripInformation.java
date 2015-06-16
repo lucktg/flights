@@ -1,16 +1,20 @@
-package com.nearsoft.flights.domain.model.repository.jdbc.specification;
+package com.nearsoft.flights.domain.repository.jdbc.specification;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.regex.Pattern;
 
-import com.nearsoft.flights.domain.model.flight.TripInformationRequest;
+import com.nearsoft.flights.domain.model.TripInformationRequest;
 
 public class FlightSpecificationByTripInformation implements SqlSpecification{
 
 	private TripInformationRequest tripInfo;
-	
+	private static final Pattern pattern = Pattern.compile("\\p{Alnum}*");
 	public FlightSpecificationByTripInformation(TripInformationRequest tripInfo) {
+		if(!pattern.matcher(tripInfo.getArrivalAirportCode()).matches() ||
+				!pattern.matcher(tripInfo.getDepartureAirportCode()).matches()) 
+			throw new AssertionError("Airport code must be Alphanumeric");
 		this.tripInfo = tripInfo;
 	}
 	

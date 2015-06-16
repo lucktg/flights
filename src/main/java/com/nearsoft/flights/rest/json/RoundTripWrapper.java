@@ -2,10 +2,12 @@ package com.nearsoft.flights.rest.json;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class RoundTripWrapper {
 
-	private Set<FlightWrapper> origin;
-	private Set<FlightWrapper> destiny;
+	private Set<FlightWrapper> originFlights;
+	private Set<FlightWrapper> destinyFlights;
 	
 	public RoundTripWrapper(){
 		
@@ -14,14 +16,14 @@ public class RoundTripWrapper {
 	
 	public RoundTripWrapper(Set<FlightWrapper> origin,
 			Set<FlightWrapper> destiny) {
-		this.origin = origin;
-		this.destiny = destiny;
+		this.originFlights = origin;
+		this.destinyFlights = destiny;
 	}
-	public Set<FlightWrapper> getOrigin() {
-		return origin;
+	public Set<FlightWrapper> getOriginFlights() {
+		return originFlights;
 	}
-	public Set<FlightWrapper> getDestiny() {
-		return destiny;
+	public Set<FlightWrapper> getDestinyFlights() {
+		return destinyFlights;
 	}
 	
 	

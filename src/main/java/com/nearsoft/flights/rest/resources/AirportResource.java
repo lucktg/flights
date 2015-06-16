@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.nearsoft.flights.domain.model.airport.Airport;
+import com.nearsoft.flights.domain.model.Airport;
 import com.nearsoft.flights.domain.services.AirportsService;
 
 @Component

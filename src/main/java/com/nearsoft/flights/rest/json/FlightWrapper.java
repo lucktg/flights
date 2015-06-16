@@ -2,8 +2,10 @@ package com.nearsoft.flights.rest.json;
 
 import java.util.Set;
 
-import com.nearsoft.flights.domain.model.flight.Airline;
-import com.nearsoft.flights.domain.model.flight.Flight;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.nearsoft.flights.domain.model.Airline;
+import com.nearsoft.flights.domain.model.Flight;
 
 public class FlightWrapper {	
 
@@ -19,10 +21,10 @@ public class FlightWrapper {
 		this.departure = new ScheduledTripWrapper(flight.getDeparture());
 		this.arrival = new ScheduledTripWrapper(flight.getArrival());
 	}
-	
+	/*
 	public Set<String> getServiceClass() {
 		return flight.getServiceClass();
-	}
+	}*/
 	
 	public String getServiceType() {
 		return flight.getServiceType();
@@ -36,6 +38,7 @@ public class FlightWrapper {
 		return departure;
 	}
 	
+	@JsonProperty("flightNumber")
 	public String getFlightNumber() {
 		return flight.getFlightNumber();
 	}

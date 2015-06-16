@@ -22,7 +22,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.nearsoft.flights.domain.model.airport.Airport;
+import com.nearsoft.flights.domain.model.Airport;
 import com.nearsoft.flights.interfaces.AirportApiService;
 import com.nearsoft.flights.interfaces.flexapi.domain.services.AirportApiFlexService.URLParams;
 

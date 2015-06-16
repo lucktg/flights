@@ -18,8 +18,8 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.nearsoft.flights.domain.model.airport.Airport;
-import com.nearsoft.flights.domain.model.repository.Repository;
+import com.nearsoft.flights.domain.model.Airport;
+import com.nearsoft.flights.domain.repository.Repository;
 import com.nearsoft.flights.interfaces.AirportApiService;
 @RunWith(MockitoJUnitRunner.class)
 public class AirportServiceTest {

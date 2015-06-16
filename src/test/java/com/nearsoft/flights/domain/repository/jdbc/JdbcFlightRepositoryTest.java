@@ -1,8 +1,8 @@
-package com.nearsoft.flights.domain.model.repository.jdbc;
+package com.nearsoft.flights.domain.repository.jdbc;
 
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.empty;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -38,15 +38,14 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.nearsoft.flights.domain.model.airport.Airport;
-import com.nearsoft.flights.domain.model.airport.Airport.AirportBuilder;
-import com.nearsoft.flights.domain.model.flight.Airline;
-import com.nearsoft.flights.domain.model.flight.Flight;
-import com.nearsoft.flights.domain.model.flight.TripInformationRequest;
-import com.nearsoft.flights.domain.model.flight.Flight.FlightBuilder;
-import com.nearsoft.flights.domain.model.flight.ScheduledTrip;
-import com.nearsoft.flights.domain.model.repository.Repository;
-import com.nearsoft.flights.domain.model.repository.jdbc.specification.FlightSpecificationByTripInformation;
+import com.nearsoft.flights.domain.model.Airline;
+import com.nearsoft.flights.domain.model.Airport.AirportBuilder;
+import com.nearsoft.flights.domain.model.Flight;
+import com.nearsoft.flights.domain.model.Flight.FlightBuilder;
+import com.nearsoft.flights.domain.model.ScheduledTrip;
+import com.nearsoft.flights.domain.model.TripInformationRequest;
+import com.nearsoft.flights.domain.repository.FlightRepository;
+import com.nearsoft.flights.domain.repository.jdbc.specification.FlightSpecificationByTripInformation;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:spring/jdbc-test-config.xml")
@@ -60,7 +59,7 @@ public class JdbcFlightRepositoryTest {
 	}
 	
 	@Autowired
-	Repository<Flight> flightRepository;
+	FlightRepository flightRepository;
 	
 	@Autowired
 	JdbcTemplate jdbcTemplate;
@@ -172,9 +171,7 @@ public class JdbcFlightRepositoryTest {
 		calendar.set(Calendar.MONTH, Calendar.JUNE);
 		calendar.set(Calendar.DAY_OF_MONTH, 14);
 		calendar.set(Calendar.HOUR_OF_DAY, 1); 
-		FlightSpecificationByTripInformation specification = new FlightSpecificationByTripInformation(
-				new TripInformationRequest("1", calendar.getTime(), "3"));
-		List<Flight> flight = flightRepository.getAllBySpecification(specification);
+		List<Flight> flight = flightRepository.getBytTripInformation(new TripInformationRequest("1", calendar.getTime(), "3"));
 		Assert.assertNotNull(flight);
 		Assert.assertThat(flight, is(not(empty())));
 		Assert.assertThat(flight.size(), is(1));
@@ -188,9 +185,7 @@ public class JdbcFlightRepositoryTest {
 		calendar.set(Calendar.MONTH, Calendar.JUNE);
 		calendar.set(Calendar.DAY_OF_MONTH, 14);
 		calendar.set(Calendar.HOUR_OF_DAY, 1); 
-		FlightSpecificationByTripInformation specification = new FlightSpecificationByTripInformation(
-				new TripInformationRequest("1", calendar.getTime(), "2"));
-		List<Flight> flight = flightRepository.getAllBySpecification(specification);
+		List<Flight> flight = flightRepository.getBytTripInformation(new TripInformationRequest("1", calendar.getTime(), "2"));
 		Assert.assertNotNull(flight);
 		Assert.assertThat(flight, is(empty()));
 		Assert.assertThat(flight.size(), is(0));

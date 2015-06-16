@@ -9,12 +9,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.nearsoft.flights.domain.model.airport.Airport;
-import com.nearsoft.flights.domain.model.airport.Airport.AirportBuilder;
-import com.nearsoft.flights.domain.model.flight.Airline;
-import com.nearsoft.flights.domain.model.flight.Flight;
-import com.nearsoft.flights.domain.model.flight.Flight.FlightBuilder;
-import com.nearsoft.flights.domain.model.flight.ScheduledTrip;
+import com.nearsoft.flights.domain.model.Airline;
+import com.nearsoft.flights.domain.model.Airport;
+import com.nearsoft.flights.domain.model.Flight;
+import com.nearsoft.flights.domain.model.ScheduledTrip;
+import com.nearsoft.flights.domain.model.Airport.AirportBuilder;
+import com.nearsoft.flights.domain.model.Flight.FlightBuilder;
 import com.nearsoft.flights.interfaces.flexapi.domain.model.AirlinePojo;
 import com.nearsoft.flights.interfaces.flexapi.domain.model.AirportPojo;
 import com.nearsoft.flights.interfaces.flexapi.domain.model.AppendixPojo;
@@ -62,7 +62,6 @@ public class ExtractorJsonUtils {
 		ScheduledTrip departure = getScheduledTrip(departureAirport,flightPojo.getDepartureTime(), flightPojo.getDepartureTerminal());
 		FlightBuilder builder = new FlightBuilder(flightPojo.getFlightNumber(), airline);
 		builder.addFlightRoute(departure, arrival);
-		builder.addServiceClasses(flightPojo.getServiceClasses());
 		builder.addServiceType(flightPojo.getServiceType());
 		return builder.build();
 	}

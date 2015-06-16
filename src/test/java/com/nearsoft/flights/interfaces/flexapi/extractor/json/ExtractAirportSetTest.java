@@ -28,7 +28,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
-import com.nearsoft.flights.domain.model.airport.Airport;
+import com.nearsoft.flights.domain.model.Airport;
 import com.nearsoft.flights.interfaces.flexapi.domain.services.AirportJsonWrapper;
 import com.nearsoft.flights.interfaces.flexapi.domain.services.ExtractorJsonUtils;
 import com.nearsoft.flights.interfaces.flexapi.extractor.Extractor;

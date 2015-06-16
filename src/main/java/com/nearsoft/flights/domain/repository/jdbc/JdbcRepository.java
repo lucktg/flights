@@ -1,4 +1,4 @@
-package com.nearsoft.flights.domain.model.repository.jdbc;
+package com.nearsoft.flights.domain.repository.jdbc;
 
 import static com.nearsoft.flights.util.Utils.isNull;
 
@@ -18,9 +18,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.nearsoft.flights.domain.model.repository.jdbc.IgnorePersistence.Operation;
-import com.nearsoft.flights.domain.model.repository.jdbc.specification.SqlSpecification;
-import com.nearsoft.flights.domain.model.repository.Repository;
+import com.nearsoft.flights.domain.repository.Repository;
+import com.nearsoft.flights.domain.repository.jdbc.annotation.ForeignKey;
+import com.nearsoft.flights.domain.repository.jdbc.annotation.IgnorePersistence;
+import com.nearsoft.flights.domain.repository.jdbc.annotation.Table;
+import com.nearsoft.flights.domain.repository.jdbc.annotation.IgnorePersistence.Operation;
+import com.nearsoft.flights.domain.repository.jdbc.specification.SqlSpecification;
 
 public abstract class JdbcRepository<T> implements Repository<T> {
 	
@@ -150,14 +153,13 @@ public abstract class JdbcRepository<T> implements Repository<T> {
 		jdbcTemplate.update(sql, ps -> fillUpdatePreparedStatement(ps, t));
 	}
 
-	@Override
-	public List<T> getAllBySpecification(SqlSpecification sqlSpecification) {
+	
+	protected List<T> getAllBySpecification(SqlSpecification sqlSpecification) {
 		String select = buildSelectAllStatement() + sqlSpecification.toSqlClauses();
 		return jdbcTemplate.query(select, (rs, rowNum) -> fillModelObject(rs, rowNum));
 	}
 	
-	@Override
-	public T getBySpecification(SqlSpecification sqlSpecification) {
+	protected T getBySpecification(SqlSpecification sqlSpecification) {
 		String select = buildSelectAllStatement() + sqlSpecification.toSqlClauses();
 		return jdbcTemplate.queryForObject(select, (rs, rowNum) -> fillModelObject(rs, rowNum));
 	}

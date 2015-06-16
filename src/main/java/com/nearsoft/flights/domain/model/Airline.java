@@ -1,8 +1,8 @@
-package com.nearsoft.flights.domain.model.flight;
+package com.nearsoft.flights.domain.model;
 
-import com.nearsoft.flights.domain.model.repository.jdbc.IgnorePersistence;
-import com.nearsoft.flights.domain.model.repository.jdbc.Table;
-import com.nearsoft.flights.domain.model.repository.jdbc.IgnorePersistence.Operation;
+import com.nearsoft.flights.domain.repository.jdbc.annotation.IgnorePersistence;
+import com.nearsoft.flights.domain.repository.jdbc.annotation.Table;
+import com.nearsoft.flights.domain.repository.jdbc.annotation.IgnorePersistence.Operation;
 
 @Table(tableName="airline", idTable="airlineCode")
 public class Airline {

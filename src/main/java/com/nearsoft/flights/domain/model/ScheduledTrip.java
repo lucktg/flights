@@ -1,8 +1,6 @@
-package com.nearsoft.flights.domain.model.flight;
+package com.nearsoft.flights.domain.model;
 
 import java.util.Date;
-
-import com.nearsoft.flights.domain.model.airport.Airport;
 
 public class ScheduledTrip {
 	private Airport airport;

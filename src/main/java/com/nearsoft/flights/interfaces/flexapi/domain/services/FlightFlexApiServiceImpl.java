@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.nearsoft.flights.domain.model.flight.Flight;
-import com.nearsoft.flights.domain.model.flight.TripInformationRequest;
+import com.nearsoft.flights.domain.model.Flight;
+import com.nearsoft.flights.domain.model.TripInformationRequest;
 import com.nearsoft.flights.interfaces.FlightApiService;
 
 @Service

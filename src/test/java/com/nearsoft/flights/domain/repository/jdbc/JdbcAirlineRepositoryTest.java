@@ -1,4 +1,4 @@
-package com.nearsoft.flights.domain.model.repository.jdbc;
+package com.nearsoft.flights.domain.repository.jdbc;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
@@ -35,8 +35,8 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.nearsoft.flights.domain.model.flight.Airline;
-import com.nearsoft.flights.domain.model.repository.Repository;
+import com.nearsoft.flights.domain.model.Airline;
+import com.nearsoft.flights.domain.repository.AirlineRepository;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -47,7 +47,7 @@ public class JdbcAirlineRepositoryTest {
 			.getLogger(JdbcAirlineRepositoryTest.class);
 
 	@Autowired
-	Repository<Airline> airlineRepository;
+	AirlineRepository airlineRepository;
 	
 	@Autowired
 	JdbcTemplate jdbcTemplate;
