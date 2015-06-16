@@ -60,7 +60,7 @@ private static Logger logger = Logger.getLogger(JsonExtractorTest.class);
 		logger.debug("Starting test shouldThrownExceptionWithUnrecognizedTokenMessage");
 		expected.expect(ExtractionException.class);
 		json = JsonExtractorTest.class.getResourceAsStream(PLAIN_TEXT_JSON);
-		expected.expectMessage(UNRECOGNIZED_TOKEN_MESSAGE);
+		expected.expectMessage(NO_CONTENT_MESSAGE);
 		when(function.apply(any())).thenReturn(new Object());
 		extractor.extract(json, function, Object.class);
 	}

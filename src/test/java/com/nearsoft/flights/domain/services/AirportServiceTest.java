@@ -1,7 +1,12 @@
 package com.nearsoft.flights.domain.services;
 
-import static org.mockito.Mockito.*;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 import java.util.Collections;
 import java.util.Set;
@@ -19,7 +24,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.nearsoft.flights.domain.model.Airport;
-import com.nearsoft.flights.domain.repository.Repository;
+import com.nearsoft.flights.domain.repository.AirportRepository;
 import com.nearsoft.flights.interfaces.AirportApiService;
 @RunWith(MockitoJUnitRunner.class)
 public class AirportServiceTest {
@@ -30,7 +35,7 @@ public class AirportServiceTest {
 	AirportsServiceImpl airportsService;
 	
 	@Mock
-	private Repository<Airport> airportRepository;
+	private AirportRepository airportRepository;
 	@Mock
 	private AirportApiService airportApiService;
 	
