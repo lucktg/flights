@@ -4,8 +4,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 
-import com.nearsoft.flights.interfaces.flexapi.extractor.ExtractionException;
-
 public class ExtractionExceptionMapper implements ExceptionMapper<RuntimeException>{
 
 	

@@ -73,5 +73,8 @@ public class FlightsResource {
 	private boolean isNullOrEmpty(String string) {
 		return string == null || "".equals(string.trim());
 	}
+<<<<<<< HEAD
 
+=======
+>>>>>>> dev
 }
